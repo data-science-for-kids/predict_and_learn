@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/splash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/front">
+
+
+    <TextView
+        android:id="@+id/splash_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:gravity="center_horizontal"
+        android:layout_alignParentLeft="true"
+        android:text="DATA SCIENCE \nFOR ALL"
+        android:textColor="@color/slider_text"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/ProgressBar01"
+
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/splash_text"
+        android:layout_centerHorizontal="true"
+
+        android:layout_margin="5dip" />
+
+</RelativeLayout>
