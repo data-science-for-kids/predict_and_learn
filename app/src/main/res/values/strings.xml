@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Data science for all</string>
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="button_next">NEXT</string>
+
+
+    <string name="button_skip">SKIP</string>
+    <string name="menu_item1">What is data science?</string>
+    <string name="menu_item2">Who\'s your friend?</string>
+    <string name="menu_item3">Predict your friend</string>
+    <string name="dialog_button">PROCEED</string>
+    <string name="dialog_end_button">FINISH</string>
+    <string name="dialog_end_item">Thanks for giving rating</string>
+    <string name="dialog_back_item">Are you sure you want to exit ?</string>
+    <string name="dialog_item"> Let’s get started with our fun exercise! You will now be shown profiles of some young people. Based on the description provided again each person, decide whether you would like to be friends with her/him. \nYou can rate on a scale of 1-5, where 5 stars would mean you will definitely make friends with the person and 1 meaning you will definitely not make friends.\nReady to get started? Hit ‘proceed’</string>
+    <string name="no_rating_content">Do rate you feel about being friends with this person. You cannot proceed to the next profile until you finish rating this.</string>
+
+    <string name="slider_screen_1">Hello there! Let\'s begin with a story</string>
+    <string name="slider_screen2">In the year 1854, London, the capital city of England, experienced an outbreak of Cholera.</string>
+    <string name="slider_screen_3">The sad thing was, no one really knew what Cholrea was or how to go about treating it.</string>
+    <string name="slider_screen_4">It was considered that such diseases spread through the air while it really was a water-borne disease.</string>
+    <string name="slider_screen_5">At that time, John Snow, a young British doctor did not really buy the idea of Cholera spreading through the air. He started looking around.</string>
+    <string name="slider_screen_6">He tracked down information from hospital and public records on when the outbreak began and tried to see what was common to the victims.</string>
+    <string name="slider_screen_7">He put out all the information collected onto a map of London.</string>
+    <string name="slider_screen_9">Several interesting facts came to light by looking at this colored map. Blocks near Broad street seemed to be heavily affected while neighboring blocks, just a mile or so away, seemed to be totally unaffected.</string>
+    <string name="slider_screen_11">What was going on?</string>
+    <string name="slider_screen_12">On talking to people living there,John discovered that people in the nearby unaffected blocks used a different hand pump to fetch water than those living near Broad street.</string>
+    <string name="slider_screen_13">This helped John rule out other possible sources of the epidemic besides pump water.</string>
+    <string name="slider_screen_14">On 7 September 1854, Snow took his research to the town officials and convinced them to take the handle off the pump, making it impossible to draw water.</string>
+    <string name="slider_screen_15">The officials were reluctant to believe him, but took the handle off as a trial only to find the outbreak of cholera trickle to a stop.</string>
+    <string name="slider_screen_16">Gradually, people who had left their homes and businesses in the Broad Street area out of fear of Cholera began to return.</string>
+    <string name="slider_screen_17">What John Snow did in this example is what data science actually is!</string>
+    <string name="slider_screen_18">Data Science is learning new things about our world by collecting and analyzing information of events that have taken place.</string>
+    <string name="slider_screen_19">In this example, John Snow showed how relating data on people’s source of water to the places they lives was able to show possibly infected hand pumps.</string>
+</resources>
+

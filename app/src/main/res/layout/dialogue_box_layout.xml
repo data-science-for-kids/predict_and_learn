@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:scrollbars="vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/slider_background"
+            android:fontFamily="serif-monospace"
+            android:padding="10dp"
+            android:text="@string/dialog_item"
+            android:textColor="@color/slider_text"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/declineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/customized_buttons_dialogbox"
+            android:fontFamily="serif-monospace"
+            android:text="@string/dialog_button"
+            android:textColor="@color/slider_text"
+            android:textSize="19dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</RelativeLayout>
