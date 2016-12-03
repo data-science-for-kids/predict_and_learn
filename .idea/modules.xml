@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DataScienceApp.iml" filepath="$PROJECT_DIR$/DataScienceApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data_science_kids.iml" filepath="$PROJECT_DIR$/data_science_kids.iml" />
     </modules>
   </component>
 </project>
