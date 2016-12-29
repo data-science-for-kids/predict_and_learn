@@ -26,7 +26,20 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class collect_data_activity extends AppCompatActivity implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
@@ -36,11 +49,11 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
     CoordinatorLayout snackbarCoordinatorLayout;
     RatingBar ratingBar;
     ImageView rating_image;
-    int count = 0;
-    int pic_no = 0;
+
+    int pic_no = 1;
     int j = 2;                //used for checking slide no
     static int numStars = 0;
-    ArrayList<DataBean> list1 = new ArrayList<DataBean>();
+
 
     @Override
     public void onBackPressed() {
@@ -101,18 +114,63 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
 
         rating_image = (ImageView) findViewById(R.id.rating_image);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-
         ratingBar.setOnRatingBarChangeListener(this);
         newq.setOnClickListener(collect_data_activity.this);
-        DataBean ob = new DataBean();
-        // ob=list.get(1);
-        list1 = create_databean_list.create_list();
-        ob = list1.get(pic_no++);
-        // gender.setText(ob.getGender());
-        game.setText("" + ob.getGame());
-        id.setText("" + ob.getId() + "/" + list1.size());
-        name.setText("" + ob.getName());
-        rating_image.setImageResource(R.drawable.rating_pic_1);
+       // list1 = create_databean_list.create_list();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        DatabaseReference cards = database.getReference("cards").child("id_1");
+        cards.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    //Data being fetched from server database
+                DataBean ob=dataSnapshot.getValue(DataBean.class);
+                game.setText("" + ob.getGame());
+                id.setText("" + ob.getId() + "/" + "56");
+                name.setText("" + ob.getName());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        cards.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child("card/rating_pic_1.png");
+
+       //Images are fetched from server and not drawable
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(mStorageRef)
+                .fitCenter()
+                .override(600,1000)
+                .into(rating_image);
+        pic_no++;
 
     }
 
@@ -136,13 +194,10 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                     dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
                     Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
 
-                    // if decline button is clicked, close the custom dialog
 
                     declineButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // Close dialog
-                            //create_databean_list a=new create_databean_list();
 
 
                             dialog.dismiss();
@@ -153,10 +208,63 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                 } else {
                     String Tag = "" + a;
                     Log.e(Tag, Tag);
-                    if (j <= list1.size()) {
-                        // Toast.makeText(this, Tag, Toast.LENGTH_SHORT).show();
-                        ratingBar.setRating(0);
+                     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
+                    if (j <= 56) {
+
+                        ratingBar.setRating(0);
+                    Log.d("Pic no",pic_no+"");
+                        DatabaseReference cards = database.getReference("cards").child("id_"+pic_no);
+                        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child("card/rating_pic_"+pic_no+".png");
+                        cards.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                DataBean ob=dataSnapshot.getValue(DataBean.class);
+                                game.setText("" + ob.getGame());
+                                id.setText("" + ob.getId() + "/ 56");
+                                name.setText("" + ob.getName());
+
+                                Log.d("Image no",""+ob.getImage());
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+                        Glide.with(this)
+                                .using(new FirebaseImageLoader())
+                                .load(mStorageRef)
+                                .fitCenter()
+                                .override(600,1000)
+                                .into(rating_image);
+
+                        cards.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                         final View l = findViewById(R.id.main);
                         Animation ab = AnimationUtils.loadAnimation(
                                 collect_data_activity.this, R.anim.blink);
@@ -178,15 +286,8 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                             }
 
                         });
-                        DataBean ob = new DataBean();
-
-                        ob = list1.get(pic_no++);
                         l.startAnimation(ab);
-                        //gender.setText(ob.getGender());
-                        game.setText("" + ob.getGame());
-                        id.setText("" + ob.getId() + "/" + list1.size());
-                        name.setText("" + ob.getName());
-                        rating_image.setImageResource(ob.getImage());
+                        pic_no++;
                         j++;
 
                     } else {
@@ -202,13 +303,10 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                         dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
                         Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
 
-                        // if decline button is clicked, close the custom dialog
 
                         declineButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // Close dialog
-                                //create_databean_list a=new create_databean_list();
 
 
                                 finish();
