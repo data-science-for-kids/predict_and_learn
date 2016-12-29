@@ -11,6 +11,9 @@ package com.example.user.datascienceapp;
 public class DataBean {
     private String name;
     private String gender;
+    private int id;
+    private int image;
+    private String game;
 
     public int getId() {
         return id;
@@ -52,9 +55,7 @@ public class DataBean {
         this.name = name;
     }
 
-    private int id;
-    private int image;
-    private String game;
+
 
 
 }

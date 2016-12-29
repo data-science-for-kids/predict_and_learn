@@ -13,17 +13,27 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TypefaceSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button story, collect;
 
     static int counter = 0;
-
+    ArrayList<DataBean> list1 = new ArrayList<DataBean>();
     // int count=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         collect.setOnClickListener(this);
         Drawable Background = findViewById(R.id.main1).getBackground();
         Background.setAlpha(80);
+
+
 
 
     }
@@ -53,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialogue_box_layout);
-                //View v = getWindow().getDecorView();
-                //v.setBackgroundResource(android.R.color.transparent);
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
@@ -69,16 +79,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //create_databean_list a=new create_databean_list();
 
                         Intent next1 = new Intent(MainActivity.this, collect_data_activity.class);
+                        next1.putExtra("list1",list1);
                         startActivity(next1);
                         dialog.dismiss();
                     }
                 });
 
                 dialog.show();
-
-               // dialog.getWindow().setAttributes(lp);
-
-
                 break;
 
         }
