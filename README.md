@@ -7,9 +7,9 @@ Through this app, kids will learn
 We have more such interesting apps to learn a suite of data-science related concepts! 
 
 #Our webpage
-[[http://www.datasciencekids.org/|http://www.datasciencekids.org/]]
-asdasdasdasdasd
+http://www.datasciencekids.org/
+
 #Contact
 If you have ideas or want to know more, please contact the primary authors - 
-* [[Varun Aggarwal | https://www.linkedin.com/in/varunaggarwal2/]]
-* [[Shashank Srikant | https://shashank-srikant.github.io/]]
+* [Varun Aggarwal](https://www.linkedin.com/in/varunaggarwal2/)
+* [Shashank Srikant](https://shashank-srikant.github.io/)
