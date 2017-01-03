@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "812834464651",
+    "firebase_url": "https://datasciencekids-master.firebaseio.com",
+    "project_id": "datasciencekids-master",
+    "storage_bucket": "datasciencekids-master.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812834464651:android:b9a44ede5da31ba8",
+        "android_client_info": {
+          "package_name": "com.example.user.datascienceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812834464651-adbb96tdeg9o9rmmsuo9s1pet1srv2om.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.user.datascienceapp",
+            "certificate_hash": "1717817405A8167B5F0F31CE92F2060B4FAC0D74"
+          }
+        },
+        {
+          "client_id": "812834464651-ebd0q6hss5qiivljktbbch87ji6i91vu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE1OBcmiN-iwChlsn5lprFgExEighAWes"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812834464651-ebd0q6hss5qiivljktbbch87ji6i91vu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

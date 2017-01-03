@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:id="@+id/linear_main"
                 android:orientation="vertical">
 
 
@@ -39,7 +40,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/rating_pic_1" />
+                    android:src="@drawable/rating_pic_1"
+                    />
 
 
                 <TextView
@@ -102,7 +104,8 @@
             android:layout_above="@+id/button"
             android:layout_margin="10dp"
             android:numStars="5"
-            android:stepSize="1.0"></RatingBar>
+            android:stepSize="1.0"
+            ></RatingBar>
 
         <Button
             android:id="@+id/button"

@@ -72,10 +72,6 @@ public class Slider_activity extends AppCompatActivity {
             public void onClick(View v) {
                 // Close dialog
                 //create_databean_list a=new create_databean_list();
-
-
-
-
                 dialog.dismiss();
             }
         });

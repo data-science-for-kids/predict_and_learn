@@ -5,10 +5,12 @@ package com.example.user.datascienceapp;
  */
 
 
+import java.io.Serializable;
+
 /**
  * Created by USER on 12-07-2016.
  */
-public class DataBean {
+public class DataBean implements Serializable {
     private String name;
     private String gender;
     private int id;
