@@ -10,13 +10,31 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/back3"
-        android:gravity="center"
+        android:background="@drawable/login"
+        android:gravity="top"
         android:orientation="vertical"
+
         android:padding="16dp">
+
+
+        <TextView
+            android:id="@+id/splash_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center_horizontal"
+            android:paddingTop="30dp"
+            android:layout_alignParentLeft="true"
+            android:text="DATA SCIENCE \nFOR ALL"
+            android:textColor="@color/slider_text"
+            android:textSize="30dp"
+            android:textStyle="bold" />
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <EditText
                 android:id="@+id/fname"
@@ -48,17 +66,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/school"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="true"
-                android:hint="@string/school"
-                android:imeActionId="@+id/login"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textLongMessage"
-                android:maxLines="1"
-                android:textColor="@color/slider_text" />
 
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout

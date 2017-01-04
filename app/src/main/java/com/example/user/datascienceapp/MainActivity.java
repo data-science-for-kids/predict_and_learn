@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (connected) {
 
                         } else {
-                            progressBar.setVisibility(View.GONE);
+                           // progressBar.setVisibility(View.GONE);
                          //   Snackbar.make(view, "No Internet", Snackbar.LENGTH_LONG)
                            //         .setAction("RETRY", null).show();
                         }
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (connected) {
                             // System.out.println("connected");
                         } else {
-                            progressBar.setVisibility(View.GONE);
+                          //  progressBar.setVisibility(View.GONE);
                            // Snackbar.make(view, "No Internet", Snackbar.LENGTH_LONG)
                              //       .setAction("RETRY", null).show();
                         }

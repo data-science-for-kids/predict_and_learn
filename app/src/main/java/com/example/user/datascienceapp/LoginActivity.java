@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         fname= (EditText) findViewById(R.id.fname);
         lname= (EditText) findViewById(R.id.lname);
-        school= (EditText) findViewById(R.id.school);
+       // school= (EditText) findViewById(R.id.school);
         grade= (EditText) findViewById(R.id.grade);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -71,9 +71,9 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         String f_name=fname.getText().toString();
         String l_name=lname.getText().toString();
-        String school_name=school.getText().toString();
+        //String school_name=school.getText().toString();
         String grade_name=grade.getText().toString();
-        String email=f_name+l_name+"."+grade_name+"@"+school_name+".com";
+        String email=f_name+"."+grade_name+"@"+l_name+".com";
         String password="password123";
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
