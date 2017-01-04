@@ -26,8 +26,8 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:orientation="vertical"
         android:paddingBottom="15dp"
@@ -38,9 +38,9 @@
             android:id="@+id/story_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginTop="45dp"
             android:background="@drawable/customized_buttons_collect_data"
             android:fontFamily="serif-monospace"
             android:onClick="onClick"
@@ -53,7 +53,6 @@
             android:id="@+id/collect_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/story_button"
             android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
@@ -73,15 +72,21 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="80dp"
+            android:layout_marginBottom="40dp"
             android:background="@drawable/customized_buttons_analyze_data"
             android:fontFamily="serif-monospace"
             android:text="@string/menu_item3"
             android:textColor="@color/slider_text"
             android:textSize="20dp"
             android:textStyle="bold"
-
-
-
             />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone" />
     </LinearLayout>
+
 </RelativeLayout>

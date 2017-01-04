@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".splash_screen"
+            android:name=".SplashScreenActivity"
             android:screenOrientation="portrait">
 
         </activity>
@@ -19,16 +19,18 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             >
-        <intent-filter>
+
+        </activity>
+        <activity
+            android:name=".CollectDataExerciseActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".LoginActivity">
+           <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-        </activity>
-        <activity
-            android:name=".collect_data_activity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".LoginActivity" />
+            </activity>
         <activity
             android:name=".StoryActivity"
             android:label="@string/title_activity_story"
