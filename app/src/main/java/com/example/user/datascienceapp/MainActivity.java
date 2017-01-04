@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -74,14 +78,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }*/
 
 
+
+
     }
 
     public void onClick(View w) {
+        final View view=w;
+        final DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         switch (w.getId()) {
             case R.id.story_button:
+
+
                 final ProgressDialog progressDialog=ProgressDialog.show(this,"Loading","Please Wait..",true);
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
                 final DatabaseReference story=database.getReference().child("story").child("story_1");
+
                 story.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -99,7 +110,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        progressDialog.dismiss();
+                        Snackbar.make(view, "Error While Connecting", Snackbar.LENGTH_LONG)
+                                .setAction("RETRY", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        onClick(view);
+                                    }
+                                }).show();
                     }
                 });
                 story.addChildEventListener(new ChildEventListener() {
@@ -129,9 +147,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
+                connectedRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        boolean connected = snapshot.getValue(Boolean.class);
+                        if (connected) {
+                            // System.out.println("connected");
+                        } else {
+                            progressDialog.dismiss();
+                            Snackbar.make(view, "No Internet", Snackbar.LENGTH_LONG)
+                                    .setAction("RETRY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            onClick(view);
+                                        }
+                                    }).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // System.err.println("Listener was cancelled");
+                    }
+                });
                 break;
             case R.id.collect_button:
-
                /* final Context context = this;
                 final Dialog dialog = new Dialog(context);
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -151,8 +190,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                    }
                 });*/
 
-
+                //Starting a progress box
                 final ProgressDialog progressDialog1=ProgressDialog.show(this,"Loading","Please Wait..",true);
+
+                //Creating reference to images in database
+                StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
+                StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
+
+                //Adding listener to both
+                final long ONE_MEGABYTE = 1024 * 1024;
+                female.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                     @Override
+                     public void onSuccess(byte[] bytes) {
+
+                         }
+                }).addOnFailureListener(new OnFailureListener() {
+                     @Override
+                     public void onFailure(@NonNull Exception exception) {
+                       // Handle any errors
+                       }
+                });
+
+                male.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
+
                 final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
                 final DatabaseReference cards=database1.getReference().child("cards").child("card_1");
                 cards.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -176,7 +246,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        progressDialog1.dismiss();
+                        Snackbar.make(view, "Error While Connecting", Snackbar.LENGTH_LONG)
+                                .setAction("RETRY", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        onClick(view);
+                                    }
+                                }).show();
                     }
                 });
                 cards.addChildEventListener(new ChildEventListener() {
@@ -205,7 +282,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
+                connectedRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        boolean connected = snapshot.getValue(Boolean.class);
+                        if (connected) {
+                            // System.out.println("connected");
+                        } else {
+                            progressDialog1.dismiss();
+                            Snackbar.make(view, "No Internet", Snackbar.LENGTH_LONG)
+                                    .setAction("RETRY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            onClick(view);
+                                        }
+                                    }).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // System.err.println("Listener was cancelled");
+                    }
+                });
                 break;
         }
     }
+
 }
