@@ -15,12 +15,12 @@ import java.*;
 public class create_databean_list {
     static ArrayList<DataBean> list1 = new ArrayList<DataBean>();
 
-    static int image_id[] = {R.drawable.rating_pic_1, R.drawable.rating_pic_2, R.drawable.rating_pic_3, R.drawable.rating_pic_4, R.drawable.rating_pic_5, R.drawable.rating_pic_6,
+    static int image_id[] = {/*R.drawable.rating_pic_1, R.drawable.rating_pic_2, R.drawable.rating_pic_3, R.drawable.rating_pic_4, R.drawable.rating_pic_5, R.drawable.rating_pic_6,
             R.drawable.rating_pic_7, R.drawable.rating_pic_8, R.drawable.rating_pic_9, R.drawable.rating_pic_10, R.drawable.rating_pic_11, R.drawable.rating_pic_12, R.drawable.rating_pic_13, R.drawable.rating_pic_14, R.drawable.rating_pic_15, R.drawable.rating_pic_16
             , R.drawable.rating_pic_17, R.drawable.rating_pic_18, R.drawable.rating_pic_19, R.drawable.rating_pic_20, R.drawable.rating_pic_21, R.drawable.rating_pic_22, R.drawable.rating_pic_23, R.drawable.rating_pic_24, R.drawable.rating_pic_25, R.drawable.rating_pic_26, R.drawable.rating_pic_27, R.drawable.rating_pic_28
             , R.drawable.rating_pic_29, R.drawable.rating_pic_30, R.drawable.rating_pic_31, R.drawable.rating_pic_32, R.drawable.rating_pic_33, R.drawable.rating_pic_34, R.drawable.rating_pic_35, R.drawable.rating_pic_36
             , R.drawable.rating_pic_37, R.drawable.rating_pic_38, R.drawable.rating_pic_39, R.drawable.rating_pic_40, R.drawable.rating_pic_41, R.drawable.rating_pic_42, R.drawable.rating_pic_43, R.drawable.rating_pic_44, R.drawable.rating_pic_45, R.drawable.rating_pic_46
-            , R.drawable.rating_pic_47, R.drawable.rating_pic_48, R.drawable.rating_pic_49, R.drawable.rating_pic_50, R.drawable.rating_pic_51, R.drawable.rating_pic_52, R.drawable.rating_pic_53, R.drawable.rating_pic_54, R.drawable.rating_pic_55, R.drawable.rating_pic_56};
+            , R.drawable.rating_pic_47, R.drawable.rating_pic_48, R.drawable.rating_pic_49, R.drawable.rating_pic_50, R.drawable.rating_pic_51, R.drawable.rating_pic_52, R.drawable.rating_pic_53, R.drawable.rating_pic_54, R.drawable.rating_pic_55, R.drawable.rating_pic_56*/};
 
 
     static String name[] = {"NEERAJA", "SEETARAM", "TANMAY", "MANJULA", "RADHIKA", "SHILPI", "RAMLAL", "ATMARAM", "SURENDRA", "SEETA", "AARYAN", "VAAMIKA",

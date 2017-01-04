@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -97,15 +98,22 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
         id.setText(cards.get(0).getId()+"/"+"56");
         name.setText(cards.get(0).getName());
 
-        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child("card/rating_pic_1.png");
-
+        StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
+        StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
        //Images are fetched from server and not drawable
+
         Glide.with(this)
                 .using(new FirebaseImageLoader())
-                .load(mStorageRef)
+                .load(female)
                 .fitCenter()
-                .override(600,1000)
+                .override(600, 1000)
                 .into(rating_image);
+
+
+      /*  Glide.with(this).using(new FirebaseImageLoader())
+                .load(female).downloadOnly(600,1000);
+        Glide.with(this).using(new FirebaseImageLoader())
+                .load(male).downloadOnly(600,1000);*/
 
     }
 
@@ -158,19 +166,33 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                             game.setText(cards.get(pic_no).getGame());
                             id.setText(cards.get(pic_no).getId()+"/"+"56");
                             name.setText(cards.get(pic_no).getName());
+                            String gender=cards.get(pic_no).getGender();
 
-                            StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child("card/rating_pic_" + (pic_no+1) + ".png");
-                            Glide.with(this)
-                                    .using(new FirebaseImageLoader())
-                                    .load(mStorageRef)
-                                    .fitCenter()
-                                    .override(600, 1000)
-                                    .into(rating_image);
+                            StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
+                            StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
+                            if(gender.equals("FEMALE")){
+                                Log.d("gender","FEMALE");
+                                Glide.with(this)
+                                        .using(new FirebaseImageLoader())
+                                        .load(female)
+                                        .fitCenter()
+                                        .override(600, 1000)
+                                        .into(rating_image);
+                            }
+                            else if(gender.equals("MALE")) {
+                                Log.d("gender","MALE");
+                                Glide.with(this)
+                                        .using(new FirebaseImageLoader())
+                                        .load(male)
+                                        .fitCenter()
+                                        .override(600, 1000)
+                                        .into(rating_image);
+                            }
 
                             final View l = findViewById(R.id.main);
                             Animation ab = AnimationUtils.loadAnimation(
                                     collect_data_activity.this, R.anim.blink);
-                            ab.setDuration(3500);
+                            ab.setDuration(1500);
                             ab.setAnimationListener(new Animation.AnimationListener() {
 
                                 public void onAnimationEnd(Animation animation) {
