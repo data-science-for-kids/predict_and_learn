@@ -1,26 +1,13 @@
 package com.example.user.datascienceapp;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ProgressBar;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
-public class splash_screen extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 4500;
 
@@ -56,7 +43,7 @@ public class splash_screen extends AppCompatActivity {
                 // This method will be executed once the timer is over
                 // Start your app main activity
 
-                Intent i = new Intent(splash_screen.this, LoginActivity.class);
+                Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
                 startActivity(i);
 
                 finish();
