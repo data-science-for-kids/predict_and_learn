@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.user.datascienceapp.StoryActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_signout"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="Sign Out"
+        android:icon="@drawable/ic_power"
+        app:showAsAction="always" />
+
+
 </menu>
