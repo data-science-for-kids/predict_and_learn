@@ -13,25 +13,21 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
 
-public class collect_data_activity extends AppCompatActivity implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
+public class CollectDataExerciseActivity extends AppCompatActivity implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
     View v;
     private Button newq;
     private TextView id, name, game;
@@ -45,7 +41,6 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
     public void onBackPressed() {
 
         final Context context = this;
-
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -91,7 +86,7 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
         rating_image = (ImageView) findViewById(R.id.rating_image);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingBar.setOnRatingBarChangeListener(this);
-        newq.setOnClickListener(collect_data_activity.this);
+        newq.setOnClickListener(CollectDataExerciseActivity.this);
         cards= (ArrayList<DataBean>) getIntent().getSerializableExtra("Card");
 
         game.setText(cards.get(0).getGame());
@@ -109,12 +104,6 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                 .override(600, 1000)
                 .into(rating_image);
 
-
-      /*  Glide.with(this).using(new FirebaseImageLoader())
-                .load(female).downloadOnly(600,1000);
-        Glide.with(this).using(new FirebaseImageLoader())
-                .load(male).downloadOnly(600,1000);*/
-
     }
 
     public void onClick(View v) {
@@ -122,6 +111,7 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
             case R.id.button:
 
                     float a = ratingBar.getRating();
+                String uid="admin";
                     if (a == 0) {
 
                         final Context context = this;
@@ -129,6 +119,7 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.no_rating_dialog_box);
                         dialog.setCanceledOnTouchOutside(false);
+
 
                         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
@@ -147,26 +138,28 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                         String Tag = "" + a;
                         Log.e(Tag, Tag);
 
+                        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+                        if(mAuth.getCurrentUser()!=null){
+                            FirebaseUser user=mAuth.getCurrentUser();
+                            uid=user.getUid();
+                        }
                         Response res = new Response();
-
                         res.setCard("id_" +pic_no);
-                        res.setUser("admin");
+                        res.setUser(uid);
                         res.setExercise("friends");
                         res.setResponse(a + "");
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference response;
-                        if(pic_no<=9)
-                             response= database.getReference("response").child("resid_0" + pic_no );
-                        else
-                             response = database.getReference("response").child("resid_" + pic_no );
+                        response = database.getReference("response").child("resid_" + uid);
                         response.setValue(res);
+
                         if (j <= 56) {
                             ratingBar.setRating(0);
                            // Log.d("Pic no in if", pic_no + "");
                             game.setText(cards.get(pic_no).getGame());
                             id.setText(cards.get(pic_no).getId()+"/"+"56");
                             name.setText(cards.get(pic_no).getName());
-                            String gender=cards.get(pic_no).getGender();
+                            String gender = cards.get(pic_no).getGender();
 
                             StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
                             StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
@@ -190,8 +183,7 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                             }
 
                             final View l = findViewById(R.id.main);
-                            Animation ab = AnimationUtils.loadAnimation(
-                                    collect_data_activity.this, R.anim.blink);
+                            Animation ab = AnimationUtils.loadAnimation(CollectDataExerciseActivity.this, R.anim.blink);
                             ab.setDuration(1500);
                             ab.setAnimationListener(new Animation.AnimationListener() {
 
@@ -220,38 +212,27 @@ public class collect_data_activity extends AppCompatActivity implements View.OnC
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setContentView(R.layout.ending_dialog_box);
                             dialog.setCanceledOnTouchOutside(false);
-
                             dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                             dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
                             Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
                             declineButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-
                                     finish();
-
                                     dialog.dismiss();
                                 }
                             });
                             dialog.show();
                             ratingBar.setRating(0);
-                            //dialog.getWindow().setAttributes(lp);
                         }
                     }
                 break;
+            }
         }
-    }
 
-    /**
-     * Notification that the rating has changed.
-     *
-     * @see android.widget.RatingBar.OnRatingBarChangeListener#onRatingChanged(android.widget.RatingBar,
-     * float, boolean)
-     */
     @Override
     public void onRatingChanged(RatingBar ratingBar, float rating,
                                 boolean fromTouch) {
-        //do nothing
     }
 
 
