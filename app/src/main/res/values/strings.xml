@@ -8,6 +8,7 @@
     <string name="menu_item1">What is data science?</string>
     <string name="menu_item2">Who\'s your friend?</string>
     <string name="menu_item3">Predict your friend</string>
+    <string name="menu_item4">Log Out</string>
     <string name="dialog_button">PROCEED</string>
     <string name="dialog_end_button">FINISH</string>
     <string name="dialog_end_item">Thanks for giving rating</string>
