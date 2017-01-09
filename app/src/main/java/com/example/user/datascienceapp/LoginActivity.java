@@ -1,11 +1,15 @@
 package com.example.user.datascienceapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText fname,lname,school,grade;
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
+    private String TAG="TAG";
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -44,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         fname= (EditText) findViewById(R.id.fname);
         lname= (EditText) findViewById(R.id.lname);
-       // school= (EditText) findViewById(R.id.school);
         grade= (EditText) findViewById(R.id.grade);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -68,28 +71,36 @@ public class LoginActivity extends AppCompatActivity {
     }
     @OnClick(R.id.sign_up_button)
     void login(View view){
+        InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
         progressBar.setVisibility(View.VISIBLE);
         String f_name=fname.getText().toString();
         String l_name=lname.getText().toString();
-        //String school_name=school.getText().toString();
         String grade_name=grade.getText().toString();
-        String email=f_name+"."+grade_name+"@"+l_name+".com";
-        String password="password123";
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Tag", "createUserWithEmail:onComplete:" + task.isSuccessful());
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
 
+        if(f_name.equals("")||l_name.equals("")||grade_name.equals("")){
+            Toast.makeText(getBaseContext(),"Fill all the fields",Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.GONE);
+        }
+        else {
+            final String email = f_name + "." + grade_name + "@" + l_name + ".com";
+            final String password = "password123";
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("Tag", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
+                            if (!task.isSuccessful()) {
+                                login(email, password);
+                            }
                         }
-
-                    }
-                });
+                    });
+        }
 
     }
     @Override
@@ -99,15 +110,40 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.GONE);
-        }
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    public void login(String email,String password){
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+         @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(!task.isSuccessful())
+                {
+                    Toast.makeText(getBaseContext(), "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+                else{
+
+                }
+            }
+});
+    }
+    public static void hideSoftKeyboard (Activity activity, View view)
+    {
+        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
     }
 
 

@@ -8,10 +8,10 @@
         <item name="colorAccent">#C80815</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-    <item name="colorPrimary">#C80815</item>
-    <item name="colorPrimaryDark">#C80815</item>
-    <item name="colorAccent">#C80815</item>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">#C80815</item>
+        <item name="colorPrimaryDark">#C80815</item>
+        <item name="colorAccent">#C80815</item>
     </style>
 
 

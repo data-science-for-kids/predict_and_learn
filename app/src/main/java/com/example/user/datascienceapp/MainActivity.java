@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,7 +33,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button story, collect;
+    private Button story, collect,signout;
     private ProgressBar progressBar;
 
     @Override
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         story.setOnClickListener(this);
         collect = (Button) findViewById(R.id.collect_button);
         collect.setOnClickListener(this);
+        signout= (Button) findViewById(R.id.signout);
+        signout.setOnClickListener(this);
         Drawable Background = findViewById(R.id.main1).getBackground();
         Background.setAlpha(80);
         progressBar= (ProgressBar) findViewById(R.id.progressBar);
@@ -62,6 +65,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 myRef.child("id_"+temp.getId()).setValue(temp);
             i++;
         }*/
+       /* FloatingActionButton floatingActionButton= (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+        */
 
     }
 
@@ -77,22 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_signout:
-                FirebaseAuth auth=FirebaseAuth.getInstance();
-                auth.signOut();
 
-// this listener will be called when there is change in firebase user session
-                FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
-                   @Override
-                    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        if (user == null) {
-                            // user auth state is changed - user is null
-                            // launch login activity
-                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                            finish();
-                           }
-                       }
-                   };
         }
         return super.onOptionsItemSelected(item);
     }
@@ -298,6 +292,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onCancelled(DatabaseError error) {
                     }
                 });
+                break;
+            case R.id.signout:
+                FirebaseAuth auth=FirebaseAuth.getInstance();
+                auth.signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+
+                // this listener will be called when there is change in firebase user session
+                FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
+                    @Override
+                    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                        //   Log.d("Here","Logout");
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if (user == null) {
+                            // user auth state is changed - user is null
+                            // launch login activity
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            finish();
+                        }
+                    }
+                };
                 break;
         }
     }

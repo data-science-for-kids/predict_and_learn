@@ -9,17 +9,17 @@ import android.widget.ProgressBar;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 4500;
+    private static int SPLASH_TIME_OUT = 2500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        final ProgressBar progress = (ProgressBar) findViewById(R.id.ProgressBar01);
+        //final ProgressBar progress = (ProgressBar) findViewById(R.id.ProgressBar01);
         Drawable loginActivityBackground = findViewById(R.id.splash).getBackground();
         loginActivityBackground.setAlpha(100);
 
-        progress.setIndeterminate(true);
+       // progress.setIndeterminate(true);
         // Splash screen timer
         new Handler().postDelayed(new Runnable() {
 
