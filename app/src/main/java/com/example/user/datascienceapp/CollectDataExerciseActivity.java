@@ -177,14 +177,21 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                         res.setResponse(a + "");
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference response;
-                    if(session<10)
-                        response = database.getReference("response").child("resid_" + uid).child("ses_0"+session).child("id_"+pic_no);
-                    else
-                         response= database.getReference("response").child("resid_" + uid).child("ses_"+session).child("id_"+pic_no);
-
+                    if(session<10) {
+                        if (pic_no < 10)
+                            response = database.getReference("response").child("resid_" + uid).child("ses_0" + session).child("id_0" + pic_no);
+                        else
+                            response = database.getReference("response").child("resid_" + uid).child("ses_0" + session).child("id_" + pic_no);
+                    }
+                    else {
+                        if (pic_no < 10)
+                            response = database.getReference("response").child("resid_" + uid).child("ses_" + session).child("id_0" + pic_no);
+                        else
+                            response = database.getReference("response").child("resid_" + uid).child("ses_" + session).child("id_" + pic_no);
+                    }
                         response.setValue(res);
 
-                        if (card_no <= 56) {
+                        if (card_no < 56) {
                             page++;
                             ratingBar.setRating(0);
                            // Log.d("Pic no in if", pic_no + "");
