@@ -1,12 +1,10 @@
 package com.example.user.datascienceapp;
 
-import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -35,6 +34,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button story, collect,signout;
     private ProgressBar progressBar;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,27 +50,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Drawable Background = findViewById(R.id.main1).getBackground();
         Background.setAlpha(80);
         progressBar= (ProgressBar) findViewById(R.id.progressBar);
-      /* FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("cards").child("card_1");
-        list1 = create_databean_list.create_list();
+        intent=new Intent(MainActivity.this, CollectDataExerciseActivity.class);
 
-        Iterator<DataBean> iterator=list1.iterator();
-        int i=1;
-        while(iterator.hasNext()){
+       /* progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        String uid="admin";
+        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser()!=null){
+            FirebaseUser user=mAuth.getCurrentUser();
+            uid=user.getUid();
+        }
 
-            DataBean temp=iterator.next();
-            if(i<=9)
-                myRef.child("id_0"+temp.getId()).setValue(temp);
-            else
-                myRef.child("id_"+temp.getId()).setValue(temp);
-            i++;
-        }*/
-       /* FloatingActionButton floatingActionButton= (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference session=database.getReference().child("user").child(uid);
+
+        session.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int session=dataSnapshot.getValue(Integer.class);
+                SharedPreferences.Editor editor=getSharedPreferences("Page",MODE_PRIVATE).edit();
+                editor.putInt("session",session);
+                editor.commit();
+                Log.d("Sessionmain",session+"");
 
-        */
+                progressBar.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                SharedPreferences.Editor editor=getSharedPreferences("Page",MODE_PRIVATE).edit();
+                editor.putInt("session",1);
+                editor.commit();
+            }
+        });*/
 
     }
 
@@ -235,12 +249,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Log.d("Card",dataBean.toString()+" "+c);
                         }
 
-                        Intent next = new Intent(MainActivity.this, CollectDataExerciseActivity.class);
-                        next.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        next.putExtra("Card",list);
+                        intent = new Intent(MainActivity.this, CollectDataExerciseActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent.putExtra("Card",list);
                         progressBar.setVisibility(View.GONE);
                         cards.removeEventListener(this);
-                        startActivity(next);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -280,13 +294,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         boolean connected = snapshot.getValue(Boolean.class);
-                        if (connected) {
-                            // System.out.println("connected");
-                        } else {
-                          //  progressBar.setVisibility(View.GONE);
-                           // Snackbar.make(view, "No Internet", Snackbar.LENGTH_LONG)
-                             //       .setAction("RETRY", null).show();
-                        }
+
                     }
                     @Override
                     public void onCancelled(DatabaseError error) {
@@ -298,7 +306,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 auth.signOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
-
                 // this listener will be called when there is change in firebase user session
                 FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
                     @Override
