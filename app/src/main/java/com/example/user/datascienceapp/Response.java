@@ -2,16 +2,9 @@ package com.example.user.datascienceapp;
 
 public class Response {
     private String exercise_id;
-    private String user_id;
     private String card_id;
     private String response;
 
-    public String getUser() {
-        return user_id;
-    }
-    public void setUser(String user_id) {
-        this.user_id = user_id;
-    }
     public String getExercise() {
         return exercise_id;
     }

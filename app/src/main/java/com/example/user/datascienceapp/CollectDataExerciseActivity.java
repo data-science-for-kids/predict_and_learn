@@ -2,6 +2,7 @@ package com.example.user.datascienceapp;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,14 +29,15 @@ import java.util.ArrayList;
 
 
 public class CollectDataExerciseActivity extends AppCompatActivity implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
-    View v;
+
     private Button newq;
     private TextView id, name, game;
     private RatingBar ratingBar;
     private ImageView rating_image;
     private int pic_no = 1;
-    private int j =1 ;      //used for checking slide no
+    private int card_no = 1 ;      //used for checking slide no
     private ArrayList<DataBean> cards;
+    private int page=-1,session;
 
     @Override
     public void onBackPressed() {
@@ -57,8 +59,17 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Close dialog
-                //create_databean_list a=new create_databean_list();
+                FirebaseAuth mAuth=FirebaseAuth.getInstance();
+                String uid="admin";
+                if(mAuth.getCurrentUser()!=null){
+                    FirebaseUser user=mAuth.getCurrentUser();
+                    uid=user.getUid();
+                }
+
+                SharedPreferences.Editor editor=getSharedPreferences("Page",MODE_PRIVATE).edit();
+                editor.putInt(uid,page-1);
+                editor.commit();
+                Log.d("pageCommit",(page-1)+"");
                 finish();
                 dialog.dismiss();
             }
@@ -78,7 +89,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collect_data_activity);
-
+        Log.d("Exercise","created");
         newq = (Button) findViewById(R.id.button);
         id = (TextView) findViewById(R.id.id);
         name = (TextView) findViewById(R.id.name);
@@ -89,9 +100,27 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         newq.setOnClickListener(CollectDataExerciseActivity.this);
         cards= (ArrayList<DataBean>) getIntent().getSerializableExtra("Card");
 
-        game.setText(cards.get(0).getGame());
-        id.setText(cards.get(0).getId()+"/"+"56");
-        name.setText(cards.get(0).getName());
+        String uid="admin";
+        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser()!=null){
+            FirebaseUser user=mAuth.getCurrentUser();
+            uid=user.getUid();
+        }
+        SharedPreferences prefs = getSharedPreferences("Page", MODE_PRIVATE);
+        card_no = prefs.getInt(uid, 1);
+        pic_no = prefs.getInt(uid, 1);//0 is the default value.
+        session=prefs.getInt("session"+uid,1);
+        Log.d("pageRead",card_no+"   "+session);
+
+            if(card_no==-1){
+                card_no=1;
+                pic_no=1;
+        }
+
+        game.setText(cards.get(card_no-1).getGame());
+        id.setText(cards.get(card_no-1).getId()+"/"+"56");
+        name.setText(cards.get(card_no-1).getName());
+
 
         StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
         StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
@@ -104,23 +133,23 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                 .override(600, 1000)
                 .into(rating_image);
 
+        page=card_no+1;
+
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button:
 
-                    float a = ratingBar.getRating();
-                String uid="admin";
-                    if (a == 0) {
+                float a = ratingBar.getRating();
+                 String uid="admin";
 
+                if (a == 0) {
                         final Context context = this;
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.no_rating_dialog_box);
                         dialog.setCanceledOnTouchOutside(false);
-
-
                         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
                         Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
@@ -132,7 +161,6 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                             }
                         });
                         dialog.show();
-
                     } else {
 
                         String Tag = "" + a;
@@ -145,15 +173,19 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                         }
                         Response res = new Response();
                         res.setCard("id_" +pic_no);
-                        res.setUser(uid);
                         res.setExercise("friends");
                         res.setResponse(a + "");
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference response;
-                        response = database.getReference("response").child("resid_" + uid);
+                    DatabaseReference response;
+                    if(session<10)
+                        response = database.getReference("response").child("resid_" + uid).child("ses_0"+session).child("id_"+pic_no);
+                    else
+                         response= database.getReference("response").child("resid_" + uid).child("ses_"+session).child("id_"+pic_no);
+
                         response.setValue(res);
 
-                        if (j <= 56) {
+                        if (card_no <= 56) {
+                            page++;
                             ratingBar.setRating(0);
                            // Log.d("Pic no in if", pic_no + "");
                             game.setText(cards.get(pic_no).getGame());
@@ -204,9 +236,11 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                             });
                             l.startAnimation(ab);
                             pic_no++;
-                            j++;
+                            card_no++;
 
+                            // cards finished
                         } else {
+
                             final Context context = this;
                             final Dialog dialog = new Dialog(context);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -218,6 +252,24 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                             declineButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    FirebaseAuth mAuth=FirebaseAuth.getInstance();
+                                    String uid="admin";
+                                    if(mAuth.getCurrentUser()!=null){
+                                        FirebaseUser user=mAuth.getCurrentUser();
+                                        uid=user.getUid();
+                                    }
+                                    Log.d("user","id");
+
+
+                                    SharedPreferences.Editor editor=getSharedPreferences("Page",MODE_PRIVATE).edit();
+                                    editor.putInt(uid,-1);
+                                    editor.putInt("session"+uid,session+1);
+                                    editor.commit();
+                                    Log.d("pageCommit",-1+"");
+
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference response= database.getReference("user").child(uid);
+                                    response.setValue(session+1);
                                     finish();
                                     dialog.dismiss();
                                 }
