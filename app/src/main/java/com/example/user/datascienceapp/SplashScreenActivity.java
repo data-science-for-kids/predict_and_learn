@@ -7,6 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 2500;
@@ -19,8 +27,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         Drawable loginActivityBackground = findViewById(R.id.splash).getBackground();
         loginActivityBackground.setAlpha(100);
 
-       // progress.setIndeterminate(true);
+        // progress.setIndeterminate(true);
         // Splash screen timer
+
         new Handler().postDelayed(new Runnable() {
 
             /*
@@ -30,22 +39,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-
-               /* FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("cards");
-                list1 = create_databean_list.create_list();
-
-                Iterator<DataBean> iterator=list1.iterator();
-                while(iterator.hasNext()){
-                    DataBean temp=iterator.next();
-                    myRef.child("id_"+temp.getId()).setValue(temp);
-                }*/
-                // This method will be executed once the timer is over
-                // Start your app main activity
-
                 Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
                 startActivity(i);
-
                 finish();
             }
         }, SPLASH_TIME_OUT);

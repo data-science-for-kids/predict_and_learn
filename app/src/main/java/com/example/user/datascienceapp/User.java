@@ -7,18 +7,21 @@ public class User implements Serializable {
 
     private String session;
     private int page;
+
     public String getSession() {
         return session;
     }
+
     public void setSession(String session) {
         this.session = session;
     }
 
 
-    public void setpageNo(int page){
-        this.page=page;
+    public void setpageNo(int page) {
+        this.page = page;
     }
-    public int getPage(){
+
+    public int getPage() {
         return page;
     }
 

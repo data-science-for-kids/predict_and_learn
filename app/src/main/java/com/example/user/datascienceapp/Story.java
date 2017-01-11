@@ -12,15 +12,17 @@ public class Story implements Serializable {
     public String getText() {
         return text;
     }
+
     public void setText(String text) {
         this.text = text;
     }
 
 
-    public void imagePresent(boolean present){
-        this.image=image;
+    public void imagePresent(boolean present) {
+        this.image = image;
     }
-    public boolean isImage(){
+
+    public boolean isImage() {
         return image;
     }
 
