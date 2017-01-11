@@ -1,7 +1,9 @@
 package com.example.user.datascienceapp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
@@ -12,12 +14,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -32,7 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button story, collect,signout;
+    private Button story, collect, signout;
     private ProgressBar progressBar;
     private Intent intent;
 
@@ -45,47 +47,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         story.setOnClickListener(this);
         collect = (Button) findViewById(R.id.collect_button);
         collect.setOnClickListener(this);
-        signout= (Button) findViewById(R.id.signout);
+        signout = (Button) findViewById(R.id.signout);
         signout.setOnClickListener(this);
         Drawable Background = findViewById(R.id.main1).getBackground();
         Background.setAlpha(80);
-        progressBar= (ProgressBar) findViewById(R.id.progressBar);
-        intent=new Intent(MainActivity.this, CollectDataExerciseActivity.class);
-
-       /* progressBar.setVisibility(View.VISIBLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        String uid="admin";
-        FirebaseAuth mAuth=FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser()!=null){
-            FirebaseUser user=mAuth.getCurrentUser();
-            uid=user.getUid();
-        }
-
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference session=database.getReference().child("user").child(uid);
-
-        session.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int session=dataSnapshot.getValue(Integer.class);
-                SharedPreferences.Editor editor=getSharedPreferences("Page",MODE_PRIVATE).edit();
-                editor.putInt("session",session);
-                editor.commit();
-                Log.d("Sessionmain",session+"");
-
-                progressBar.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                SharedPreferences.Editor editor=getSharedPreferences("Page",MODE_PRIVATE).edit();
-                editor.putInt("session",1);
-                editor.commit();
-            }
-        });*/
-
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        intent = new Intent(MainActivity.this, CollectDataExerciseActivity.class);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -94,11 +62,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         inflater.inflate(R.menu.menu_story, menu);
 
         return super.onCreateOptionsMenu(menu);
-        }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        progressBar.setVisibility(View.GONE);
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_signout:
 
         }
@@ -106,39 +80,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View w) {
-        final View view=w;
+        final View view = w;
         final DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         switch (w.getId()) {
             case R.id.story_button:
 
                 progressBar.setVisibility(View.VISIBLE);
+                StoryLoader storyLoader=new StoryLoader(getApplicationContext());
+                int image[]={2,3,5,6,8,10,12,13,14,15,16,18};
+                for(int i=0;i<12;i++){
+                    StorageReference storyImg = FirebaseStorage.getInstance().getReference().child("story1/slide"+image[i]+".jpg");
+                    if(i==2)
+                    {
+                        Glide.with(this)
+                                .using(new FirebaseImageLoader())
+                                .load(storyImg)
+                                .listener(storyLoader).fitCenter()
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .preload(700,1200);
+                    }
+                    else {
+                        Glide.with(this)
+                                .using(new FirebaseImageLoader())
+                                .load(storyImg)
+                                .listener(storyLoader).fitCenter()
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .preload();
+                    }
+                }
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference story=database.getReference().child("story").child("story_1");
+                final DatabaseReference story = database.getReference().child("story").child("story_1");
 
-                story.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        ArrayList<Story> list = new ArrayList<Story>();
-                        for(DataSnapshot ds:dataSnapshot.getChildren()){
-                           Story story = ds.getValue(Story.class);
-                           list.add(story);
-                       }
-                        Intent next = new Intent(MainActivity.this, StoryActivity.class);
-                        next.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        next.putExtra("Story",list);
-                        progressBar.setVisibility(View.GONE);
-                        story.removeEventListener(this);
-                        startActivity(next);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        progressBar.setVisibility(View.GONE);
-                       // Snackbar.make(view, "Error While Connecting", Snackbar.LENGTH_LONG)
-                         //       .setAction("RETRY", null).show();
-                    }
-                });
+                story.addListenerForSingleValueEvent(storyLoader);
                 story.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -170,14 +143,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         boolean connected = snapshot.getValue(Boolean.class);
-                        if (connected) {
 
-                        } else {
-                           // progressBar.setVisibility(View.GONE);
-                         //   Snackbar.make(view, "No Internet", Snackbar.LENGTH_LONG)
-                           //         .setAction("RETRY", null).show();
-                        }
                     }
+
                     @Override
                     public void onCancelled(DatabaseError error) {
                     }
@@ -205,104 +173,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 //Starting a progress box
                 progressBar.setVisibility(View.VISIBLE);
+                ExerciseLoader exerciseLoader=new ExerciseLoader(getApplicationContext());
 
-                //Creating reference to images in database
+
+
                 StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
                 StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
+                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                DatabaseReference cards = database1.getReference().child("cards").child("card_1");
 
-                //Adding listener to both
-                final long ONE_MEGABYTE = 1024 * 1024;
-                female.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                     @Override
-                     public void onSuccess(byte[] bytes) {
+                    Glide.with(this)
+                            .using(new FirebaseImageLoader())
+                            .load(female)
+                            .listener(exerciseLoader).fitCenter()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .preload(600,1000);
+                    Glide.with(this)
+                            .using(new FirebaseImageLoader())
+                            .load(male)
+                            .listener(exerciseLoader)
+                            .fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .preload(600,1000);
 
-                         }
-                }).addOnFailureListener(new OnFailureListener() {
-                     @Override
-                     public void onFailure(@NonNull Exception exception) {
-                       // Handle any errors
-                       }
-                });
+                cards.addListenerForSingleValueEvent(exerciseLoader);
 
-                male.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });
-                final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                final DatabaseReference cards=database1.getReference().child("cards").child("card_1");
-                cards.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        ArrayList<DataBean> list=new ArrayList<DataBean>();
-                        int c=0;
-                        for(DataSnapshot ds:dataSnapshot.getChildren()){
-                            DataBean dataBean=ds.getValue(DataBean.class);
-                            list.add(dataBean);
-                            c++;
-                            Log.d("Card",dataBean.toString()+" "+c);
-                        }
-
-                        intent = new Intent(MainActivity.this, CollectDataExerciseActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        intent.putExtra("Card",list);
-                        progressBar.setVisibility(View.GONE);
-                        cards.removeEventListener(this);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        progressBar.setVisibility(View.GONE);
-                        /*Snackbar.make(view, "Error While Connecting", Snackbar.LENGTH_LONG)
-                                .setAction("RETRY", null).show();*/
-                    }
-                });
-                cards.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
                 connectedRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         boolean connected = snapshot.getValue(Boolean.class);
 
                     }
+
                     @Override
                     public void onCancelled(DatabaseError error) {
                     }
                 });
                 break;
             case R.id.signout:
-                FirebaseAuth auth=FirebaseAuth.getInstance();
+                FirebaseAuth auth = FirebaseAuth.getInstance();
                 auth.signOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();

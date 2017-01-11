@@ -42,16 +42,27 @@
         android:textColor="@color/slider_text"
         android:textSize="20dp"
         android:textStyle="bold" />
-
     <Button
         android:id="@+id/btn_skip1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@null"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="serif-monospace"
+        android:text="SKIP"
+        android:textColor="@color/slider_text"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+    <Button
+        android:id="@+id/btn_prev1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:background="@null"
         android:fontFamily="serif-monospace"
-        android:text="@string/button_skip"
+        android:text="PREV"
         android:textColor="@color/slider_text"
         android:textSize="20dp"
         android:textStyle="bold" />

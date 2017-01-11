@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.eftimoff.viewpagertransformers.ForegroundToBackgroundTransformer;
 import com.eftimoff.viewpagertransformers.StackTransformer;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -61,7 +62,8 @@ public class StoryActivity extends AppCompatActivity {
     private int count;
     private LinearLayout dotsLayout;
     private TextView[] dots;
-    private Button btnSkip, btnNext;
+    private Button btnSkip, btnNext,btnPrev;
+
     @Override
     public void onBackPressed() {
         final Context context = this;
@@ -101,6 +103,7 @@ public class StoryActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,18 +114,19 @@ public class StoryActivity extends AppCompatActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        story= (ArrayList<Story>) getIntent().getSerializableExtra("Story");
-        count=story.size();
+        story = (ArrayList<Story>) getIntent().getSerializableExtra("Story");
+        count = story.size();
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mSectionsPagerAdapter.notifyDataSetChanged();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-        mViewPager.setPageTransformer(true,new StackTransformer());
+        mViewPager.setPageTransformer(true, new StackTransformer());
 
         btnSkip = (Button) findViewById(R.id.btn_skip1);
         btnNext = (Button) findViewById(R.id.btn_next1);
+        btnPrev = (Button) findViewById(R.id.btn_prev1);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
 
 
@@ -138,7 +142,21 @@ public class StoryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // checking for last page
                 // if last page home screen will be launched
-                int current=mViewPager.getCurrentItem()+1;
+                int current = mViewPager.getCurrentItem() + 1;
+                if (current < count) {
+                    // move to next screen
+                    mViewPager.setCurrentItem(current);
+                } else {
+                    finish();
+                }
+            }
+        });
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // checking for last page
+                // if last page home screen will be launched
+                int current = mViewPager.getCurrentItem() - 1;
                 if (current < count) {
                     // move to next screen
                     mViewPager.setCurrentItem(current);
@@ -152,14 +170,13 @@ public class StoryActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_story, menu);
         return true;
     }
+
     private void addBottomDots(int currentPage) {
         dots = new TextView[count];
 
@@ -179,10 +196,10 @@ public class StoryActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(colorsActive[currentPage]);
     }
 
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener= new ViewPager.OnPageChangeListener() {
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            if (position == count-1) {
+            if (position == count - 1) {
                 // last page. make button text to GOT IT
                 btnNext.setText("GOT IT!");
                 btnSkip.setVisibility(View.GONE);
@@ -190,6 +207,12 @@ public class StoryActivity extends AppCompatActivity {
                 btnNext.setText("NEXT");
                 btnSkip.setVisibility(View.VISIBLE);
 
+            }
+            if (position==0){
+                btnPrev.setVisibility(View.GONE);
+            }
+            else{
+                btnPrev.setVisibility(View.VISIBLE);
             }
         }
 
@@ -232,34 +255,33 @@ public class StoryActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            int page=getArguments().getInt(ARG_SECTION_NUMBER);
-            Log.d("Pager",page+"");
+            int page = getArguments().getInt(ARG_SECTION_NUMBER);
+            Log.d("Pager", page + "");
             View rootView;
-            rootView=inflater.inflate(R.layout.slider_screen,container,false);
+            rootView = inflater.inflate(R.layout.slider_screen, container, false);
 
-            TextView textView= (TextView) rootView.findViewById(R.id.textView_story);
-            ImageView imageView= (ImageView) rootView.findViewById(R.id.image_story);
-            if(story.get(page-1).getText()!=null) {
+            TextView textView = (TextView) rootView.findViewById(R.id.textView_story);
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.image_story);
+            if (story.get(page - 1).getText() != null) {
                 textView.setText(story.get(page - 1).getText());
             }
-          //  Log.d("Check",story.get(page-1).isImage()+"");
-            if(story.get(page-1).isImage()){
+            //  Log.d("Check",story.get(page-1).isImage()+"");
+            if (story.get(page - 1).isImage()) {
 
                 StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child("story1/slide" + page + ".jpg");
-                if (page==5){
+                if (page == 5) {
                     Glide.with(this)
                             .using(new FirebaseImageLoader())
                             .load(mStorageRef)
                             .fitCenter()
-                            .override(700,1200)
+                            .override(700, 1200).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(imageView);
-                }
-                else
-                Glide.with(this)
-                        .using(new FirebaseImageLoader())
-                        .load(mStorageRef)
-                        .fitCenter()
-                        .into(imageView);
+                } else
+                    Glide.with(this)
+                            .using(new FirebaseImageLoader())
+                            .load(mStorageRef).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .fitCenter()
+                            .into(imageView);
 
             }
 
@@ -272,7 +294,8 @@ public class StoryActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        public int pages=count;
+        public int pages = count;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
