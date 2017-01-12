@@ -62,7 +62,7 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
 
     }
     public void check(int count){
-        if(/*count>=5&&*/text){
+        if(count>=5&&text){
             Intent intent = new Intent(context,StoryActivity.class);
             intent.putExtra("Story",list);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

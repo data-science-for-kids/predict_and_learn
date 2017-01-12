@@ -250,13 +250,22 @@ public class StoryActivity extends AppCompatActivity {
                             .fitCenter()
                             .override(700, 1200).placeholder(R.drawable.placeholder5).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(imageView);
+                }
+                else if(page==6)
+                {
+                    Glide.with(this)
+                            .using(new FirebaseImageLoader())
+                            .load(mStorageRef)
+                            .fitCenter()
+                            .placeholder(R.drawable.placeholder6).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(imageView);
                 }else if(page>=12)
                 {
                     Glide.with(this)
                             .using(new FirebaseImageLoader())
                             .load(mStorageRef)
                             .fitCenter()
-                            .override(700, 1200).placeholder(R.drawable.placeholder2).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.placeholder2).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(imageView);
                 }
                 else

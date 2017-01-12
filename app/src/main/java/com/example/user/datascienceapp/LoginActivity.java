@@ -22,6 +22,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -31,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG="TAG";
+    private String schoolName="test";
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -48,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         fname= (EditText) findViewById(R.id.fname);
         lname= (EditText) findViewById(R.id.lname);
+        school= (EditText) findViewById(R.id.school);
         grade= (EditText) findViewById(R.id.grade);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -55,8 +60,15 @@ public class LoginActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+               if(school.getText().toString()!=null)
+                schoolName=school.getText().toString();
+
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    String uid=user.getUid();
+                    FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+                    DatabaseReference databaseReference=firebaseDatabase.getReference("user").child(uid).child("school");
+                    databaseReference.setValue(schoolName);
                     Intent intent = new Intent(getBaseContext(),MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -73,9 +85,8 @@ public class LoginActivity extends AppCompatActivity {
     }
     @OnClick(R.id.sign_up_button)
     void login(View view){
-        InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+
         progressBar.setVisibility(View.VISIBLE);
         String f_name=fname.getText().toString();
         String l_name=lname.getText().toString();
