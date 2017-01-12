@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/first_name"
-                android:inputType="textPersonName"
+                android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:textColor="@color/slider_text" />
 
@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/last_name"
-                android:inputType="textPersonName"
+                android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:textColor="@color/slider_text" />
 
@@ -73,7 +73,10 @@
                 android:hint="@string/grade"
                 android:inputType="number"
                 android:maxLines="1"
-                android:textColor="@color/slider_text" />
+                android:textColor="@color/slider_text"
+                android:onClick="onClick"
+                android:focusableInTouchMode="false"
+                />
 
         </android.support.design.widget.TextInputLayout>
 

@@ -1,69 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/slider_background"
-    tools:context="com.example.user.datascienceapp.StoryActivity">
+    android:weightSum="10">
+
 
     <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
         android:id="@+id/container"
+        android:layout_height="0dp"
+        android:layout_weight="9.2">
+
+    </android.support.v4.view.ViewPager>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
-
-    <LinearLayout
-        android:id="@+id/layoutDots"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dots_height"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dots_margin_bottom"
-        android:gravity="center"
-        android:visibility="invisible"
-        android:orientation="horizontal"></LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@id/layoutDots"
-        android:alpha=".5"
-        android:background="@color/slider_text" />
-
-    <Button
-        android:id="@+id/btn_next1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="@null"
-        android:fontFamily="serif-monospace"
-        android:text="@string/button_next"
-        android:textColor="@color/slider_text"
-        android:textSize="20dp"
-        android:textStyle="bold" />
-    <Button
-        android:id="@+id/btn_skip1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@null"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="serif-monospace"
-        android:text="SKIP"
-        android:textColor="@color/slider_text"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
-    <Button
-        android:id="@+id/btn_prev1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:background="@null"
-        android:fontFamily="serif-monospace"
-        android:text="PREV"
-        android:textColor="@color/slider_text"
-        android:textSize="20dp"
-        android:textStyle="bold" />
-</RelativeLayout>
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.8">
+        <Button
+            android:id="@+id/btn_prev1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PREV"
+            android:background="@null"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/slider_text"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:fontFamily="serif-monospace"
+            />
+        <Button
+            android:id="@+id/btn_skip1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SKIP"
+            android:background="@null"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/slider_text"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:fontFamily="serif-monospace"/>
+        <Button
+            android:id="@+id/btn_next1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEXT"
+            android:background="@null"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/slider_text"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:fontFamily="serif-monospace"
+            />
+    </RelativeLayout>
+</LinearLayout>

@@ -90,6 +90,9 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_collect_data_activity);
         newq = (Button) findViewById(R.id.button);
         id = (TextView) findViewById(R.id.id);

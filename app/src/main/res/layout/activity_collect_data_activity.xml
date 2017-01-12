@@ -23,8 +23,6 @@
             card_view:cardBackgroundColor="@color/slider_background"
             card_view:cardCornerRadius="15dp"
             card_view:cardPreventCornerOverlap="true"
-
-
             >
 
             <LinearLayout
@@ -40,15 +38,14 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="serif-monospace"
                     android:gravity="center"
-                    android:text="vikas "
-
+                    android:text=" "
                     android:textColor="@color/slider_text"
                     android:textSize="15dp"
                     />
                 <ImageView
                     android:id="@+id/rating_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="210dp"
+                    android:layout_height="280dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/rating_pic_1"
                     />
@@ -61,11 +58,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="2dp">
-
-
                     <TableRow>
-
-
                         <TextView
                             android:id="@+id/name"
                             android:layout_width="wrap_content"
