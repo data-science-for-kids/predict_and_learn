@@ -2,12 +2,16 @@ package com.example.user.datascienceapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -36,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
@@ -61,6 +68,8 @@ public class LoginActivity extends AppCompatActivity {
                 // ...
             }
         };
+       // grade.setClickable(true);
+
     }
     @OnClick(R.id.sign_up_button)
     void login(View view){
@@ -78,6 +87,11 @@ public class LoginActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
         }
         else {
+            if(grade_name.equals("Below 5"))
+                grade_name="0";
+            else if(grade_name.equals("Above 12"))
+                grade_name="13";
+
             final String email = f_name + "." + grade_name + "@" + l_name + ".com";
             final String password = "password123";
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -95,6 +109,29 @@ public class LoginActivity extends AppCompatActivity {
                     });
         }
 
+    }
+    @OnClick(R.id.grade)
+    void dialog(View view){
+        final CharSequence grades[] = new CharSequence[] {"Below 5","5th","6th","7th","8th","9th","10th","11th","12th","Above 12"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyDialogTheme);
+        builder.setTitle("Choose Grade");
+        builder.setItems(grades, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                    grade.setText(grades[which]);
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //the user clicked on Cancel
+            }
+        });
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        builder.show();
     }
     @Override
     public void onStop() {

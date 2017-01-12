@@ -2,6 +2,7 @@ package com.example.user.datascienceapp;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -60,15 +61,11 @@ public class StoryActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private static ArrayList<Story> story;
     private int count;
-    private LinearLayout dotsLayout;
-    private TextView[] dots;
     private Button btnSkip, btnNext,btnPrev;
 
     @Override
     public void onBackPressed() {
         final Context context = this;
-
-
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.back_pressed_dialog_box);
@@ -78,26 +75,21 @@ public class StoryActivity extends AppCompatActivity {
         dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
         Button okButton = (Button) dialog.findViewById(R.id.okButton1);
         Button cancelButton = (Button) dialog.findViewById(R.id.cancelbutton);
-
         // if decline button is clicked, close the custom dialog
-
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Close dialog
-                //create_databean_list a=new create_databean_list();
-
-
+                Intent intent=new Intent(StoryActivity.this,MainActivity.class);
+                startActivity(intent);
                 finish();
 
                 dialog.dismiss();
+                return;
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Close dialog
-                //create_databean_list a=new create_databean_list();
                 dialog.dismiss();
             }
         });
@@ -127,27 +119,30 @@ public class StoryActivity extends AppCompatActivity {
         btnSkip = (Button) findViewById(R.id.btn_skip1);
         btnNext = (Button) findViewById(R.id.btn_next1);
         btnPrev = (Button) findViewById(R.id.btn_prev1);
-        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-
 
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                Intent intent=new Intent(StoryActivity.this,MainActivity.class);
+                startActivity(intent);
+                return;
             }
         });
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // checking for last page
-                // if last page home screen will be launched
+
                 int current = mViewPager.getCurrentItem() + 1;
                 if (current < count) {
                     // move to next screen
                     mViewPager.setCurrentItem(current);
                 } else {
+                    Intent intent=new Intent(StoryActivity.this,MainActivity.class);
+                    startActivity(intent);
                     finish();
+                    return;
                 }
             }
         });
@@ -158,17 +153,13 @@ public class StoryActivity extends AppCompatActivity {
                 // if last page home screen will be launched
                 int current = mViewPager.getCurrentItem() - 1;
                 if (current < count) {
-                    // move to next screen
+                    // move to previous screen
                     mViewPager.setCurrentItem(current);
                 } else {
-                    finish();
                 }
             }
         });
-
-        addBottomDots(0);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,24 +168,7 @@ public class StoryActivity extends AppCompatActivity {
         return true;
     }
 
-    private void addBottomDots(int currentPage) {
-        dots = new TextView[count];
 
-        int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
-        int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
-
-        dotsLayout.removeAllViews();
-        for (int i = 0; i < dots.length; i++) {
-            dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("&#8226;"));
-            dots[i].setTextSize(35);
-            dots[i].setTextColor(colorsInactive[currentPage]);
-            dotsLayout.addView(dots[i]);
-        }
-
-        if (dots.length > 0)
-            dots[currentPage].setTextColor(colorsActive[currentPage]);
-    }
 
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -274,12 +248,21 @@ public class StoryActivity extends AppCompatActivity {
                             .using(new FirebaseImageLoader())
                             .load(mStorageRef)
                             .fitCenter()
-                            .override(700, 1200).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .override(700, 1200).placeholder(R.drawable.placeholder5).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(imageView);
-                } else
+                }else if(page>=12)
+                {
                     Glide.with(this)
                             .using(new FirebaseImageLoader())
-                            .load(mStorageRef).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .load(mStorageRef)
+                            .fitCenter()
+                            .override(700, 1200).placeholder(R.drawable.placeholder2).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(imageView);
+                }
+                else
+                    Glide.with(this)
+                            .using(new FirebaseImageLoader())
+                            .load(mStorageRef).placeholder(R.drawable.placeholder).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .fitCenter()
                             .into(imageView);
 
