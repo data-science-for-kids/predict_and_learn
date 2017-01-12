@@ -60,6 +60,20 @@
                 android:textColor="@color/slider_text" />
 
         </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/school"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/school"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:textColor="@color/slider_text" />
+
+        </android.support.design.widget.TextInputLayout>
 
 
         <android.support.design.widget.TextInputLayout

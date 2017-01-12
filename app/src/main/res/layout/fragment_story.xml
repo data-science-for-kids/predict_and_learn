@@ -30,7 +30,7 @@
             android:fontFamily="serif-monospace"
             android:text="@string/slider_screen_13"
             android:textColor="@color/slider_text"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>
