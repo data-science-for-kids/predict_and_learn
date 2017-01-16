@@ -21,5 +21,10 @@
         android:textStyle="bold" />
 
 
-
+<ProgressBar
+    android:layout_width="wrap_content"
+    android:id="@+id/progressBar01"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_centerInParent="true"/>
 </RelativeLayout>

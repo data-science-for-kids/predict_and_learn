@@ -61,6 +61,7 @@ public class StoryActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private static ArrayList<Story> story;
     private int count;
+    private ArrayList<Integer> imageNo;
     private Button btnSkip, btnNext,btnPrev;
 
     @Override
@@ -107,6 +108,7 @@ public class StoryActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         story = (ArrayList<Story>) getIntent().getSerializableExtra("Story");
+        imageNo=getIntent().getIntegerArrayListExtra("imageNo");
         count = story.size();
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mSectionsPagerAdapter.notifyDataSetChanged();
@@ -258,6 +260,15 @@ public class StoryActivity extends AppCompatActivity {
                             .load(mStorageRef)
                             .fitCenter()
                             .placeholder(R.drawable.placeholder6).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(imageView);
+                }
+                else if(page==10)
+                {
+                    Glide.with(this)
+                            .using(new FirebaseImageLoader())
+                            .load(mStorageRef)
+                            .fitCenter()
+                            .placeholder(R.drawable.placeholder10).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(imageView);
                 }else if(page>=12)
                 {

@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG="TAG";
     private String schoolName="test";
+    ArrayList<Integer> imageNo;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -55,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         school= (EditText) findViewById(R.id.school);
         grade= (EditText) findViewById(R.id.grade);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
+        imageNo=getIntent().getIntegerArrayListExtra("imageNo");
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -70,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     DatabaseReference databaseReference=firebaseDatabase.getReference("user").child(uid).child("school");
                     databaseReference.setValue(schoolName);
                     Intent intent = new Intent(getBaseContext(),MainActivity.class);
+                    intent.putExtra("imageNo",imageNo);
                     startActivity(intent);
                     finish();
                     Log.d("Tag", "onAuthStateChanged:signed_in:" + user.getUid());

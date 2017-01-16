@@ -14,8 +14,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -40,6 +42,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
     private int card_no = 1;      //used for checking slide no
     private ArrayList<DataBean> cards;
     private int page = -1, session;
+    private LinearLayout mainLayout;
 
     @Override
     public void onBackPressed() {
@@ -103,7 +106,13 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         ratingBar.setOnRatingBarChangeListener(this);
         newq.setOnClickListener(CollectDataExerciseActivity.this);
         cards = (ArrayList<DataBean>) getIntent().getSerializableExtra("Card");
-
+        mainLayout= (LinearLayout) findViewById(R.id.linear_main);
+        mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(),R.string.Toast,Toast.LENGTH_LONG).show();
+            }
+        });
         String uid = "admin";
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
@@ -112,13 +121,14 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         }
         SharedPreferences prefs = getSharedPreferences("Page", MODE_PRIVATE);
         card_no = prefs.getInt(uid, 1);
-        pic_no = prefs.getInt(uid, 1);//0 is the default value.
+        pic_no = prefs.getInt(uid, 1);//1 is the default value.
         session = prefs.getInt("session" + uid, 1);
         Log.d("pageRead", card_no + "   " + session);
 
         if (card_no == -1) {
             card_no = 1;
             pic_no = 1;
+
         }
 
         game.setText(cards.get(card_no - 1).getGame());
@@ -127,7 +137,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
 
 
         StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
-        StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
+
         //Images are fetched from server and not drawable
 
 
