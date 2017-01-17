@@ -1,6 +1,8 @@
 package com.example.user.datascienceapp;
 
-public class Response {
+import java.io.Serializable;
+
+public class Response implements Serializable {
     private String exercise_id;
     private String card_id;
     private String response;

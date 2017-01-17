@@ -235,11 +235,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 };
                 break;
             case R.id.analyze_button:
+                progressBar.setVisibility(View.VISIBLE);
+                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                DatabaseReference responses = database1.getReference().child("response");
+                ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
+                responses.addValueEventListener(responseLoader);
                 Log.d("analyze","button");
-
-
-                Intent intent=new Intent(MainActivity.this,AnalysisPage.class);
-                startActivity(intent);
                 break;
         }
     }

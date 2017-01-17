@@ -89,7 +89,7 @@ private WebView webView;
         }
         @JavascriptInterface
         public String sendNo(){
-
+                // for testing only
 
             ArrayList<Integer> arr=new ArrayList<Integer>();
             arr.add(1);
