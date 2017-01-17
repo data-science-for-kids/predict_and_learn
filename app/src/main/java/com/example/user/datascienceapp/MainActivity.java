@@ -37,9 +37,10 @@ import com.google.firebase.storage.StorageReference;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button story, collect, signout;
+    private Button story, collect, signout,analyze;
     private ProgressBar progressBar;
     private Intent intent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         collect.setOnClickListener(this);
         signout = (Button) findViewById(R.id.signout);
         signout.setOnClickListener(this);
+        analyze= (Button) findViewById(R.id.analyze_button);
+        analyze.setOnClickListener(this);
         Drawable Background = findViewById(R.id.main1).getBackground();
         Background.setAlpha(80);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -230,6 +233,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 };
+                break;
+            case R.id.analyze_button:
+                Log.d("analyze","button");
+
+
+                Intent intent=new Intent(MainActivity.this,AnalysisPage.class);
+                startActivity(intent);
                 break;
         }
     }
