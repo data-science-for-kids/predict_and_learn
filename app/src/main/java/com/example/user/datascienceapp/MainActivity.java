@@ -1,5 +1,6 @@
 package com.example.user.datascienceapp;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -125,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
                     }
 
                     @Override
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case R.id.collect_button:
-               /* final Context context = this;
+                final Context context = this;
                 final Dialog dialog = new Dialog(context);
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -170,49 +171,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 declineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Close dialog
-                        create_databean_list a=new create_databean_list();
+                        ExerciseLoader exerciseLoader=new ExerciseLoader(getApplicationContext());
+                        StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
+                        StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
+                        FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                        DatabaseReference cards = database1.getReference().child("cards").child("card_1");
+
+                        Glide.with(getBaseContext())
+                                .using(new FirebaseImageLoader())
+                                .load(female)
+                                .listener(exerciseLoader).fitCenter()
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .preload(600,1000);
+                        Glide.with(getBaseContext())
+                                .using(new FirebaseImageLoader())
+                                .load(male)
+                                .listener(exerciseLoader)
+                                .fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .preload(600,1000);
+
+                        cards.addListenerForSingleValueEvent(exerciseLoader);
+
+                        connectedRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                boolean connected = snapshot.getValue(Boolean.class);
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                            }
+                        });
                         dialog.dismiss();
                    }
-                });*/
-
+                });
+                dialog.show();
                 //Starting a progress box
                 progressBar.setVisibility(View.VISIBLE);
-                ExerciseLoader exerciseLoader=new ExerciseLoader(getApplicationContext());
 
-
-
-                StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
-                StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
-                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                DatabaseReference cards = database1.getReference().child("cards").child("card_1");
-
-                    Glide.with(this)
-                            .using(new FirebaseImageLoader())
-                            .load(female)
-                            .listener(exerciseLoader).fitCenter()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .preload(600,1000);
-                    Glide.with(this)
-                            .using(new FirebaseImageLoader())
-                            .load(male)
-                            .listener(exerciseLoader)
-                            .fitCenter().diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .preload(600,1000);
-
-                cards.addListenerForSingleValueEvent(exerciseLoader);
-
-                connectedRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        boolean connected = snapshot.getValue(Boolean.class);
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                    }
-                });
                 break;
             case R.id.signout:
                 FirebaseAuth auth = FirebaseAuth.getInstance();

@@ -2,8 +2,6 @@
     <string name="app_name">Data science for all</string>
     <string name="title_activity_welcome">Home Screen</string>
     <string name="button_next">NEXT</string>
-
-
     <string name="button_skip">SKIP</string>
     <string name="menu_item1">What is data science?</string>
     <string name="menu_item2">Who\'s your friend?</string>
@@ -13,9 +11,9 @@
     <string name="dialog_end_button">FINISH</string>
     <string name="dialog_end_item">Thanks for giving rating</string>
     <string name="dialog_back_item">Are you sure you want to exit ?</string>
-    <string name="dialog_item"> Let’s get started with our fun exercise! You will now be shown profiles of some young people. Based on the description provided again each person, decide whether you would like to be friends with her/him. \nYou can rate on a scale of 1-5, where 5 stars would mean you will definitely make friends with the person and 1 meaning you will definitely not make friends.\nReady to get started? Hit ‘proceed’</string>
-    <string name="no_rating_content">Do rate you feel about being friends with this person. You cannot proceed to the next profile until you finish rating this.</string>
-
+    <string name="dialog_item"> Let’s get started with our fun exercise! You will now be shown profiles of some young people. Based on the description provided again each person, decide whether you would like to be friends with her/him. \nYou can rate on a scale of 1-5, where 5 stars would mean you will definitely make friends with the person and 1 meaning you will definitely not make friends.</string>
+    <string name="no_rating_content">Do rate your feeling about this person. You cannot proceed to the next profile until you finish rating this.</string>
+    <string name="Toast">" 5 stars means you will definitely make friends with the person and 1 means you will definitely not make friends."</string>
     <string name="slider_screen_1">Hello there! Let\'s begin with a story</string>
     <string name="slider_screen_2">In the year 1854, London, the capital city of England, experienced an outbreak of Cholera.</string>
     <string name="slider_screen_3">The sad thing was, no one really knew what Cholrea was or how to go about treating it.</string>

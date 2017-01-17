@@ -1,14 +1,13 @@
 package com.example.user.datascienceapp;
 
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,12 +23,14 @@ import java.util.ArrayList;
 public class StoryLoader implements RequestListener<StorageReference, GlideDrawable>,ValueEventListener {
     private ArrayList<Story> list;
     private int count=0;
-    private boolean text;
+    private boolean text,splash;
     private Context context;
     public StoryLoader(Context context){
         this.context=context;
         text=false;
+        splash=false;
     }
+
     @Override
     public boolean onException(Exception e, StorageReference model, Target<GlideDrawable> target, boolean isFirstResource) {
         return false;
@@ -62,13 +63,14 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
 
     }
     public void check(int count){
-        if(count>=5&&text){
+        if(count>=10&&(text&&!splash)){
             Intent intent = new Intent(context,StoryActivity.class);
             intent.putExtra("Story",list);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Log.d("List Size Check",list.size()+"");
             context.startActivity(intent);
         }
+
     }
 
 }
