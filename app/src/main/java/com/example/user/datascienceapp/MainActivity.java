@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.analyze_button:
                 progressBar.setVisibility(View.VISIBLE);
                 FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                DatabaseReference responses = database1.getReference().child("response");
+                DatabaseReference responses = database1.getReference().child("response").child("resid_Cr09A8pr4lb0Rem1qFirQe9sQH43").child("ses_01");
                 ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
                 responses.addValueEventListener(responseLoader);
                 Log.d("analyze","button");

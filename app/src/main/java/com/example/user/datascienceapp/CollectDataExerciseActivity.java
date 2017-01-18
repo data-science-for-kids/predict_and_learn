@@ -139,8 +139,6 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
 
         //Images are fetched from server and not drawable
-
-
         Glide.with(this)
                 .using(new FirebaseImageLoader())
                 .load(female).diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -190,7 +188,8 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                     Response res = new Response();
                     res.setCard("id_" + pic_no);
                     res.setExercise("friends");
-                    res.setResponse(a + "");
+                    res.setResponse(a +"");
+                    res.setGender(cards.get(pic_no-1).getGender());
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference response;
                     if (session < 10) {

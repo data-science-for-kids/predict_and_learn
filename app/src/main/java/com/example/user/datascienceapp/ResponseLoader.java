@@ -28,19 +28,19 @@ public class ResponseLoader implements ValueEventListener {
          list = new ArrayList<Response>();
     }
 
-
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
 
-
+        if(!dataSnapshot.exists()){
+            Log.d("No","Data");
+        }
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             Response response = ds.getValue(Response.class);
             list.add(response);
-
             Log.d("Response", response.toString());
         }
         count=1;
-        Log.d("ListSize",list.size()+"");
+        Log.d("ListSize ",list.size()+"");
 
         check(count);
 
