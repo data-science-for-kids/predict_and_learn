@@ -49,7 +49,7 @@ public class AnalysisPage extends AppCompatActivity {
         res[3]=0;
 
         for(Response response: responses){
-            String r=response.getResponse();
+            String r = response.getResponse();
             if(r.equals("5.0")){
                 res[3]++;
             }
