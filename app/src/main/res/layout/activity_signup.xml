@@ -31,10 +31,10 @@
             android:textColor="@color/slider_text"
             android:textSize="30dp"
             android:textStyle="bold" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/fname"
@@ -107,6 +107,7 @@
             android:textColor="@color/slider_text"
             android:textSize="20sp"
             android:textStyle="bold"/>
+
     </LinearLayout>
 
     <ProgressBar
