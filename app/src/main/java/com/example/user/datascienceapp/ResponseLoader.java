@@ -3,29 +3,20 @@ package com.example.user.datascienceapp;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-/**
- * Created by Aman Mathur on 1/11/2017.
- */
 
 public class ResponseLoader implements ValueEventListener {
-    MainActivity mainActivity;
     private ArrayList<Response> list;
     private int count=0;
     private Context context;
     public ResponseLoader(Context context){
         this.context=context;
-         list = new ArrayList<Response>();
+         list = new ArrayList<>();
     }
 
     @Override
@@ -51,7 +42,7 @@ public class ResponseLoader implements ValueEventListener {
 
     }
     public void check(int count){
-        if(count==1){
+        if(count == 1){
             Intent intent = new Intent(context,AnalysisPage.class);
             intent.putExtra("Response",list);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
