@@ -1,22 +1,18 @@
 package com.example.user.datascienceapp;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,20 +22,17 @@ public class AnalysisPage extends AppCompatActivity {
     private ArrayList<Response> responses;
     private int[] res;
     private int m=0,f=0;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_analysis_page);
-        final ProgressDialog progressDialog=new ProgressDialog(this);
-        progressDialog.setMessage("Loading...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
+        progressBar= (ProgressBar) findViewById(R.id.progressBar2);
+        progressBar.setVisibility(View.VISIBLE);
         responses= (ArrayList<Response>) getIntent().getSerializableExtra("Response");
-
         webView= (WebView) findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
         res=new int[4];
@@ -47,7 +40,12 @@ public class AnalysisPage extends AppCompatActivity {
         res[1]=0;
         res[2]=0;
         res[3]=0;
-
+        if (Build.VERSION.SDK_INT >= 19) {
+            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        }
+        else {
+            webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
         for(Response response: responses){
             String r = response.getResponse();
             if(r.equals("5.0")){
@@ -62,7 +60,6 @@ public class AnalysisPage extends AppCompatActivity {
             else{
                 res[0]++;
             }
-
             String g=response.getGender();
             if(g.equals("MALE")){
                 m++;
@@ -70,7 +67,6 @@ public class AnalysisPage extends AppCompatActivity {
             else if(g.equals("FEMALE")){
                 f++;
             }
-
         }
 
         webView.setWebViewClient(new WebViewClient(){
@@ -81,7 +77,6 @@ public class AnalysisPage extends AppCompatActivity {
                 if (!loadingFinished) {
                     redirect = true;
                 }
-
                 loadingFinished = false;
                 view.loadUrl(url);
                 return super.shouldOverrideUrlLoading(view, url);
@@ -96,7 +91,7 @@ public class AnalysisPage extends AppCompatActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                progressDialog.dismiss();
+                progressBar.setVisibility(View.GONE);
                 if(!redirect){
                     loadingFinished = true;
                 }
@@ -125,7 +120,6 @@ public class AnalysisPage extends AppCompatActivity {
         }
         @JavascriptInterface
         public String sendNo(){
-
             StringBuffer sb = new StringBuffer();
             sb.append("[");
             for(int i=0; i<res.length; i++){
@@ -133,9 +127,7 @@ public class AnalysisPage extends AppCompatActivity {
                 sb.append(",");
                 int percent=(res[i]*100)/56;
                 sb.append("\"").append(percent).append("\"");
-                //if(i+1 < res.length) {
                     sb.append(",");
-                //}
             }
             sb.append("\"").append(m).append("\"");
             sb.append(",");

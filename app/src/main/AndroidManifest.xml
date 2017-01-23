@@ -27,7 +27,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".StoryActivity"
             android:label="@string/title_activity_story"
@@ -41,6 +41,10 @@
         <activity
             android:name=".AnalysisPage"
             android:label="@string/title_activity_analysis_page"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme"></activity>
     </application>
 

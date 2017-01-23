@@ -92,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
         progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         String f_name=fname.getText().toString();
         String l_name=lname.getText().toString();
         String grade_name=grade.getText().toString();

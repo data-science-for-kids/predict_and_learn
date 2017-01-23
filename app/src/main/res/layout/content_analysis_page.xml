@@ -15,5 +15,14 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:id="@+id/webview"/>
+        android:id="@+id/webview">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="163dp"
+            android:layout_y="245dp"
+            android:foregroundGravity="center"
+            android:id="@+id/progressBar2" />
+    </WebView>
 </RelativeLayout>
