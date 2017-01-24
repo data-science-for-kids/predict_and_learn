@@ -3,7 +3,6 @@ package com.example.user.datascienceapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -23,12 +22,12 @@ import java.util.ArrayList;
 public class StoryLoader implements RequestListener<StorageReference, GlideDrawable>,ValueEventListener {
     private ArrayList<Story> list;
     private int count=0;
-    private boolean text,splash;
+    private boolean text;
     private Context context;
     public StoryLoader(Context context){
         this.context=context;
         text=false;
-        splash=false;
+
     }
 
     @Override
@@ -46,8 +45,8 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        int c = 0;
-        list= new ArrayList<Story>();
+
+        list= new ArrayList<>();
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             Story story = ds.getValue(Story.class);
             list.add(story);
@@ -63,10 +62,12 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
 
     }
     public void check(int count){
-        if(count>=10&&(text&&!splash)){
+        if(count>=7&&text){
             Intent intent = new Intent(context,StoryActivity.class);
             intent.putExtra("Story",list);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             Log.d("List Size Check",list.size()+"");
             context.startActivity(intent);
         }

@@ -37,10 +37,9 @@ import com.google.firebase.storage.StorageReference;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button story, collect, signout;
+    private Button story, collect, signout,analyze;
     private ProgressBar progressBar;
     private Intent intent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         collect.setOnClickListener(this);
         signout = (Button) findViewById(R.id.signout);
         signout.setOnClickListener(this);
+        analyze= (Button) findViewById(R.id.analyze_button);
+        analyze.setOnClickListener(this);
         Drawable Background = findViewById(R.id.main1).getBackground();
         Background.setAlpha(80);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onResume(){
         super.onResume();
         progressBar.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
     }
 
@@ -87,37 +89,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View w) {
-        final View view = w;
         final DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         switch (w.getId()) {
             case R.id.story_button:
 
                 progressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 StoryLoader storyLoader=new StoryLoader(getApplicationContext());
-                int image[]={2,3,5,6,8,10,12,13,14,15,16,18};
-                for(int i=0;i<12;i++){
-                    StorageReference storyImg = FirebaseStorage.getInstance().getReference().child("story1/slide"+image[i]+".jpg");
-                    if(i==2)
-                    {
-                        Glide.with(this)
-                                .using(new FirebaseImageLoader())
-                                .load(storyImg)
-                                .listener(storyLoader).fitCenter()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .preload(700,1200);
-                    }
-                    else {
-                        Glide.with(this)
-                                .using(new FirebaseImageLoader())
-                                .load(storyImg)
-                                .listener(storyLoader).fitCenter()
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .preload();
-                    }
-                }
+
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
                 final DatabaseReference story = database.getReference().child("story").child("story_1");
-
                 story.addListenerForSingleValueEvent(storyLoader);
                 story.addChildEventListener(new ChildEventListener() {
                     @Override
@@ -144,6 +126,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
+                int[] image={2,3,5,6,8,10,12,13,14,15,16,18};
+                for(int i=0;i<12;i++){
+                    StorageReference storyImg = FirebaseStorage.getInstance().getReference().child("story1/slide"+image[i]+".jpg");
+                    if(i==2)
+                    {
+                        Glide.with(this)
+                                .using(new FirebaseImageLoader())
+                                .load(storyImg)
+                                .listener(storyLoader).fitCenter()
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .preload(700,1200);
+                    }
+                    else {
+                        Glide.with(this)
+                                .using(new FirebaseImageLoader())
+                                .load(storyImg)
+                                .listener(storyLoader).fitCenter()
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .preload();
+                    }
+                }
+
+
+
 
                 connectedRef.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -209,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dialog.show();
                 //Starting a progress box
                 progressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                 break;
             case R.id.signout:
@@ -230,6 +238,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 };
+                break;
+            case R.id.analyze_button:
+                progressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                DatabaseReference responses = database1.getReference().child("response").child("resid_Cr09A8pr4lb0Rem1qFirQe9sQH43").child("ses_01");
+                ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
+                responses.addValueEventListener(responseLoader);
+                Log.d("analyze","button");
                 break;
         }
     }
