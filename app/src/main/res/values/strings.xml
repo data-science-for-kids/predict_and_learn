@@ -68,6 +68,8 @@
     <string name="forgot_password_msg">We just need your registere</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_analysis_page">AnalysisPage</string>
+    <string name="title_activity_analysis_page1">Analysis Page</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 
 </resources>

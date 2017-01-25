@@ -15,7 +15,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -32,20 +31,17 @@
             android:name=".StoryActivity"
             android:label="@string/title_activity_story"
             android:theme="@style/AppTheme">
+
+        </activity>
+
+        <activity
+            android:name=".AnalysisPage"
+            android:label="@string/title_activity_analysis_page1"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AnalysisPage"
-            android:label="@string/title_activity_analysis_page"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme"></activity>
     </application>
-
 </manifest>

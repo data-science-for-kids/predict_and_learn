@@ -1,10 +1,7 @@
 package com.example.user.datascienceapp;
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -15,9 +12,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-/**
- * Created by Aman Mathur on 1/11/2017.
- */
 
 public class StoryLoader implements RequestListener<StorageReference, GlideDrawable>,ValueEventListener {
     private ArrayList<Story> list;
@@ -53,7 +47,6 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
         }
         text=true;
         Log.d("ListSize",list.size()+"");
-        Log.d("Data",count+"");
         check(count);
     }
 

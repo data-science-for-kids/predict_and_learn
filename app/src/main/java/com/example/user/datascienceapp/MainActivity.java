@@ -1,10 +1,8 @@
 package com.example.user.datascienceapp;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
@@ -20,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -39,7 +38,6 @@ import com.google.firebase.storage.StorageReference;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button story, collect, signout,analyze;
     private ProgressBar progressBar;
-    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Drawable Background = findViewById(R.id.main1).getBackground();
         Background.setAlpha(80);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        intent = new Intent(MainActivity.this, CollectDataExerciseActivity.class);
-        progressBar.setVisibility(View.GONE);
+        loadStory();
+       // progressBar.setVisibility(View.GONE);
+
 
     }
 
@@ -71,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public void onResume(){
         super.onResume();
@@ -155,7 +155,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         boolean connected = snapshot.getValue(Boolean.class);
-
+                        if(!connected){
+                            Toast.makeText(getBaseContext(),"Unable to connect",Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -173,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
                 Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
-                 //if decline button is clicked, close the custom dialog
                 declineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -182,7 +183,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
                         FirebaseDatabase database1 = FirebaseDatabase.getInstance();
                         DatabaseReference cards = database1.getReference().child("cards").child("card_1");
-
+                        progressBar.setVisibility(View.VISIBLE);
+                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Glide.with(getBaseContext())
                                 .using(new FirebaseImageLoader())
                                 .load(female)
@@ -202,7 +205,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
                                 boolean connected = snapshot.getValue(Boolean.class);
-
+                                if(!connected)
+                                Toast.makeText(getBaseContext(),"Unable to connect",Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -228,7 +232,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 FirebaseAuth.AuthStateListener authListener = new FirebaseAuth.AuthStateListener() {
                     @Override
                     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                        //   Log.d("Here","Logout");
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         if (user == null) {
                             // user auth state is changed - user is null
@@ -250,6 +253,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("analyze","button");
                 break;
         }
+    }
+    public void loadStory(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference story = database.getReference().child("story").child("story_1");
+        story.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                progressBar.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
 }
