@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -97,8 +99,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 StoryLoader storyLoader=new StoryLoader(getApplicationContext());
-
-                final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                StorageReference storyText=FirebaseStorage.getInstance().getReference().child("datasciencekids-master-story-export.json");
+                final long ONE_MEGABYTE = 1024 * 1024;
+                storyText.getBytes(ONE_MEGABYTE).addOnSuccessListener(storyLoader).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
+               /* final FirebaseDatabase database = FirebaseDatabase.getInstance();
                 final DatabaseReference story = database.getReference().child("story").child("story_1");
                 story.addListenerForSingleValueEvent(storyLoader);
                 story.addChildEventListener(new ChildEventListener() {
@@ -125,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
-                });
+                });*/
                 int[] image={2,3,5,6,8,10,12,13,14,15,16,18};
                 for(int i=0;i<12;i++){
                     StorageReference storyImg = FirebaseStorage.getInstance().getReference().child("story1/slide"+image[i]+".jpg");
@@ -156,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onDataChange(DataSnapshot snapshot) {
                         boolean connected = snapshot.getValue(Boolean.class);
                         if(!connected){
-                            Toast.makeText(getBaseContext(),"Unable to connect",Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getBaseContext(),"Unable to connect",Toast.LENGTH_SHORT).show();
                         }
                     }
 

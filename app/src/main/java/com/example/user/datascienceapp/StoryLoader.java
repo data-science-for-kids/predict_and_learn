@@ -5,19 +5,26 @@ import android.util.Log;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
-public class StoryLoader implements RequestListener<StorageReference, GlideDrawable>,ValueEventListener {
+public class StoryLoader implements RequestListener<StorageReference, GlideDrawable>/*,ValueEventListener*/,OnSuccessListener<byte[]> {
     private ArrayList<Story> list;
     private int count=0;
     private boolean text;
     private Context context;
+    private JSONObject JSONtext;
     public StoryLoader(Context context){
         this.context=context;
         text=false;
@@ -36,7 +43,7 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
         check(count);
         return false;
     }
-
+/*
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -53,7 +60,7 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
-    }
+    }*/
     public void check(int count){
         if(count>=7&&text){
             Intent intent = new Intent(context,StoryActivity.class);
@@ -67,4 +74,36 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
 
     }
 
+    @Override
+    public void onSuccess(byte[] bytes) {
+        list=new ArrayList<>();
+        try {
+            JSONObject j1=new JSONObject(new String(bytes));
+            JSONObject j2=j1.getJSONObject("story_1");
+            for(int i=1;i<=19;i++){
+                JSONObject jsonObject;
+
+                if(i<=9)
+                    jsonObject=j2.getJSONObject("page_0"+i);
+                else
+                    jsonObject=j2.getJSONObject("page_"+i);
+
+                Story story=new Story();
+                if(jsonObject.has("text"))
+                    story.setText(jsonObject.getString("text"));
+                else
+                    story.setText("");
+                    story.imagePresent(jsonObject.getBoolean("image"));
+              //  Log.d(i+"",story.toString());
+                list.add(story);
+            }
+
+            //Log.d("list",list.size()+"");
+            //Log.d("JSON",j2.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        text=true;
+        check(count);
+    }
 }

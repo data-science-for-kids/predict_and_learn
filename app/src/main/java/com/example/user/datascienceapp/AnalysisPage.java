@@ -181,7 +181,6 @@ public class AnalysisPage extends AppCompatActivity {
             });
             webView.addJavascriptInterface(new PlaceholderFragment.AppJavaProxy(getActivity()),"androidAppProxy");
             String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/bar.html?alt=media&token=3597669c-1040-444d-9c41-9ed60830cd1b";
-
             String url1="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/chart1.html?alt=media&token=a7fef7c2-6b71-4850-bb0b-9e94afb68db6";
             String url2="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/chart2.html?alt=media&token=778c4c70-3306-4d69-9d9e-710bf4173986";
             String url3="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/chart3.html?alt=media&token=5b56d0c3-c198-4761-8840-9a58a685d44f";
