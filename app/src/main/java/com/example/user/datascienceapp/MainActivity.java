@@ -24,10 +24,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -107,34 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // Handle any errors
                     }
                 });
-               /* final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference story = database.getReference().child("story").child("story_1");
-                story.addListenerForSingleValueEvent(storyLoader);
-                story.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });*/
                 int[] image={2,3,5,6,8,10,12,13,14,15,16,18};
                 for(int i=0;i<12;i++){
                     StorageReference storyImg = FirebaseStorage.getInstance().getReference().child("story1/slide"+image[i]+".jpg");
@@ -177,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.collect_button:
                 final Context context = this;
                 final Dialog dialog = new Dialog(context);
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialogue_box_layout);
                 dialog.setCanceledOnTouchOutside(false);

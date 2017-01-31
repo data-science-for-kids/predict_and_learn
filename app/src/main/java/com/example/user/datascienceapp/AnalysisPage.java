@@ -32,9 +32,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class AnalysisPage extends AppCompatActivity {
-
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     private ViewPager mViewPager;
 
     @Override
@@ -46,11 +44,9 @@ public class AnalysisPage extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         
@@ -62,7 +58,7 @@ public class AnalysisPage extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_analysis_page1, menu);
         return true;
     }
@@ -72,7 +68,6 @@ public class AnalysisPage extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -214,7 +209,7 @@ public class AnalysisPage extends AppCompatActivity {
             }
             @JavascriptInterface
             public String sendNo(){
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 sb.append("[");
                 for(int i=0; i<res.length; i++){
                     sb.append("\"").append(res[i]).append("\"");
