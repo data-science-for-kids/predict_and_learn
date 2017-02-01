@@ -243,7 +243,7 @@ public class StoryActivity extends AppCompatActivity {
             }
             //  Log.d("Check",story.get(page-1).isImage()+"");
             if (story.get(page - 1).isImage()) {
-
+                Log.d("image","here");
                 StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child("story1/slide" + page + ".jpg");
                 if (page == 5) {
                     Glide.with(this)
@@ -287,6 +287,7 @@ public class StoryActivity extends AppCompatActivity {
                             .into(imageView);
 
             }
+
 
             return rootView;
         }

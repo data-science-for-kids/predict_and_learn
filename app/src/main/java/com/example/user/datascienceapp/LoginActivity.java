@@ -35,7 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText fname,lname,school,grade;
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private String TAG="TAG";
     private String schoolName="test";
     ArrayList<Integer> imageNo;
     @Override
@@ -81,10 +80,8 @@ public class LoginActivity extends AppCompatActivity {
                     // User is signed out
                     Log.d("Tag", "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
-       // grade.setClickable(true);
 
     }
     @OnClick(R.id.sign_up_button)
@@ -94,14 +91,16 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        String f_name=fname.getText().toString();
-        String l_name=lname.getText().toString();
+
+        String f_name=fname.getText().toString()+" ";
+        String l_name=lname.getText().toString()+" ";
         String grade_name=grade.getText().toString();
 
 
         if(f_name.equals("")||l_name.equals("")||grade_name.equals("")){
             Toast.makeText(getBaseContext(),"Fill all the fields",Toast.LENGTH_LONG).show();
             progressBar.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
         else {
             if(grade_name.equals("Below 5"))
@@ -109,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             else if(grade_name.equals("Above 12"))
                 grade_name="13";
 
-            final String email = f_name + "." + grade_name + "@" + l_name + ".com";
+            final String email = f_name.substring(0,f_name.indexOf(' ')) + "." + grade_name + "@" + l_name.substring(0,l_name.indexOf(' ')) + ".com";
             final String password = "password123";
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -180,6 +179,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
                 else{
 

@@ -18,12 +18,13 @@ public class Story implements Serializable {
     }
 
 
-    public void imagePresent(boolean present) {
+    public void imagePresent(boolean image) {
         this.image = image;
     }
 
     public boolean isImage() {
         return image;
     }
+
 
 }
