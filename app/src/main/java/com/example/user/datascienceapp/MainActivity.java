@@ -3,6 +3,7 @@ package com.example.user.datascienceapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
@@ -233,14 +234,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 };
                 break;
             case R.id.analyze_button:
-                progressBar.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                DatabaseReference responses = database1.getReference().child("response").child("resid_Cr09A8pr4lb0Rem1qFirQe9sQH43").child("ses_01");
-                ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
-                responses.addValueEventListener(responseLoader);
-                Log.d("analyze","button");
+                int card;
+                int session=0;
+                String uid = "admin";
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                if (mAuth.getCurrentUser() != null) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    uid = user.getUid();
+                }
+                SharedPreferences prefs = getSharedPreferences("Page", MODE_PRIVATE);
+                card = prefs.getInt(uid, 1);//1 is the default value.
+                session = (prefs.getInt("session" + uid, 1) == 1) ? 1 : prefs.getInt("session" + uid, 1)-1;
+
+                Log.d("Session",session+"");
+                Log.d("Card",card+"");
+                Log.d("Uid",uid);
+
+             if(card == -1){
+                 progressBar.setVisibility(View.VISIBLE);
+                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                 FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                 DatabaseReference responses = database1.getReference().child("response").child("resid_"+uid).child("ses_0"+session);
+                 ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
+                 responses.addValueEventListener(responseLoader);
+                 Log.d("analyze","button");
+             }
+                else{
+                 Toast.makeText(this,"Complete Exercise first",Toast.LENGTH_SHORT).show();
+             }
+
                 break;
         }
     }

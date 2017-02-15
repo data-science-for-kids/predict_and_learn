@@ -25,8 +25,6 @@ public class PredictActivity extends AppCompatActivity {
     private int[] res;
     private ArrayList<Response> responses;
     private ProgressBar progressBar;
-    private float x1,x2;
-    static final int MIN_DISTANCE = 150;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +43,9 @@ public class PredictActivity extends AppCompatActivity {
         res[1]=0;
         res[2]=0;
         res[3]=0;
-      String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/predict.html?alt=media&token=0a6236ef-8f07-4bc1-8431-fbb31582a674";
+
+        String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/predict.html?alt=media&token=0a6236ef-8f07-4bc1-8431-fbb31582a674";
+
         if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
