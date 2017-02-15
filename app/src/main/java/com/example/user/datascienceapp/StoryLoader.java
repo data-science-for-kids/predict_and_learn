@@ -17,9 +17,14 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
     private int count=0;
     private boolean text;
     private Context context;
+    private long start,finish;
     public StoryLoader(Context context){
         this.context = context;
         text = false;
+        start=System.currentTimeMillis();
+
+    }
+    public StoryLoader(){
 
     }
 
@@ -38,11 +43,15 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
     public void check(int count){
         if( count >= 7&& text ){
             Intent intent = new Intent(context,StoryActivity.class);
-            intent.putExtra("Story",list);
+            intent.putExtra("Story",list);//sending story text
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             Log.d("List Size Check",list.size()+"");
+            finish=System.currentTimeMillis();
+            Log.d("Time",Long.toString(finish - start));
+            Log.d("finish",Long.toString(finish ));
+            Log.d("start",Long.toString(start));
             context.startActivity(intent);
         }
 
@@ -57,7 +66,7 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
                 JSONObject jsonObject;
 
                 if(i<=9)
-                    jsonObject = j2.getJSONObject("page_0"+i);
+                    jsonObject = j2.getJSONObject("page_0"+i);// fetching json objects
                 else
                     jsonObject = j2.getJSONObject("page_"+i);
 
