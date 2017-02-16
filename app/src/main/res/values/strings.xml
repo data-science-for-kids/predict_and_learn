@@ -70,6 +70,7 @@
     <string name="title_activity_analysis_page">AnalysisPage</string>
     <string name="title_activity_analysis_page1">Analysis Page</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_predict">PredictActivity</string>
 
 
 </resources>

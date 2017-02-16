@@ -34,8 +34,6 @@ public class ResponseLoader implements ValueEventListener {
         Log.d("ListSize ",list.size()+"");
 
         check(count);
-
-
     }
 
     @Override
@@ -44,7 +42,7 @@ public class ResponseLoader implements ValueEventListener {
     }
     public void check(int count){
         if(count == 1){
-            Intent intent = new Intent(context,AnalysisPage.class);
+            Intent intent = new Intent(context,PredictActivity.class);
             intent.putExtra("Response",list);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Log.d("List Size Check",list.size()+"");

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -18,8 +19,13 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +42,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 4500;
 
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private String TAG="TAG";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +58,46 @@ public class SplashScreenActivity extends AppCompatActivity {
         loginActivityBackground.setAlpha(100);
 
         progress.setIndeterminate(true);
+        mAuth = FirebaseAuth.getInstance();
 
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+             @Override
+             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                  // User is signed in
+                  Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                 } else {
+                  // User is signed out
+                  Log.d(TAG, "onAuthStateChanged:signed_out");
+                 }
+                  }
+             };
+
+        mAuth.signInAnonymously()
+         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+           @Override
+           public void onComplete(@NonNull Task<AuthResult> task) {
+            Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+               load();
+               Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
+               startActivity(i);
+               finish();
+
+            if (!task.isSuccessful()) {
+             Log.w(TAG, "signInAnonymously", task.getException());
+             Toast.makeText(SplashScreenActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+             }
+            }
+            });
+
+    }
+    @Override
+    public void onStart() {
+         super.onStart();
+         mAuth.addAuthStateListener(mAuthListener);
+    }
+    public void load(){
         StorageReference storyText=FirebaseStorage.getInstance().getReference().child("datasciencekids-master-story-export.json");
         final long ONE_MEGABYTE = 1024 * 1024;
         storyText.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -78,6 +127,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                             @Override
                             public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                Log.d("Image loaded at","Splash");
                                 return false;
                             }
                         }).fitCenter()
@@ -96,6 +146,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                             @Override
                             public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                Log.d("Image loaded at","Splash");
                                 return false;
                             }
                         }).fitCenter()
@@ -103,19 +154,13 @@ public class SplashScreenActivity extends AppCompatActivity {
                         .preload();
             }
         }
+    }
 
-
-
-
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                progress.setVisibility(View.GONE);
-                Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                startActivity(i);
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
+    @Override
+    public void onStop() {
+         super.onStop();
+         if (mAuthListener != null) {
+              mAuth.removeAuthStateListener(mAuthListener);
+             }
     }
 }

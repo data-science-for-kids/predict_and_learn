@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load("current", {packages:['corechart','table']});
+  </script>
+<style>
+
+img {
+    width: 10%;
+    height: auto;
+}
+.container {
+    position: relative;
+}
+
+.bottomright {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+    font-size: 18px;
+}
+.bottomleft {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+    font-size: 18px;
+}
+.center {
+    position: absolute;
+    bottom: 8px; 
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+}
+#Chart,#inputNo,#person,#suggest{
+  display: none;
+}
+
+p{
+  font-family: "Custom",sans-serif,monospace;
+}
+
+</style>
+</head>
+<title>Predict your Friend</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
+<body>
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<br>
+
+  
+  <div class="w3-container w3-center ">
+
+      <div class="w3-container w3-animate-right" id="Chart">
+          <p class="w3-text-red ">This is called a histogram.</p>
+         <div id="line-chart-marker"  ></div>
+
+         <div id="table_div" ></div>
+      </div>
+      <div class="w3-animate-right">
+      <p id="card_text" class="w3-text-red "><b>Welcome</b></p>
+      <p id="person" class="w3-text-green"><b></b></p>
+      <p id="suggest" ><b></b></p>
+      <input type="number" id="inputNo" placeholder="Answer" style="width:70px;" >
+      <br>
+      </div>
+      
+
+
+   
+    <div class="bottomright">
+      <button class="w3-btn w3-transparent w3-text-red" onclick="next()" id="next">NEXT</button>
+    </div>
+    <div class="bottomleft">
+      <button class="w3-btn w3-transparent w3-text-red" onclick="back()" id="prev">PREV</button>
+    </div>
+    <br>
+  </div>
+  
+</div>
+
+
+
+  <script type="text/javascript">
+  var max=0;
+    var i = -1;
+    var text = [
+                "Great! So you have let us know how much you liked the young people we showed you some information about.",
+
+                "But can we guess or \"predict\" whom you generally befriend based on this information? Can \"analyzing\" the ratings you just provided tell us more about your likes and preferences? About you, as a person?",
+
+                "Let's find out!",
+
+                "Let us first understand how many you chose to befriend.","",
+
+                "Based on your rating preference and looking at the histogram,","",
+
+                "Let us now understand something about whom you have befriended.",
+
+                "to be continued"
+               ];
+
+    var suggest="Can you go back, count and tell us how many people you marked as \"friends\"? We consider all those whom you rated with 4 or 5 stars as your friends";
+
+    var person= [
+                  "It seems you are generally a friendly person. We infer this because you have rated many more people with 4 or 5 stars than those with 1, 2 or 3 stars.",
+                  "It seems you don't easily befriend a person",
+                  "It's hard to say whether you easily befriend a person or not."
+                ];
+    var results = ["Great! So we've found out a little something about you - \n You are a very friendly person",
+                    "Great! So your data is yet to reveal anything about you. Let's keep looking..."]
+
+    function next(){
+      i++;
+      pageHandler();
+      
+        
+    }
+    function back(){
+      i--;
+      pageHandler();
+      
+        
+    }
+    function pageHandler(){
+        console.log(i);
+
+        $('#Chart').hide();
+        $('#inputNo').hide();
+        $('#person').hide();
+        $('#suggest').hide();
+        $('#next').show();
+        $('#prev').show();
+
+        switch(i){
+          case 0:
+          case 1:
+          case 2:
+          case 3:
+            break;
+          case 4:
+            $('#Chart').show();
+            drawChart();
+            max
+            break;
+          case 5:
+
+            $('#person').show();
+            $('#suggest').show();
+            document.getElementById('person').innerHTML = person[1].bold();
+            document.getElementById('suggest').innerHTML = suggest.bold();
+            $('#inputNo').show();
+
+            break;
+          case 6:
+            var ans=document.getElementById('inputNo').value;
+            if(ans == max){
+              document.getElementById('suggest').innerHTML = results[1].bold();
+              $('#suggest').show();
+            
+            }else{
+              i--;// calling page 5
+              pageHandler();
+              return;
+            }
+            console.log(i+'Page');
+            break;
+          case 7:
+
+            break;
+          default:
+            if(i<0)
+            $('#prev').hide();
+            else
+            $('#next').hide();
+            break;   
+      }
+       document.getElementById('card_text').innerHTML=text[i].bold(); 
+       console.log("text"+i);
+    }
+
+    function drawChart() {
+      var x=null;
+      var y=null;
+      if(typeof androidAppProxy !== "undefined"){
+       x=androidAppProxy.sendNo();
+       console.log(x);
+       y=JSON.parse(x);
+      }
+      else{
+        x=null;
+      }
+      var data = google.visualization.arrayToDataTable(
+                [
+                  ['Friend', 'Number' ],
+                  ['Does not want ', parseInt(y[0])],
+                  ['May not ', parseInt(y[1])],
+                  ['May ', parseInt(y[2])],
+                  ['Really Wants to', parseInt(y[3])]
+                ]);
+      // var data = new google.visualization.arrayToDataTable([
+      //   ['Threat', 'Attacks'],
+      //   ['Chandrian', 38],
+      //   ['Ghosts', 12],
+      //   ['Ghouls', 6],
+      //   ['UFOs', 4],
+      //   ['Vampires', 28],
+      //   ['Zombies', 8]
+      // ]);
+
+      var options = {
+        legend: 'none',
+        colors: ['#db2727'],
+        lineWidth: 4,
+        height: 228,
+        width: "100%",
+        hAxis: { gridlines: { count: 5 } }
+      };
+
+      var chart = new google.visualization.ColumnChart(document.getElementById('line-chart-marker'));
+      chart.draw(data, options);
+
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+
+        table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+
+        max=data.getColumnRange(1).max;
+    }
+  
+  </script>
+
+</body>
+</html>

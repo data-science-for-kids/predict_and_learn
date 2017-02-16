@@ -3,10 +3,12 @@ package com.example.user.datascienceapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,10 +26,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,9 +59,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Drawable Background = findViewById(R.id.main1).getBackground();
         Background.setAlpha(80);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        loadStory();
        // progressBar.setVisibility(View.GONE);
-
+        FloatingActionButton floatingActionButton= (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"Data Science",Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -79,6 +84,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressBar.setVisibility(View.GONE);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -107,34 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // Handle any errors
                     }
                 });
-               /* final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference story = database.getReference().child("story").child("story_1");
-                story.addListenerForSingleValueEvent(storyLoader);
-                story.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });*/
                 int[] image={2,3,5,6,8,10,12,13,14,15,16,18};
                 for(int i=0;i<12;i++){
                     StorageReference storyImg = FirebaseStorage.getInstance().getReference().child("story1/slide"+image[i]+".jpg");
@@ -177,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.collect_button:
                 final Context context = this;
                 final Dialog dialog = new Dialog(context);
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialogue_box_layout);
                 dialog.setCanceledOnTouchOutside(false);
@@ -252,36 +234,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 };
                 break;
             case R.id.analyze_button:
-                progressBar.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                DatabaseReference responses = database1.getReference().child("response").child("resid_Cr09A8pr4lb0Rem1qFirQe9sQH43").child("ses_01");
-                ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
-                responses.addValueEventListener(responseLoader);
-                Log.d("analyze","button");
+                int card;
+                int session=0;
+                String uid = "admin";
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                if (mAuth.getCurrentUser() != null) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    uid = user.getUid();
+                }
+                SharedPreferences prefs = getSharedPreferences("Page", MODE_PRIVATE);
+                card = prefs.getInt(uid, 1);//1 is the default value.
+                session = (prefs.getInt("session" + uid, 1) == 1) ? 1 : prefs.getInt("session" + uid, 1)-1;
+
+                Log.d("Session",session+"");
+                Log.d("Card",card+"");
+                Log.d("Uid",uid);
+
+             if(card == -1){
+                 progressBar.setVisibility(View.VISIBLE);
+                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                 FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                 DatabaseReference responses = database1.getReference().child("response").child("resid_"+uid).child("ses_0"+session);
+                 ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
+                 responses.addValueEventListener(responseLoader);
+                 Log.d("analyze","button");
+             }
+                else{
+                 Toast.makeText(this,"Complete Exercise first",Toast.LENGTH_SHORT).show();
+             }
+
                 break;
         }
     }
-    public void loadStory(){
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference story = database.getReference().child("story").child("story_1");
-        story.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                progressBar.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
 
 }
