@@ -42,10 +42,9 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 4500;
 
+
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private String TAG="TAG";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,47 +55,66 @@ public class SplashScreenActivity extends AppCompatActivity {
         final ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar01);
         Drawable loginActivityBackground = findViewById(R.id.splash).getBackground();
         loginActivityBackground.setAlpha(100);
-
-        progress.setIndeterminate(true);
         mAuth = FirebaseAuth.getInstance();
-
+        progress.setIndeterminate(true);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
-             @Override
-             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                  // User is signed in
-                  Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                 } else {
-                  // User is signed out
-                  Log.d(TAG, "onAuthStateChanged:signed_out");
-                 }
-                  }
-             };
-
-        mAuth.signInAnonymously()
-         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-           @Override
-           public void onComplete(@NonNull Task<AuthResult> task) {
-            Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
-               load();
-               Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
-               startActivity(i);
-               finish();
-
-            if (!task.isSuccessful()) {
-             Log.w(TAG, "signInAnonymously", task.getException());
-             Toast.makeText(SplashScreenActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-             }
+                    // User is signed in
+                    Log.d("TAG", "onAuthStateChanged:signed_in:" + user.getUid());
+                    load();
+                    Intent intent=new Intent(SplashScreenActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // User is signed out
+                    Log.d("TAG", "onAuthStateChanged:signed_out");
+                }
+                // ...
             }
-            });
+        };
 
+
+//        new Handler().postDelayed(new Runnable(){
+//            @Override
+//            public void run() {
+//                /* Create an Intent that will start the Menu-Activity. */
+//                Intent intent=new Intent(SplashScreenActivity.this,LoginActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }, SPLASH_TIME_OUT);
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("TAG", "signInAnonymously:onComplete:" + task.isSuccessful());
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "signInAnonymously", task.getException());
+                            Toast.makeText(SplashScreenActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
     }
+
     @Override
     public void onStart() {
-         super.onStart();
-         mAuth.addAuthStateListener(mAuthListener);
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
     public void load(){
         StorageReference storyText=FirebaseStorage.getInstance().getReference().child("datasciencekids-master-story-export.json");
         final long ONE_MEGABYTE = 1024 * 1024;
@@ -156,11 +174,5 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onStop() {
-         super.onStop();
-         if (mAuthListener != null) {
-              mAuth.removeAuthStateListener(mAuthListener);
-             }
-    }
+
 }

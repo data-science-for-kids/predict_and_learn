@@ -71,7 +71,7 @@
     <string name="title_activity_analysis_page1">Analysis Page</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_predict">PredictActivity</string>
-
+    <string name="no_exercise">"We won't be able to predict anything until you tell us something about yourself. Complete the Who's your friend exercise and we will then be able to predict your preferences."</string>
 
 </resources>
 

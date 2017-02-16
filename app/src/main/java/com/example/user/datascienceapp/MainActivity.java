@@ -262,7 +262,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  Log.d("analyze","button");
              }
                 else{
-                 Toast.makeText(this,"Complete Exercise first",Toast.LENGTH_SHORT).show();
+                 final Context context1 = this;
+                 final Dialog dialog1 = new Dialog(context1);
+                 dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                 dialog1.setContentView(R.layout.complete_exercise_dialog_box);
+                 dialog1.setCanceledOnTouchOutside(false);
+                 dialog1.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                 dialog1.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+                 Button declineButton1 = (Button) dialog1.findViewById(R.id.declineButton);
+                 declineButton1.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+
+                         dialog1.dismiss();
+                     }
+                 });
+                 dialog1.show();
              }
 
                 break;
