@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -29,6 +31,9 @@ public class PredictActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_predict);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,8 +49,8 @@ public class PredictActivity extends AppCompatActivity {
         res[2]=0;
         res[3]=0;
 
-        String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/predict.html?alt=media&token=0a6236ef-8f07-4bc1-8431-fbb31582a674";
-
+        //String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/predict.html?alt=media&token=0a6236ef-8f07-4bc1-8431-fbb31582a674";
+        String url="file:///android_asset/chart.html";
         if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
@@ -131,9 +136,7 @@ public class PredictActivity extends AppCompatActivity {
             for(int i=0; i<res.length; i++){
                 sb.append("\"").append(res[i]).append("\"");
                 sb.append(",");
-//                int percent=(res[i]*100)/56;
-//                sb.append("\"").append(percent).append("\"");
-                //sb.append(",");
+
             }
             sb.append("\"").append(30).append("\"");
             sb.append("]");

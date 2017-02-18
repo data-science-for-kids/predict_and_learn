@@ -121,7 +121,14 @@ public class LoginActivity extends AppCompatActivity {
                             // the auth state listener will be notified and logic to handle the
                             // signed in user can be handled in the listener.
                             if (!task.isSuccessful()) {
-                                login(email, password);
+                                //FirebaseAuth auth = FirebaseAuth.getInstance();
+                                //auth.signOut();
+                                login(email, password);  // Old User
+                                Log.d("Old","User");
+                            }
+                            else{
+                                loginAnno(email,password); //New User
+                                Log.d("new","User");
                             }
                         }
                     });
@@ -171,42 +178,42 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
+    public void loginAnno(String email,String  password){
+        AuthCredential credential=EmailAuthProvider.getCredential(email,password);
+        mAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("TAG", "linkWithCredential:onComplete:" + task.isSuccessful());
+
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+    }
 
     public void login(String email,String password){
 
-        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-        mAuth.getCurrentUser().linkWithCredential(credential)
-         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
+
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+         @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                 Log.d("TAG", "linkWithCredential:onComplete:" + task.isSuccessful());
+                if(!task.isSuccessful())
+                {
+                    Toast.makeText(getBaseContext(), "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+                else{
 
-
-                 if (!task.isSuccessful()) {
-                     Toast.makeText(getBaseContext(), "Authentication failed.",
-                             Toast.LENGTH_SHORT).show();
-                     progressBar.setVisibility(View.GONE);
-                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                  }
-
-
-               }
-             });
-//        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//         @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                if(!task.isSuccessful())
-//                {
-//                    Toast.makeText(getBaseContext(), "Authentication failed.",
-//                            Toast.LENGTH_SHORT).show();
-//                    progressBar.setVisibility(View.GONE);
-//                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//                }
-//                else{
-//
-//                }
-//            }
-//});
+                }
+            }
+});
     }
     public static void hideSoftKeyboard (Activity activity, View view)
     {
