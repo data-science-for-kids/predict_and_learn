@@ -135,18 +135,27 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         id.setText(cards.get(card_no - 1).getId() + "/" + "56");
         name.setText(cards.get(card_no - 1).getName());
 
-
+        String gender_temp=cards.get(card_no-1).getGender();
         StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
+        StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
+        if(gender_temp.equals("FEMALE")) {
+            //Images are fetched from server and not drawable
+            Glide.with(this)
+                    .using(new FirebaseImageLoader())
+                    .load(female).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .fitCenter()
+                    .override(600, 1000)
+                    .into(rating_image);
 
-        //Images are fetched from server and not drawable
-        Glide.with(this)
-                .using(new FirebaseImageLoader())
-                .load(female).diskCacheStrategy(DiskCacheStrategy.ALL)
-                .fitCenter()
-                .override(600, 1000)
-                .into(rating_image);
-
-
+        }
+        else{
+            Glide.with(this)
+                    .using(new FirebaseImageLoader())
+                    .load(male).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .fitCenter()
+                    .override(600, 1000)
+                    .into(rating_image);
+        }
         page = card_no + 1;
 
     }

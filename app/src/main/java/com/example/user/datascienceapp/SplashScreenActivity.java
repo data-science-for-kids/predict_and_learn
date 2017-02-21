@@ -51,7 +51,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Log.d("Splash","Created");
         setContentView(R.layout.activity_splash_screen);
+
+
         final ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar01);
         Drawable loginActivityBackground = findViewById(R.id.splash).getBackground();
         loginActivityBackground.setAlpha(100);
@@ -65,40 +68,34 @@ public class SplashScreenActivity extends AppCompatActivity {
                     // User is signed in
                     Log.d("TAG", "onAuthStateChanged:signed_in:" + user.getUid());
                     load();
+                    firebaseAuth.removeAuthStateListener(mAuthListener);
                     Intent intent=new Intent(SplashScreenActivity.this,LoginActivity.class);
+
                     startActivity(intent);
                     finish();
                 } else {
                     // User is signed out
-                    Log.d("TAG", "onAuthStateChanged:signed_out");
+                    Log.d("TAG", "onAuthStateChanged:signed_out at Splash");
+
                 }
                 // ...
             }
         };
+        if (mAuth.getCurrentUser() == null) {
+            mAuth.signInAnonymously()
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("TAG", "signInAnonymously:onComplete:" + task.isSuccessful());
+                            if (!task.isSuccessful()) {
+                                Log.w("TAG", "signInAnonymously", task.getException());
+                                Toast.makeText(SplashScreenActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
 
-
-//        new Handler().postDelayed(new Runnable(){
-//            @Override
-//            public void run() {
-//                /* Create an Intent that will start the Menu-Activity. */
-//                Intent intent=new Intent(SplashScreenActivity.this,LoginActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        }, SPLASH_TIME_OUT);
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("TAG", "signInAnonymously:onComplete:" + task.isSuccessful());
-                        if (!task.isSuccessful()) {
-                            Log.w("TAG", "signInAnonymously", task.getException());
-                            Toast.makeText(SplashScreenActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
                         }
-
-                    }
-                });
+                    });
+        }
     }
 
     @Override
@@ -121,7 +118,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         storyText.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                Log.d("Text","Yes");
+                Log.d("JSON FILE","Yes");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -21,8 +21,23 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_predict" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linearlyout">
+    <include layout="@layout/content_predict"
+        android:id="@+id/include" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        android:id="@+id/fab"
+        app:elevation="15dp"
+        android:layout_marginBottom="5dp"
+        app:layout_anchor="@id/include"
+        app:layout_anchorGravity="bottom|center"
+        app:srcCompat="@drawable/info" />
 
 
 </android.support.design.widget.CoordinatorLayout>

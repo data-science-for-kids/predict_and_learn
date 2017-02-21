@@ -27,6 +27,7 @@ public class PredictActivity extends AppCompatActivity {
     private int[] res;
     private ArrayList<Response> responses;
     private ProgressBar progressBar;
+    FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +36,25 @@ public class PredictActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_predict);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton.setVisibility(View.GONE);
         webView= (WebView) findViewById(R.id.webview);
 
         webView.getSettings().setJavaScriptEnabled(true);
         responses= (ArrayList<Response>) getIntent().getSerializableExtra("Response");
         progressBar= (ProgressBar) findViewById(R.id.progressBar4);
         progressBar.setVisibility(View.VISIBLE);
-        res=new int[4];
+        res=new int[5];
         res[0]=0;
         res[1]=0;
         res[2]=0;
         res[3]=0;
 
-        //String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/predict.html?alt=media&token=0a6236ef-8f07-4bc1-8431-fbb31582a674";
+       // String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/chart.html?alt=media&token=12afb374-34d4-43bf-97d2-b5269e8c341b";
         String url="file:///android_asset/chart.html";
         if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -68,12 +73,15 @@ public class PredictActivity extends AppCompatActivity {
         for(Response response: responses){
             String r = response.getResponse();
             if(r.equals("5.0")){
-                res[3]++;
+                res[4]++;
             }
             else if(r.equals("4.0")){
-                res[2]++;
+                res[3]++;
             }
             else if(r.equals("3.0")){
+                res[2]++;
+            }
+            else if(r.equals("2.0")){
                 res[1]++;
             }
             else{
@@ -101,9 +109,11 @@ public class PredictActivity extends AppCompatActivity {
                 super.onPageStarted(view, url, favicon);
             }
 
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 progressBar.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 if(!redirect){
                     loadingFinished = true;
                 }
@@ -143,6 +153,20 @@ public class PredictActivity extends AppCompatActivity {
             Log.d("St",sb.toString());
             return sb.toString();
         }
+        @JavascriptInterface
+        public void makeToast(String message){
+            Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+        }
+        @JavascriptInterface
+        public void floatVisible(boolean flag){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
     }
 
 

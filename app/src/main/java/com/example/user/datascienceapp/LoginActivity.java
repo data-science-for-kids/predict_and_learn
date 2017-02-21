@@ -68,19 +68,28 @@ public class LoginActivity extends AppCompatActivity {
                 schoolName=school.getText().toString();
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    String uid=user.getUid();
-                    FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-                    DatabaseReference databaseReference=firebaseDatabase.getReference("user").child(uid).child("school");
-                    databaseReference.setValue(schoolName);
-                    Intent intent = new Intent(getBaseContext(),MainActivity.class);
-                    intent.putExtra("imageNo",imageNo);
-                    startActivity(intent);
-                    finish();
-                    Log.d("Tag", "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
+                if(user != null){
+                    if(user.isAnonymous()){
+                        Log.d("User","Annonymous"+user.getUid());
+                        firebaseAuth.signOut();
+                    }
+                    else {
+                        String uid=user.getUid();
+                        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+                        DatabaseReference databaseReference=firebaseDatabase.getReference("user").child(uid).child("school");
+                        databaseReference.setValue(schoolName);
+                        Intent intent = new Intent(getBaseContext(),MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent);
+                        finish();
+                        Log.d("Tag", "onAuthStateChanged:signed_in:" + user.getUid());
+                    }
+                }
+                else {
                     // User is signed out
-                    Log.d("Tag", "onAuthStateChanged:signed_out");
+                    Log.d("Tag", "onAuthStateChanged:signed_out at Login");
                 }
             }
         };
@@ -121,14 +130,14 @@ public class LoginActivity extends AppCompatActivity {
                             // the auth state listener will be notified and logic to handle the
                             // signed in user can be handled in the listener.
                             if (!task.isSuccessful()) {
-                                //FirebaseAuth auth = FirebaseAuth.getInstance();
-                                //auth.signOut();
+                                if(mAuth.getCurrentUser()!=null)
+                                    mAuth.signOut();
                                 login(email, password);  // Old User
                                 Log.d("Old","User");
                             }
                             else{
                                 loginAnno(email,password); //New User
-                                Log.d("new","User");
+                                Log.d("New","User");
                             }
                         }
                     });
