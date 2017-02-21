@@ -71,13 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_story, menu);
 
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public void onResume(){
@@ -100,14 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         onPause();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_signout:
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public void onClick(View w) {
         final DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
