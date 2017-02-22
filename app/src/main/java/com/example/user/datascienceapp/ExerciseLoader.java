@@ -24,7 +24,6 @@ import java.util.ArrayList;
  */
 
 public class ExerciseLoader  implements RequestListener<StorageReference, GlideDrawable>,ValueEventListener {
-    MainActivity mainActivity;
     private ArrayList<DataBean> list;
     private int count=0;
     private Context context;

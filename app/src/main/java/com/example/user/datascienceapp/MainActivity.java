@@ -37,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button story, collect, signout,analyze;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this,"Data Science",Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -151,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
                         StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
                         FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                        DatabaseReference cards = database1.getReference().child("cards").child("card_1");
+                        DatabaseReference cards = database1.getReference().child("cards").child("card_2");
                         progressBar.setVisibility(View.VISIBLE);
                         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

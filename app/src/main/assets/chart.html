@@ -7,10 +7,7 @@
       </script>
     <style>
 
-    img {
-        width: 10%;
-        height: auto;
-    }
+
     .container {
         position: relative;
     }
@@ -70,13 +67,14 @@
     </div>
 
     <div class="center" id="card">
-        <p id="card_text" class="w3-text-red"><b>Welcome</b></p>
+        <p id="card_text" class="w3-text-red">Welcome</p>
+        <img src="" style="width: 100%; height: 228px;" id="image">
         <p id="person" class="w3-text-red"><b></b></p>
         <p id="suggest" class="w3-text-red" ><b></b></p>
         <input type="number" id="inputNo" placeholder="Answer" style="width:70px;" >
         <textarea id="response" cols="40" rows="5" ></textarea>
-        <button id="send_email" onclick="sendEmail()">Send</button>
-        <button id="submitSuggestion">Submit Suggestion</button>
+        <button id="send_email" onclick="sendEmail()" class="w3-btn w3-transparent w3-text-red">Send</button>
+        <button id="submitSuggestion" class="w3-btn w3-transparent w3-text-red">Submit Suggestion</button>
         <br>
     </div>
 
@@ -89,9 +87,6 @@
     <br>
 </div>
 
-</div>
-
-
 <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
 <script type="text/javascript">
            (function(){
@@ -100,40 +95,46 @@
         $('#response').hide();
         $('#send_email').hide();
         $('#submitSuggestion').hide();
+        $('#image').hide();
         var max=0;
         var row_max = 0;
         var genderData;
         var i = -1;
+        var inference = "";
 
         var text = [
-                    "Great! So you have let us know how much you liked the young people we showed you some information about.",
-                    "But can we guess or \"predict\" whom you generally befriend based on this information? Can \"analyzing\" the ratings you just provided tell us more about your likes and preferences? About you, as a person?",
-                    "Let's find out!",
-                    "Let us first understand how many you chose to befriend.","",
-                    "Based on your rating preference and looking at the histogram,","",
-                    "Let us now understand something about whom you have befriended.",
-                    "So far so good?<br>Please feel free to share any queries. We'll do our best to answer them and get in touch with you!",
-                    "Let us find out what is common among those whom you thought you'll befriend. This will help us *predict* whom you befriend.",
-                    "We think there are three factors based on which you may have decided to befriend people shown to you.<br> * Name of the person<br> * The person's gender<br> * The person's hobby",
-                    "Name of the person<br>Whether its an old name or a new name",
-                    "Person's gender<br>Boy or a girl",
-                    "Person's hobby<br>Outdoor activity or an indoor activity",
-                    "Do you think there are more factors which determined how you made friends?","","","","","","",
-                    "to be continued..."
+                        "Great! So you have let us know how much you liked the young people we showed you some information about.",
+                        "But can we guess or \"predict\" whom you generally befriend based on this information? Can \"analyzing\" the ratings you just provided tell us more about your likes and preferences? About you, as a person?",
+                        "Let's find out!",
+                        "Let us first understand how many you chose to befriend.","",
+                        "Based on your rating preference and looking at the histogram,","",
+                        "Let us now understand something about whom you have befriended.",
+                        "So far so good?<br>Please feel free to share any queries. We'll do our best to answer them and get in touch with you!",
+                        "Let us find out what is common among those whom you thought you'll befriend. This will help us *predict* whom you befriend.",
+                        "We think there are three factors based on which you may have decided to befriend people shown to you.<br> * Name of the person<br> * The person's gender<br> * The person's hobby",
+                        "Name of the person<br>Whether its an old name or a new name",
+                        "Person's gender<br>Boy or a girl",
+                        "Person's hobby<br>Outdoor activity or an indoor activity",
+                        "Do you think there are more factors which determined how you made friends?","","","","","","",
+                        "to be continued..."
                    ];
 
-        var suggest=["Can you go back, count and tell us how many people you marked as \"friends\"? We consider all those whom you rated with 4 or 5 stars as your friends",
-                      "Among those you befriended, how many were boys vs girls?",
-                      "Among those you befriended, how many had new name vs old name?",
-                      " And from those you befriended, how many like Outdoor Activity vs Indoor Activity",
-                      "We can visualize this information through a pie-chart!"]
-        var person= [
-                      "It seems you don't easily befriend a person",
-                      "It's hard to say whether you easily befriend a person or not.","It's hard to say whether you easily befriend a person or not.",
-                      "It seems you are generally a friendly person. We infer this because you have rated many more people with 4 or 5 stars than those with 1, 2 or 3 stars."
-                    ];
-        var results = ["Great! So we've found out a little something about you",
-                        "Great! So your data is yet to reveal anything about you. Let's keep looking..."]
+        var suggest = [
+                        "Can you go back, count and tell us how many people you marked as \"friends\"? We consider all those whom you rated with 4 or 5 stars as your friends",
+                        "Among those you befriended, how many were boys vs girls?",
+                        "Among those you befriended, how many had new name vs old name?",
+                        "And from those you befriended, how many like Outdoor Activity vs Indoor Activity",
+                        "We can visualize this information through a pie-chart!"
+                      ];
+        var person = [
+                        "It seems you don't easily befriend a person",
+                        "It's hard to say whether you easily befriend a person or not.",
+                        "It seems you are generally a friendly person. We infer this because you have rated many more people with 4 or 5 stars than those with 1, 2 or 3 stars."
+                     ];
+        var results = [
+                        "Great! So we've found out a little something about you",
+                        "Great! So your data is yet to reveal anything about you. Let's keep looking..."
+                      ];
 
         function next(){
           i++;
@@ -143,6 +144,7 @@
           i--;
           pageHandler();
         }
+
         function pageHandler(){
             console.log(i);
 
@@ -155,149 +157,186 @@
             $('#response').hide();
             $('#send_email').hide();
             $('#submitSuggestion').hide();
+            $('#image').hide();
 
             switch(i){
+
               case 0:
               case 1:
               case 2:
               case 3:
-                break;
+              break;
+
               case 4:
-                $('#Chart').show();
-                $('#table_div').show();
-                $('#line-chart-marker').show();
-                drawChart();
-                break;
+                    $('#Chart').show();
+                    $('#table_div').show();
+                    $('#line-chart-marker').show();
+                    drawChart();
+              break;
+
               case 5:
-
-                $('#person').show();
-                $('#suggest').show();
-                document.getElementById('person').innerHTML = person[row_max];
-
-                document.getElementById('suggest').innerHTML = suggest[0];
-                $('#inputNo').show();
-
-                break;
+                    $('#person').show();
+                    $('#suggest').show();
+                    console.log('row max at 6 '+row_max);
+                    if(row_max==0)
+                        document.getElementById('person').innerHTML = person[0];
+                    else if(row_max==2||row_max==1)
+                        document.getElementById('person').innerHTML = person[1];
+                    else
+                        document.getElementById('person').innerHTML = person[2];
+                    document.getElementById('suggest').innerHTML = suggest[0];
+                    $('#inputNo').show();
+              break;
 
               case 6:
-                var ans=document.getElementById('inputNo').value;
-                if(ans == max){
-                    if(typeof androidAppProxy !== "undefined"){
-                       androidAppProxy.makeToast("Correct Answer");
+                    var ans=document.getElementById('inputNo').value;
+                    if(ans == max){
+                       if(typeof androidAppProxy !== "undefined"){
+                         androidAppProxy.makeToast("Correct Answer");
+                       }
+                       if(row_max == 3||row_max == 0||row_max == 4)
+                        document.getElementById('suggest').innerHTML = results[0];
+                       else
+                         document.getElementById('suggest').innerHTML = results[1];
+                       $('#suggest').show();
                     }
-                     if(row_max == 2||row_max == 1)
-                     document.getElementById('suggest').innerHTML = results[1];
-                     else
-                     document.getElementById('suggest').innerHTML = results[0];
-                     $('#suggest').show();
-                }
-                else{
-                    if(typeof androidAppProxy !== "undefined"){
-                       androidAppProxy.makeToast("Oops. That's not right.\n Can you go back, check and add up the numbers correctly.");
+                    else{
+                        if(typeof androidAppProxy !== "undefined"){
+                           androidAppProxy.makeToast("Oops. That's not right.\n Can you go back, check and add up the numbers correctly.");
+                        }
+                          i--;// calling page 5
+                          pageHandler();
+                          return;
                     }
-                      i--;// calling page 5
-                      pageHandler();
-                      return;
-                }
-                console.log(i+'Page');
-                break;
+                    console.log(i+'Page');
+
+              break;
 
               case 7:
-                if(typeof androidAppProxy !== "undefined"){
-                   androidAppProxy.floatVisible(true);
-                   console.log("Float");
-                  }
-                break;
+
+              break;
+
               case 8:
-                $('#response').show();
-                $('#send_email').show();
-                break;
+                    $('#response').show();
+                    $('#send_email').show();
+              break;
+
               case 9:
-                break;
+
+              break;
+
               case 10:
-                break;
+
+              break;
+
               case 11:
-                break;
+                    $('#image').show();
+                    document.getElementById('image').src="name.png";
+              break;
+
               case 12:
-                break;
+                    $('#image').show();
+                    document.getElementById('image').src="gender.png";
+              break;
+
               case 13:
-                break;
+                    $('#image').show();
+                    document.getElementById('image').src="activity.png";
+              break;
+
               case 14:
-                $('#response').show();
-                $('#submitSuggestion').show();
-                break;
+                    $('#response').show();
+                    $('#submitSuggestion').show();
+              break;
+
               case 15:
-               $('#Chart').show();
-                $('#line-chart-marker').hide();
-                 $('#table_div').show();
-                 $('#info').show();
-                 var span=document.getElementById('info');
-                span.style.fontSize="18px";
-                 document.getElementById('info').innerHTML = suggest[1];
-                drawgenderTable();
-                break;
+                    $('#Chart').show();
+                    $('#line-chart-marker').hide();
+                    $('#table_div').show();
+                    $('#info').show();
+                    var span=document.getElementById('info');
+                    span.style.fontSize="18px";
+                    document.getElementById('info').innerHTML = suggest[1];
+                    drawTableNew(1);
+                    if(typeof androidAppProxy !== "undefined"){
+                       androidAppProxy.floatVisible(false);
+                       console.log("Float");
+                    }
+              break;
+
               case 16:
-              $('#Chart').show();
-                $('#line-chart-marker').show();
-                 $('#table_div').hide();
-                 $('#info').show();
-                 var span=document.getElementById('info');
-                span.style.fontSize="18px";
-                 document.getElementById('info').innerHTML = suggest[4];
-                drawPie();
+                    $('#Chart').show();
+                    $('#line-chart-marker').show();
+                    $('#table_div').hide();
+                    $('#info').show();
+                    var span=document.getElementById('info');
+                    span.style.fontSize="18px";
+                    document.getElementById('info').innerHTML = suggest[4];
+                    drawPie(1);
+                    if(typeof androidAppProxy !== "undefined"){
+                       androidAppProxy.floatVisible(true);
+                       console.log("Float");
+                    }
                 break;
+
               case 17:
-              $('#Chart').show();
-                $('#line-chart-marker').hide();
-                 $('#table_div').show();
-                 $('#info').show();
-                 var span=document.getElementById('info');
-                span.style.fontSize="18px";
-                 document.getElementById('info').innerHTML = suggest[2];
-                drawgenderTable();
-                break;
+                    $('#Chart').show();
+                    $('#line-chart-marker').hide();
+                    $('#table_div').show();
+                    $('#info').show();
+                    var span=document.getElementById('info');
+                    span.style.fontSize="18px";
+                    document.getElementById('info').innerHTML = suggest[2];
+                    drawTableNew(2);
+               break;
+
               case 18:
-              $('#Chart').show();
-                $('#line-chart-marker').show();
-                 $('#table_div').hide();
-                 $('#info').show();
-                 var span=document.getElementById('info');
-                span.style.fontSize="18px";
-                 document.getElementById('info').innerHTML = suggest[4];
-                drawPie();
-                break;
+                    $('#Chart').show();
+                    $('#line-chart-marker').show();
+                    $('#table_div').hide();
+                    $('#info').show();
+                    var span=document.getElementById('info');
+                    span.style.fontSize="18px";
+                    document.getElementById('info').innerHTML = suggest[4];
+                    drawPie(2);
+              break;
+
               case 19:
-              $('#Chart').show();
-                $('#line-chart-marker').hide();
-                 $('#table_div').show();
-                 $('#info').show();
-                 var span=document.getElementById('info');
-                span.style.fontSize="18px";
-                 document.getElementById('info').innerHTML = suggest[3];
-                drawgenderTable();
-                break;
+                    $('#Chart').show();
+                    $('#line-chart-marker').hide();
+                    $('#table_div').show();
+                    $('#info').show();
+                    var span=document.getElementById('info');
+                    span.style.fontSize="18px";
+                    document.getElementById('info').innerHTML = suggest[3];
+                    drawTableNew(3);
+              break;
+
                case 20:
-               $('#Chart').show();
-                $('#line-chart-marker').show();
-                 $('#table_div').hide();
-                 $('#info').show();
-                 var span=document.getElementById('info');
-                span.style.fontSize="18px";
-                 document.getElementById('info').innerHTML = suggest[4];
-                drawPie();
-                break;
+                    $('#Chart').show();
+                    $('#line-chart-marker').show();
+                    $('#table_div').hide();
+                    $('#info').show();
+                    var span=document.getElementById('info');
+                    span.style.fontSize="18px";
+                    document.getElementById('info').innerHTML = suggest[4];
+                    drawPie(3);
+               break;
+
               default:
-                if(i<0){
-                $('#prev').hide();
-                i=0;
-                }
-                else
-                $('#next').hide();
-                break;
-             }
+                    if(i<0){
+                        $('#prev').hide();
+                        i=0;
+                    }
+                    else
+                        $('#next').hide();
+              break;
+            }
+
            document.getElementById('card_text').innerHTML=text[i];
            console.log("text"+i);
         }
+
         function sendEmail(){
                 var msg = document.getElementById('response').value;
                 console.log(msg+ " Wow");
@@ -333,7 +372,7 @@
             width: "100%",
             vAxis: { title: "# provided to"},
             hAxis: { gridlines: { count: 5 },
-                    title: "Stars provided"}
+                    title: "Stars provided\n(Tap on the bar to see details)"}
           };
 
           var chart = new google.visualization.ColumnChart(document.getElementById('line-chart-marker'));
@@ -343,69 +382,147 @@
             var h = "Histogram";
             var hb=h.bold();
             var info = "This diagram shows your rating preference.\nFor e.g. you chose to provide 1-star to "+data.getValue(0,1)+ " people. Such a diagram is called a "+hb.fontcolor('blue');
-            document.getElementById('info').innerHTML = info;
+            var span=document.getElementById('info');
+            span.style.fontSize = "small";
+            span.innerHTML = info;
             table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
             max=data.getValue(4,1)+data.getValue(3,1);
             var j;
             var h = 0;
 
-            for(j = 0;j < 4;j++){
+            for(j = 0;j < 5;j++){
                 var t = parseInt(y[j]);
                 if(t > h){
                     h = t;
                     row_max = j ;
                     console.log(row_max+' Row');
                     }
-           // console.log(row_max+' '+h);
         }
-        //max=data.getColumnRange(1).max;
     }
-    function drawPie(){
+    var f1=false,f2=false,f3=false;
+    function drawPie(n){
+        var row1,row2,title;
+            if(n == 1){
+                row1='Male';
+                row2='Female';
+                title='Gender';
+            }
+            else if(n == 2){
+                row1='Old Name';
+                row2='New Name';
+                title='Names';
+            }
+            else{
+                row1='Indoor';
+                row2='Outdoor';
+                title='Activity';
+            }
           var x=null;
           var y=null;
           if(typeof androidAppProxy !== "undefined"){
+          if(n==1)
            x=androidAppProxy.sendGender();
+          else if(n==2)
+           x=androidAppProxy.sendNameAge();
+          else
+           x=androidAppProxy.sendActivity();
            console.log(x);
            y=JSON.parse(x);
           }
           else{
             x=null;
           }
-          var genderData = google.visualization.arrayToDataTable(
+          var Data_new = google.visualization.arrayToDataTable(
                     [
-                      ['Gender', '# provided to' ],
-                      ['Male ', parseInt(y[0])],
-                      ['Female ', parseInt(y[1])]
+                      [title, '# provided to' ],
+                      [row1, parseInt(y[0])],
+                      [row2, parseInt(y[1])]
                     ]);
 
           var options = {
-            title: 'Gender',
-            height: 280,
+            title: ' Gender \n (Tap on the chart to see details)',
+            height: 300,
             width: "100%",
           };
 
           var chart = new google.visualization.PieChart(document.getElementById('line-chart-marker'));
-          chart.draw(genderData, options);
+          chart.draw(Data_new, options);
 
+          var messages = [ "are Male"  , "have an old name" , "likes indoor activities"];
+          var messages1=[ "are Female"  , "have a new name" , "likes outdoor activities"];
+          if(typeof androidAppProxy !== "undefined"){
+          var str;
+          if(y[0]>y[1])
+              str=messages[n-1];
+          else
+              str=messages1[n-1];
+
+          androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
+
+          if(n == 1 && !f1){
+            inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+            if(typeof androidAppProxy !== "undefined")
+              androidAppProxy.dialogText(inference);
+            f1 = true;
+          }
+          else if(n == 2 && !f2){
+            inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+            if(typeof androidAppProxy !== "undefined")
+              androidAppProxy.dialogText(inference);
+            f2 = true;
+          }
+          if(n == 3 && !f3){
+            inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+            if(typeof androidAppProxy !== "undefined")
+              androidAppProxy.dialogText(inference);
+            f3 = true;
+          }
     }
-    function drawgenderTable(){
-         if(typeof androidAppProxy !== "undefined"){
-             x=androidAppProxy.sendGender();
-             console.log(x);
-             y=JSON.parse(x);
+  }
+
+    function drawTableNew(n){
+
+          var row1,row2,title;
+            if(n == 1){
+                row1='Male';
+                row2='Female';
+                title='Gender';
+            }
+            else if(n == 2){
+                row1='Old Name';
+                row2='New Name';
+                title='Names';
             }
             else{
-              x=null;
+                row1='Indoor';
+                row2='Outdoor';
+                title='Activity';
             }
-            var genderData = google.visualization.arrayToDataTable(
+          var x=null;
+          var y=null;
+          if(typeof androidAppProxy !== "undefined"){
+          if(n==1)
+           x=androidAppProxy.sendGender();
+          else if(n==2)
+           x=androidAppProxy.sendNameAge();
+          else
+           x=androidAppProxy.sendActivity();
+           console.log(x);
+           y=JSON.parse(x);
+          }
+          else{
+            x=null;
+          }
+            var Data_new = google.visualization.arrayToDataTable(
                     [
-                      ['Gender', '# provided to' ],
-                      ['Male ', parseInt(y[0])],
-                      ['Female ', parseInt(y[1])]
+                      [title, '# provided to' ],
+                      [row1, parseInt(y[0])],
+                      [row2, parseInt(y[1])]
                     ]);
             var table = new google.visualization.Table(document.getElementById('table_div'));
-            table.draw(genderData, {showRowNumber: true, width: '100%', height: '100%'});
-    }
+            table.draw(Data_new, {showRowNumber: true, width: '100%', height: '100%'});
+
+            }
       </script>
 
 </body>

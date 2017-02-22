@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +21,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,10 +29,11 @@ import java.util.ArrayList;
 public class PredictActivity extends AppCompatActivity {
     private WebView webView;
     private int[] res;
-    private int m,f;
+    private int m,f,new_name,old_name,indoor,outdoor;
     private ArrayList<Response> responses;
     private ProgressBar progressBar;
-    FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatingActionButton;
+    private String dialog_text="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,10 @@ public class PredictActivity extends AppCompatActivity {
         res[3]=0;
         m=0;
         f=0;
+        indoor=0;
+        outdoor=0;
+        new_name=0;
+        old_name=0;
 
        // String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/chart.html?alt=media&token=12afb374-34d4-43bf-97d2-b5269e8c341b";
         String url="file:///android_asset/chart.html";
@@ -84,10 +89,12 @@ public class PredictActivity extends AppCompatActivity {
                 Log.d("Float","Pressed");
                 final Dialog dialog = new Dialog(context);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_infrence);
-                dialog.setCanceledOnTouchOutside(false);
+                dialog.setContentView(R.layout.dialog_inference);
+                dialog.setCanceledOnTouchOutside(true);
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+                TextView textView= (TextView) dialog.findViewById(R.id.dialog_text);
+                textView.setText(dialog_text);
                 Button predict = (Button) dialog.findViewById(R.id.predictDialogButton);
                 predict.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -99,28 +106,47 @@ public class PredictActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-
+        int c=0;
         for(Response response: responses){
+            c++;
+            if(c==43)
+                break;
             String r = response.getResponse();
             if(r.equals("5.0")){
                 res[4]++;
                 String gender=response.getGender();
-                if(gender.equals("MALE")){
+                if(gender.equals("MALE"))
                     m++;
-                }
-                else{
+                else
                     f++;
-                }
+                int age=response.getNameAge();
+                if(age == 0)
+                    old_name++;
+                else
+                    new_name++;
+                int act=response.getActivity();
+                if(act == 0)
+                    indoor++;
+                else
+                    outdoor++;
             }
             else if(r.equals("4.0")){
                 res[3]++;
                 String gender=response.getGender();
-                if(gender.equals("MALE")){
+                if(gender.equals("MALE"))
                     m++;
-                }
-                else{
+                else
                     f++;
-                }
+                int age=response.getNameAge();
+                if(age == 0)
+                    old_name++;
+                else
+                    new_name++;
+                int act=response.getActivity();
+                if(act == 0)
+                    indoor++;
+                else
+                    outdoor++;
             }
             else if(r.equals("3.0")){
                 res[2]++;
@@ -185,6 +211,10 @@ public class PredictActivity extends AppCompatActivity {
             Toast.makeText(this.activity.getApplicationContext(),message,Toast.LENGTH_SHORT).show();
         }
         @JavascriptInterface
+        public void dialogText(String message){
+            dialog_text=message;
+        }
+        @JavascriptInterface
         public String sendNo(){
             StringBuilder sb = new StringBuilder();
             sb.append("[");
@@ -210,17 +240,49 @@ public class PredictActivity extends AppCompatActivity {
             return sb.toString();
         }
         @JavascriptInterface
-        public void makeToast(String message){
-            Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+        public String sendNameAge(){
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            sb.append("\"").append(old_name).append("\"");
+            sb.append(",");
+            sb.append("\"").append(new_name).append("\"");
+            sb.append("]");
+            Log.d("St-nameage",sb.toString());
+            return sb.toString();
         }
         @JavascriptInterface
-        public void floatVisible(boolean flag){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    floatingActionButton.setVisibility(View.VISIBLE);
-                }
-            });
+        public String sendActivity(){
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            sb.append("\"").append(indoor).append("\"");
+            sb.append(",");
+            sb.append("\"").append(outdoor).append("\"");
+            sb.append("]");
+            Log.d("St-activity",sb.toString());
+            return sb.toString();
+        }
+        @JavascriptInterface
+        public void makeToast(String message){
+            Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
+        }
+        @JavascriptInterface
+        public void floatVisible(boolean flag) {
+            if (flag) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        floatingActionButton.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+            else{
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        floatingActionButton.setVisibility(View.GONE);
+                    }
+                });
+            }
         }
 
     }

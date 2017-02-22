@@ -12,14 +12,23 @@
         android:gravity="center"
         android:orientation="vertical"
         android:layout_margin="7dp">
-
             <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Inferences Drawn"
             android:background="@color/slider_background"
             android:fontFamily="serif-monospace"
             android:padding="10dp"
-            android:text="Point 1- qwertyasdf\n\n\nPoint 2- sdfdvffdcvf\n\n\nPoint 3-sfdbfdfvfvs\n\n\nPoint 4-fffvsdvvsfs"
+            android:textColor="@color/slider_text"
+            android:textSize="22dp"/>
+            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_text"
+            android:background="@color/slider_background"
+            android:fontFamily="serif-monospace"
+            android:padding="10dp"
+            android:text=""
             android:textColor="@color/slider_text"
             android:textSize="20dp" />
 

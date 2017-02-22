@@ -199,6 +199,8 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                     res.setExercise("friends");
                     res.setResponse(a +"");
                     res.setGender(cards.get(pic_no-1).getGender());
+                    res.setActivity(cards.get(pic_no-1).getActivity());
+                    res.setNameAge(cards.get(pic_no-1).getNameAge());
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference response;
                     if (session < 10) {
@@ -223,7 +225,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                         name.setText(cards.get(pic_no).getName());
                         String gender = cards.get(pic_no).getGender();
 
-                        StorageReference female = FirebaseStorage.getInstance().getReference().child   ("card/rating_pic_f.png");
+                        StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
                         StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
                         if (gender.equals("FEMALE")) {
                            // Log.d("gender", "FEMALE");

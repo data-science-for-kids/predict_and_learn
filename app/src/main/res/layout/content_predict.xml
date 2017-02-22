@@ -32,7 +32,7 @@
         android:clickable="true"
         app:fabSize="normal"
         android:id="@+id/fab"
-        app:elevation="15dp"
+        app:elevation="19dp"
         android:layout_marginBottom="5dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"

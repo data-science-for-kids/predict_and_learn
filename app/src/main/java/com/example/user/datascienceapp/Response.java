@@ -7,6 +7,8 @@ public class Response implements Serializable {
     private String card_id;
     private String response;
     private String gender;
+    private int name_age;
+    private int activity;
 
     public String getExercise() {
         return exercise_id;
@@ -29,6 +31,21 @@ public class Response implements Serializable {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+    public int getNameAge() {
+        return name_age;
+    }
+
+    public void setNameAge(int name_age) {
+        this.name_age = name_age;
+    }
+
+    public int getActivity() {
+        return activity;
+    }
+
+    public void setActivity(int activity) {
+        this.activity = activity;
     }
 
     public String getResponse() {
