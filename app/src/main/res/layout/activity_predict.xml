@@ -21,7 +21,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_predict" />
+        <include layout="@layout/content_predict"
+        android:id="@+id/include" />
+
+
 
 
 

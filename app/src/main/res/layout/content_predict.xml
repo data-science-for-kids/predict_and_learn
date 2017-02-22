@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
+        android:padding="5dp"
         android:layout_alignParentBottom="true"
         android:id="@+id/webview">
 
@@ -25,4 +26,16 @@
             android:foregroundGravity="center"
             android:id="@+id/progressBar4" />
     </WebView>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="normal"
+        android:id="@+id/fab"
+        app:elevation="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/ic_lightbulb" />
+
 </RelativeLayout>

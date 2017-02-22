@@ -48,8 +48,6 @@ public class ExerciseLoader  implements RequestListener<StorageReference, GlideD
         Log.d("ListSize",list.size()+"");
         Log.d("Data",count+"");
         check(count);
-
-
     }
 
     @Override
@@ -73,7 +71,7 @@ public class ExerciseLoader  implements RequestListener<StorageReference, GlideD
 
     @Override
     public boolean onResourceReady(GlideDrawable resource, StorageReference model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-       count++;
+        count++;
         Log.d("Image",count+"");
         check(count);
         return false;

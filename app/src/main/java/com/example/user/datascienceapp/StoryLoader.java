@@ -17,11 +17,11 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
     private int count=0;
     private boolean text;
     private Context context;
-    private long start,finish;
+   // private long start,finish;
     public StoryLoader(Context context){
         this.context = context;
         text = false;
-        start=System.currentTimeMillis();
+      //  start=System.currentTimeMillis();
 
     }
     public StoryLoader(){
@@ -48,10 +48,8 @@ public class StoryLoader implements RequestListener<StorageReference, GlideDrawa
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             Log.d("List Size Check",list.size()+"");
-            finish=System.currentTimeMillis();
-            Log.d("Time",Long.toString(finish - start));
-            Log.d("finish",Long.toString(finish ));
-            Log.d("start",Long.toString(start));
+          //  finish=System.currentTimeMillis();
+
             context.startActivity(intent);
         }
 

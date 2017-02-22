@@ -9,7 +9,7 @@
     <string name="menu_item4">Log Out</string>
     <string name="dialog_button">PROCEED</string>
     <string name="dialog_end_button">FINISH</string>
-    <string name="dialog_end_item">Thanks for giving rating</string>
+    <string name="dialog_end_item">Thanks for letting us know of your preferences. Proceed to the next section and see how this information can be analyzed.</string>
     <string name="dialog_back_item">Are you sure you want to exit ?</string>
     <string name="dialog_item"> Let’s get started with our fun exercise! You will now be shown profiles of some young people. Based on the description provided again each person, decide whether you would like to be friends with her/him. \nYou can rate on a scale of 1-5, where 5 stars would mean you will definitely make friends with the person and 1 meaning you will definitely not make friends.</string>
     <string name="no_rating_content">Do rate your feeling about this person. You cannot proceed to the next profile until you finish rating this.</string>

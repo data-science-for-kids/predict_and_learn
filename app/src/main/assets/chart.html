@@ -3,47 +3,54 @@
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-    google.charts.load("current", {packages:['corechart','table']});
-  </script>
+        google.charts.load("current", {packages:['corechart','table']});
+      </script>
     <style>
 
-img {
-    width: 10%;
-    height: auto;
-}
-.container {
-    position: relative;
-}
+    img {
+        width: 10%;
+        height: auto;
+    }
+    .container {
+        position: relative;
+    }
 
-.bottomright {
-    position: absolute;
-    bottom: 8px;
-    right: 16px;
-    font-size: 18px;
-}
-.bottomleft {
-    position: absolute;
-    bottom: 8px;
-    left: 16px;
-    font-size: 18px;
-}
-.center {
-    position: absolute;
-    left: 0;
-    top: 18%;
-    width: 100%;
-    text-align: center;
-    font-size: 18px;
-}
-#Chart,#inputNo,#person,#suggest{
-  display: none;
-}
+    .bottomright {
+        position: absolute;
+        bottom: 8px;
+        right: 16px;
+        font-size: 18px;
+    }
+    .bottomleft {
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+        font-size: 18px;
+    }
 
-p{
-  font-family: "Custom",sans-serif,monospace;
-}
+    .center {
+        position: absolute;
+        left: 0;
+        top: 10%;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+    }
 
-</style>
+    #Chart,#inputNo,#person,#suggest{
+      display: none;
+    }
+
+    p{
+      font-family: "Custom",sans-serif,monospace;
+    }
+
+    .google-visualization-table-td {
+    text-align: center !important;
+    }
+
+
+    </style>
 </head>
 <title>Predict your Friend</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,18 +64,22 @@ p{
 <div class="w3-container w3-center">
 
     <div class="w3-container" id="Chart">
-        <p class="w3-text-red">This is called a histogram.</p>
-        <div id="line-chart-marker"  ></div>
-
         <div id="table_div" ></div>
+        <div id="line-chart-marker"></div>
+        <p class="w3-text-red" id="info" style="font-size: small;"></p>
     </div>
-    <div class="center">
-    <p id="card_text" class="w3-text-red"><b>Welcome</b></p>
-    <p id="person" class="w3-text-green"><b></b></p>
-    <p id="suggest" ><b></b></p>
-    <input type="number" id="inputNo" placeholder="Answer" style="width:70px;" >
-    <br>
+
+    <div class="center" id="card">
+        <p id="card_text" class="w3-text-red"><b>Welcome</b></p>
+        <p id="person" class="w3-text-red"><b></b></p>
+        <p id="suggest" class="w3-text-red" ><b></b></p>
+        <input type="number" id="inputNo" placeholder="Answer" style="width:70px;" >
+        <textarea id="response" cols="40" rows="5" ></textarea>
+        <button id="send_email" onclick="sendEmail()">Send</button>
+        <button id="submitSuggestion">Submit Suggestion</button>
+        <br>
     </div>
+
     <div class="bottomright">
         <button class="w3-btn w3-transparent w3-text-red" onclick="next()" id="next">NEXT</button>
     </div>
@@ -81,163 +92,321 @@ p{
 </div>
 
 
-
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
 <script type="text/javascript">
-    var max=0;
-    var row_max = 0;
-    var i = -1;
-    var text = [
-                "Great! So you have let us know how much you liked the young people we showed you some information about.",
+           (function(){
+              emailjs.init("user_NrU2UM8OeHr2TmxmoEaWI");
+           })();
+        $('#response').hide();
+        $('#send_email').hide();
+        $('#submitSuggestion').hide();
+        var max=0;
+        var row_max = 0;
+        var genderData;
+        var i = -1;
 
-                "But can we guess or \"predict\" whom you generally befriend based on this information? Can \"analyzing\" the ratings you just provided tell us more about your likes and preferences? About you, as a person?",
+        var text = [
+                    "Great! So you have let us know how much you liked the young people we showed you some information about.",
+                    "But can we guess or \"predict\" whom you generally befriend based on this information? Can \"analyzing\" the ratings you just provided tell us more about your likes and preferences? About you, as a person?",
+                    "Let's find out!",
+                    "Let us first understand how many you chose to befriend.","",
+                    "Based on your rating preference and looking at the histogram,","",
+                    "Let us now understand something about whom you have befriended.",
+                    "So far so good?<br>Please feel free to share any queries. We'll do our best to answer them and get in touch with you!",
+                    "Let us find out what is common among those whom you thought you'll befriend. This will help us *predict* whom you befriend.",
+                    "We think there are three factors based on which you may have decided to befriend people shown to you.<br> * Name of the person<br> * The person's gender<br> * The person's hobby",
+                    "Name of the person<br>Whether its an old name or a new name",
+                    "Person's gender<br>Boy or a girl",
+                    "Person's hobby<br>Outdoor activity or an indoor activity",
+                    "Do you think there are more factors which determined how you made friends?","","","","","","",
+                    "to be continued..."
+                   ];
 
-                "Let's find out!",
+        var suggest=["Can you go back, count and tell us how many people you marked as \"friends\"? We consider all those whom you rated with 4 or 5 stars as your friends",
+                      "Among those you befriended, how many were boys vs girls?",
+                      "Among those you befriended, how many had new name vs old name?",
+                      " And from those you befriended, how many like Outdoor Activity vs Indoor Activity",
+                      "We can visualize this information through a pie-chart!"]
+        var person= [
+                      "It seems you don't easily befriend a person",
+                      "It's hard to say whether you easily befriend a person or not.","It's hard to say whether you easily befriend a person or not.",
+                      "It seems you are generally a friendly person. We infer this because you have rated many more people with 4 or 5 stars than those with 1, 2 or 3 stars."
+                    ];
+        var results = ["Great! So we've found out a little something about you",
+                        "Great! So your data is yet to reveal anything about you. Let's keep looking..."]
 
-                "Let us first understand how many you chose to befriend.","",
-
-                "Based on your rating preference and looking at the histogram,","",
-
-                "Let us now understand something about whom you have befriended.",
-
-                "to be continued"
-               ];
-
-    var suggest="Can you go back, count and tell us how many people you marked as \"friends\"? We consider all those whom you rated with 4 or 5 stars as your friends";
-
-    var person= [
-                  "It seems you don't easily befriend a person",
-                  "It's hard to say whether you easily befriend a person or not.",
-                  "It seems you are generally a friendly person. We infer this because you have rated many more people with 4 or 5 stars than those with 1, 2 or 3 stars."
-                ];
-    var results = ["Great! So we've found out a little something about you",
-                    "Great! So your data is yet to reveal anything about you. Let's keep looking..."]
-
-    function next(){
-      i++;
-      pageHandler();
-
-
-    }
-    function back(){
-      i--;
-      pageHandler();
-
-
-    }
-    function pageHandler(){
-        console.log(i);
-
-        $('#Chart').hide();
-        $('#inputNo').hide();
-        $('#person').hide();
-        $('#suggest').hide();
-        $('#next').show();
-        $('#prev').show();
-
-        switch(i){
-          case 0:
-          case 1:
-          case 2:
-          case 3:
-            break;
-          case 4:
-            $('#Chart').show();
-            drawChart();
-            max
-            break;
-          case 5:
-
-            $('#person').show();
-            $('#suggest').show();
-            if(row_max == 0)
-              row_max = 1;
-            document.getElementById('person').innerHTML = person[row_max];
-            document.getElementById('suggest').innerHTML = suggest;
-            $('#inputNo').show();
-
-            break;
-          case 6:
-            var ans=document.getElementById('inputNo').value;
-            if(ans == max){
-              if(row_max == 2)
-              document.getElementById('suggest').innerHTML = results[0];
-              else
-              document.getElementById('suggest').innerHTML = results[1];
-              $('#suggest').show();
-
-            }else{
-              i--;// calling page 5
-              pageHandler();
-              return;
-            }
-            console.log(i+'Page');
-            break;
-          case 7:
-
-            break;
-          default:
-            if(i<0)
-            $('#prev').hide();
-            else
-            $('#next').hide();
-            break;
-      }
-       document.getElementById('card_text').innerHTML=text[i];
-       console.log("text"+i);
-    }
-
-    function drawChart() {
-      var x=null;
-      var y=null;
-      if(typeof androidAppProxy !== "undefined"){
-       x=androidAppProxy.sendNo();
-       console.log(x);
-       y=JSON.parse(x);
-      }
-      else{
-        x=null;
-      }
-      var data = google.visualization.arrayToDataTable(
-                [
-                  ['Star', 'Number' ],
-                  ['1 Star ', parseInt(y[0])],
-                  ['2 Star ', parseInt(y[1])],
-                  ['3 Star ', parseInt(y[2])],
-                  ['4 or 5 Star', parseInt(y[3])]
-                ]);
-
-
-      var options = {
-        legend: 'none',
-        colors: ['#db2727'],
-        lineWidth: 4,
-        height: 228,
-        width: "100%",
-        hAxis: { gridlines: { count: 5 } }
-      };
-
-      var chart = new google.visualization.ColumnChart(document.getElementById('line-chart-marker'));
-      chart.draw(data, options);
-
-        var table = new google.visualization.Table(document.getElementById('table_div'));
-
-        table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
-        max=data.getValue(3,1);
-        var j;
-        var h = 0;
-
-        for(j = 0;j < 4;j++){
-            if(h < y[j])
-            {
-              h =y[j];
-              row_max = j;
-            }
+        function next(){
+          i++;
+          pageHandler();
         }
+        function back(){
+          i--;
+          pageHandler();
+        }
+        function pageHandler(){
+            console.log(i);
 
+            $('#Chart').hide();
+            $('#inputNo').hide();
+            $('#person').hide();
+            $('#suggest').hide();
+            $('#next').show();
+            $('#prev').show();
+            $('#response').hide();
+            $('#send_email').hide();
+            $('#submitSuggestion').hide();
+
+            switch(i){
+              case 0:
+              case 1:
+              case 2:
+              case 3:
+                break;
+              case 4:
+                $('#Chart').show();
+                $('#table_div').show();
+                $('#line-chart-marker').show();
+                drawChart();
+                break;
+              case 5:
+
+                $('#person').show();
+                $('#suggest').show();
+                document.getElementById('person').innerHTML = person[row_max];
+
+                document.getElementById('suggest').innerHTML = suggest[0];
+                $('#inputNo').show();
+
+                break;
+
+              case 6:
+                var ans=document.getElementById('inputNo').value;
+                if(ans == max){
+                    if(typeof androidAppProxy !== "undefined"){
+                       androidAppProxy.makeToast("Correct Answer");
+                    }
+                     if(row_max == 2||row_max == 1)
+                     document.getElementById('suggest').innerHTML = results[1];
+                     else
+                     document.getElementById('suggest').innerHTML = results[0];
+                     $('#suggest').show();
+                }
+                else{
+                    if(typeof androidAppProxy !== "undefined"){
+                       androidAppProxy.makeToast("Oops. That's not right.\n Can you go back, check and add up the numbers correctly.");
+                    }
+                      i--;// calling page 5
+                      pageHandler();
+                      return;
+                }
+                console.log(i+'Page');
+                break;
+
+              case 7:
+                if(typeof androidAppProxy !== "undefined"){
+                   androidAppProxy.floatVisible(true);
+                   console.log("Float");
+                  }
+                break;
+              case 8:
+                $('#response').show();
+                $('#send_email').show();
+                break;
+              case 9:
+                break;
+              case 10:
+                break;
+              case 11:
+                break;
+              case 12:
+                break;
+              case 13:
+                break;
+              case 14:
+                $('#response').show();
+                $('#submitSuggestion').show();
+                break;
+              case 15:
+               $('#Chart').show();
+                $('#line-chart-marker').hide();
+                 $('#table_div').show();
+                 $('#info').show();
+                 var span=document.getElementById('info');
+                span.style.fontSize="18px";
+                 document.getElementById('info').innerHTML = suggest[1];
+                drawgenderTable();
+                break;
+              case 16:
+              $('#Chart').show();
+                $('#line-chart-marker').show();
+                 $('#table_div').hide();
+                 $('#info').show();
+                 var span=document.getElementById('info');
+                span.style.fontSize="18px";
+                 document.getElementById('info').innerHTML = suggest[4];
+                drawPie();
+                break;
+              case 17:
+              $('#Chart').show();
+                $('#line-chart-marker').hide();
+                 $('#table_div').show();
+                 $('#info').show();
+                 var span=document.getElementById('info');
+                span.style.fontSize="18px";
+                 document.getElementById('info').innerHTML = suggest[2];
+                drawgenderTable();
+                break;
+              case 18:
+              $('#Chart').show();
+                $('#line-chart-marker').show();
+                 $('#table_div').hide();
+                 $('#info').show();
+                 var span=document.getElementById('info');
+                span.style.fontSize="18px";
+                 document.getElementById('info').innerHTML = suggest[4];
+                drawPie();
+                break;
+              case 19:
+              $('#Chart').show();
+                $('#line-chart-marker').hide();
+                 $('#table_div').show();
+                 $('#info').show();
+                 var span=document.getElementById('info');
+                span.style.fontSize="18px";
+                 document.getElementById('info').innerHTML = suggest[3];
+                drawgenderTable();
+                break;
+               case 20:
+               $('#Chart').show();
+                $('#line-chart-marker').show();
+                 $('#table_div').hide();
+                 $('#info').show();
+                 var span=document.getElementById('info');
+                span.style.fontSize="18px";
+                 document.getElementById('info').innerHTML = suggest[4];
+                drawPie();
+                break;
+              default:
+                if(i<0){
+                $('#prev').hide();
+                i=0;
+                }
+                else
+                $('#next').hide();
+                break;
+             }
+           document.getElementById('card_text').innerHTML=text[i];
+           console.log("text"+i);
+        }
+        function sendEmail(){
+                var msg = document.getElementById('response').value;
+                console.log(msg+ " Wow");
+                emailjs.send("gmail","data_science_for_kids",{name: "Shashank", message_html: msg,from_name:"Aman"});
+
+        }
+        function drawChart() {
+          var x=null;
+          var y=null;
+          if(typeof androidAppProxy !== "undefined"){
+           x=androidAppProxy.sendNo();
+           console.log(x);
+           y=JSON.parse(x);
+          }
+          else{
+            x=null;
+          }
+          var data = google.visualization.arrayToDataTable(
+                    [
+                      ['Stars provided', '# provided to' ],
+                      ['1 star ', parseInt(y[0])],
+                      ['2 star ', parseInt(y[1])],
+                      ['3 star ', parseInt(y[2])],
+                      ['4 star', parseInt(y[3])],
+                      ['5 star ', parseInt(y[4])]
+                    ]);
+
+          var options = {
+            legend: 'none',
+            colors: ['#db2727'],
+            lineWidth: 4,
+            height: 228,
+            width: "100%",
+            vAxis: { title: "# provided to"},
+            hAxis: { gridlines: { count: 5 },
+                    title: "Stars provided"}
+          };
+
+          var chart = new google.visualization.ColumnChart(document.getElementById('line-chart-marker'));
+          chart.draw(data, options);
+
+            var table = new google.visualization.Table(document.getElementById('table_div'));
+            var h = "Histogram";
+            var hb=h.bold();
+            var info = "This diagram shows your rating preference.\nFor e.g. you chose to provide 1-star to "+data.getValue(0,1)+ " people. Such a diagram is called a "+hb.fontcolor('blue');
+            document.getElementById('info').innerHTML = info;
+            table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+            max=data.getValue(4,1)+data.getValue(3,1);
+            var j;
+            var h = 0;
+
+            for(j = 0;j < 4;j++){
+                var t = parseInt(y[j]);
+                if(t > h){
+                    h = t;
+                    row_max = j ;
+                    console.log(row_max+' Row');
+                    }
+           // console.log(row_max+' '+h);
+        }
         //max=data.getColumnRange(1).max;
     }
-  
-  </script>
+    function drawPie(){
+          var x=null;
+          var y=null;
+          if(typeof androidAppProxy !== "undefined"){
+           x=androidAppProxy.sendGender();
+           console.log(x);
+           y=JSON.parse(x);
+          }
+          else{
+            x=null;
+          }
+          var genderData = google.visualization.arrayToDataTable(
+                    [
+                      ['Gender', '# provided to' ],
+                      ['Male ', parseInt(y[0])],
+                      ['Female ', parseInt(y[1])]
+                    ]);
+
+          var options = {
+            title: 'Gender',
+            height: 280,
+            width: "100%",
+          };
+
+          var chart = new google.visualization.PieChart(document.getElementById('line-chart-marker'));
+          chart.draw(genderData, options);
+
+    }
+    function drawgenderTable(){
+         if(typeof androidAppProxy !== "undefined"){
+             x=androidAppProxy.sendGender();
+             console.log(x);
+             y=JSON.parse(x);
+            }
+            else{
+              x=null;
+            }
+            var genderData = google.visualization.arrayToDataTable(
+                    [
+                      ['Gender', '# provided to' ],
+                      ['Male ', parseInt(y[0])],
+                      ['Female ', parseInt(y[1])]
+                    ]);
+            var table = new google.visualization.Table(document.getElementById('table_div'));
+            table.draw(genderData, {showRowNumber: true, width: '100%', height: '100%'});
+    }
+      </script>
 
 </body>
 </html>

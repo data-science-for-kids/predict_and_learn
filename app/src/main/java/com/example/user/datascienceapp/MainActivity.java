@@ -2,6 +2,7 @@ package com.example.user.datascienceapp;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -70,36 +71,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_story, menu);
 
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public void onResume(){
         super.onResume();
+        Log.d("Main","onResume");
         progressBar.setVisibility(View.GONE);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    protected void onPause() {
+        super.onPause();
+        Log.d("Main","onPause");
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_signout:
-
-        }
-        return super.onOptionsItemSelected(item);
+    public void onBackPressed() {
+        super.onBackPressed();
+        onPause();
     }
+
 
     public void onClick(View w) {
         final DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
@@ -140,22 +134,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
 
-
-
-
-                connectedRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        boolean connected = snapshot.getValue(Boolean.class);
-                        if(!connected){
-                           // Toast.makeText(getBaseContext(),"Unable to connect",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                    }
-                });
                 break;
             case R.id.collect_button:
                 final Context context = this;
@@ -196,8 +174,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
                                 boolean connected = snapshot.getValue(Boolean.class);
-                                if(!connected)
-                                Toast.makeText(getBaseContext(),"Unable to connect",Toast.LENGTH_SHORT).show();
+                                if(!connected) {
+
+                                }
                             }
 
                             @Override
@@ -208,10 +187,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                    }
                 });
                 dialog.show();
+                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {    //close the dialog
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        progressBar.setVisibility(View.GONE);
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
                 //Starting a progress box
-                progressBar.setVisibility(View.VISIBLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
 
                 break;
             case R.id.signout:
@@ -227,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (user == null) {
                             // user auth state is changed - user is null
                             // launch login activity
+                            Log.d("Signout","Button");
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             finish();
                         }
@@ -273,7 +258,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  declineButton1.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
-
                          dialog1.dismiss();
                      }
                  });
