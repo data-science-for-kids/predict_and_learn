@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -24,16 +25,30 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class PredictActivity extends AppCompatActivity {
     private WebView webView;
     private int[] res;
-    private int m,f,new_name,old_name,indoor,outdoor;
+    private int m,f,new_name,old_name,indoor,outdoor,page;
     private ArrayList<Response> responses;
     private ProgressBar progressBar;
     private FloatingActionButton floatingActionButton;
     private String dialog_text="";
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        webView.loadUrl("javascript:getSession()");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +70,17 @@ public class PredictActivity extends AppCompatActivity {
         progressBar= (ProgressBar) findViewById(R.id.progressBar4);
         progressBar.setVisibility(View.VISIBLE);
         res=new int[5];
-        res[0]=0;
-        res[1]=0;
-        res[2]=0;
-        res[3]=0;
-        m=0;
-        f=0;
-        indoor=0;
-        outdoor=0;
-        new_name=0;
-        old_name=0;
+        res[0] = 0;
+        res[1] = 0;
+        res[2] = 0;
+        res[3] = 0;
+        m = 0;
+        f = 0;
+        page = getIntent().getIntExtra("Page",-1);
+        indoor = 0;
+        outdoor = 0;
+        new_name = 0;
+        old_name = 0;
 
        // String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/chart.html?alt=media&token=12afb374-34d4-43bf-97d2-b5269e8c341b";
         String url="file:///android_asset/chart.html";
@@ -160,6 +176,8 @@ public class PredictActivity extends AppCompatActivity {
 
         }
 
+
+
         webView.setWebViewClient(new WebViewClient(){
             boolean loadingFinished = true;
             boolean redirect = false;
@@ -201,8 +219,10 @@ public class PredictActivity extends AppCompatActivity {
         webView.loadUrl(url);
     }
 
+
     public class AppJavaProxy{
         private Activity activity=null;
+        private int i;
         public AppJavaProxy(Activity activity){
             this.activity=activity;
         }
@@ -211,8 +231,26 @@ public class PredictActivity extends AppCompatActivity {
             Toast.makeText(this.activity.getApplicationContext(),message,Toast.LENGTH_SHORT).show();
         }
         @JavascriptInterface
+        public void getPage(int i){
+            Log.d("Value of i",i+"");
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            String uid="";
+            if (mAuth.getCurrentUser() != null) {
+                FirebaseUser user = mAuth.getCurrentUser();
+                uid = user.getUid();
+            }
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference response = database.getReference("session").child(uid).child("page");
+            response.setValue(i);
+        }
+        @JavascriptInterface
         public void dialogText(String message){
             dialog_text=message;
+        }
+        @JavascriptInterface
+        public int setPage(){
+            Log.d("Page is ",page+"");
+            return page;
         }
         @JavascriptInterface
         public String sendNo(){

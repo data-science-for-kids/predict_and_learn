@@ -222,50 +222,81 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 };
                 break;
             case R.id.analyze_button:
-                int card;
+
                 int session=0;
-                String uid = "admin";
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                 String uid="";
+                progressBar.setVisibility(View.VISIBLE);
+                final FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 if (mAuth.getCurrentUser() != null) {
                     FirebaseUser user = mAuth.getCurrentUser();
                     uid = user.getUid();
                 }
-                SharedPreferences prefs = getSharedPreferences("Page", MODE_PRIVATE);
-                card = prefs.getInt(uid, 1);//1 is the default value.
-                session = (prefs.getInt("session" + uid, 1) == 1) ? 1 : prefs.getInt("session" + uid, 1)-1;
 
-                Log.d("Session",session+"");
-                Log.d("Card",card+"");
-                Log.d("Uid",uid);
+                FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+                DatabaseReference cardRef = firebaseDatabase.getReference().child("session").child(uid);
+                cardRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Session s = dataSnapshot.getValue(Session.class);
+                        if(s != null) {
+                            int card = s.getCard();
 
-             if(card == -1){
-                 progressBar.setVisibility(View.VISIBLE);
-                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            long ses = (long) dataSnapshot.child("ses").getValue();
 
-                 FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                 DatabaseReference responses = database1.getReference().child("response").child("resid_"+uid).child("ses_0"+session);
-                 ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
-                 responses.addValueEventListener(responseLoader);
-                 Log.d("analyze","button");
-             }
-                else{
-                 final Context context1 = this;
-                 final Dialog dialog1 = new Dialog(context1);
-                 dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                 dialog1.setContentView(R.layout.complete_exercise_dialog_box);
-                 dialog1.setCanceledOnTouchOutside(false);
-                 dialog1.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                 dialog1.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
-                 Button declineButton1 = (Button) dialog1.findViewById(R.id.declineButton);
-                 declineButton1.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                         dialog1.dismiss();
-                     }
-                 });
-                 dialog1.show();
-             }
+                            Log.d("Session",ses+"");
+                            Log.d("Card",card+"");
+
+                            ses = (ses == 1) ? 1 : ses-1;
+
+                            if(card == -1){
+
+
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                String uid="";
+                                if (mAuth.getCurrentUser() != null) {
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    uid = user.getUid();
+                                }
+                                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                                DatabaseReference responses = database1.getReference().child("response").child("resid_"+uid).child("ses_0"+ses);
+                                ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
+                                responses.addValueEventListener(responseLoader);
+                                Log.d("analyze","button");
+                            }
+                            else{
+                                progressBar.setVisibility(View.GONE);
+                                final Dialog dialog1=new Dialog(MainActivity.this);
+                                dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialog1.setContentView(R.layout.complete_exercise_dialog_box);
+                                dialog1.setCanceledOnTouchOutside(false);
+                                dialog1.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                                dialog1.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+                                Button declineButton1 = (Button) dialog1.findViewById(R.id.declineButton);
+                                declineButton1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog1.dismiss();
+                                    }
+                                });
+                                dialog1.show();
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+//                SharedPreferences prefs = getSharedPreferences("Page", MODE_PRIVATE);
+//                card = prefs.getInt(uid, 1);//1 is the default value.
+//                session = (prefs.getInt("session" + uid, 1) == 1) ? 1 : prefs.getInt("session" + uid, 1)-1;
+
+
+
 
                 break;
         }

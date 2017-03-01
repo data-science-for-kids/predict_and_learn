@@ -4,10 +4,19 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load("current", {packages:['corechart','table']});
+        var i = -1;
+        function codeAddress() {
+
+
+            if(typeof androidAppProxy !== "undefined"){
+                i = androidAppProxy.setPage();
+                console.log("Page Received is "+i);
+             }
+         pageHandler();
+        }
+        window.onload = codeAddress;
       </script>
     <style>
-
-
     .container {
         position: relative;
     }
@@ -89,9 +98,10 @@
 
 <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
 <script type="text/javascript">
-           (function(){
-              emailjs.init("user_NrU2UM8OeHr2TmxmoEaWI");
-           })();
+         (function(){
+            emailjs.init("user_NrU2UM8OeHr2TmxmoEaWI");
+         })();
+
         $('#response').hide();
         $('#send_email').hide();
         $('#submitSuggestion').hide();
@@ -99,7 +109,7 @@
         var max=0;
         var row_max = 0;
         var genderData;
-        var i = -1;
+
         var inference = "";
 
         var text = [
@@ -143,6 +153,12 @@
         function back(){
           i--;
           pageHandler();
+        }
+
+        function getSession(){
+          if(typeof androidAppProxy !== "undefined"){
+               androidAppProxy.getPage(i);
+          }
         }
 
         function pageHandler(){
@@ -312,7 +328,7 @@
                     drawTableNew(3);
               break;
 
-               case 20:
+              case 20:
                     $('#Chart').show();
                     $('#line-chart-marker').show();
                     $('#table_div').hide();
@@ -343,6 +359,8 @@
                 emailjs.send("gmail","data_science_for_kids",{name: "Shashank", message_html: msg,from_name:"Aman"});
 
         }
+
+
         function drawChart() {
           var x=null;
           var y=null;
