@@ -76,14 +76,14 @@ public class PredictActivity extends AppCompatActivity {
         res[3] = 0;
         m = 0;
         f = 0;
-        page = getIntent().getIntExtra("Page",-1);
+        page = getIntent().getIntExtra("Page",1);
         indoor = 0;
         outdoor = 0;
         new_name = 0;
         old_name = 0;
 
-       // String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/chart.html?alt=media&token=12afb374-34d4-43bf-97d2-b5269e8c341b";
-        String url="file:///android_asset/chart.html";
+        String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/datasciene.html?alt=media&token=ca6e78cc-4d8a-472d-ae2e-ceefa0f7dd13";
+       // String url="file:///android_asset/chart.html";
         if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
