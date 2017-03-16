@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/slider_background"
-    tools:context="com.example.user.datascienceapp.CollectDataExerciseActivity">
+    tools:context="com.example.user.datascienceapp.Activities.CollectDataExerciseActivity">
 
     <ProgressBar
         android:layout_width="wrap_content"

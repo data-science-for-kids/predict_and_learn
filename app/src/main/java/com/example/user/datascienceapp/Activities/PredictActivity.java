@@ -1,4 +1,4 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Activities;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -25,13 +24,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.datascienceapp.R;
+import com.example.user.datascienceapp.Wrappers.Response;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -82,8 +80,8 @@ public class PredictActivity extends AppCompatActivity {
         new_name = 0;
         old_name = 0;
 
-        String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/datasciene.html?alt=media&token=ca6e78cc-4d8a-472d-ae2e-ceefa0f7dd13";
-       // String url="file:///android_asset/chart.html";
+        //String url="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/datasciene.html?alt=media&token=a2205287-88b0-4625-8463-e2206694ad6b";
+        String url="file:///android_asset/chart.html";
         if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
@@ -97,6 +95,7 @@ public class PredictActivity extends AppCompatActivity {
                 return (event.getAction() == MotionEvent.ACTION_MOVE);
             }
         });
+
         final Context context = this;
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

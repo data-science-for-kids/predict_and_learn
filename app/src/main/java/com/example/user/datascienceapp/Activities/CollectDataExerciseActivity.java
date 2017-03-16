@@ -1,8 +1,8 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
+
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +22,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.user.datascienceapp.R;
+import com.example.user.datascienceapp.Wrappers.DataBean;
+import com.example.user.datascienceapp.Wrappers.Response;
+import com.example.user.datascienceapp.Wrappers.Session;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -75,9 +79,6 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                     uid = user.getUid();
                 }
 
-//                SharedPreferences.Editor editor = getSharedPreferences("Page", MODE_PRIVATE).edit();
-//                editor.putInt(uid, page - 1);
-//                editor.commit();
                 Log.d("pageCommit", (page - 1) + "");
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -194,12 +195,6 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
 
             }
         });
-
-//        SharedPreferences prefs = getSharedPreferences("Page", MODE_PRIVATE);
-//        card_no = prefs.getInt(uid, 1);
-//        pic_no = prefs.getInt(uid, 1);//1 is the default value.
-//        session = prefs.getInt("session" + uid, 1);
-
     }
 
     public void onClick(View v) {
@@ -334,12 +329,6 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     uid = user.getUid();
                                 }
-
-//                                SharedPreferences.Editor editor = getSharedPreferences("Page", MODE_PRIVATE).edit();
-//                                editor.putInt(uid, -1);
-//                                editor.putInt("session" + uid, session + 1);
-//                                editor.commit();
-
                                 Log.d("pageCommit", -1 + "");
 
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();

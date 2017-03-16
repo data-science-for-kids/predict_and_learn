@@ -1,30 +1,33 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Loaders;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.user.datascienceapp.Activities.StoryActivity;
+import com.example.user.datascienceapp.Wrappers.Story;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
+/**
+ * Created by Aman Mathur.
+ * This class is used for loading the information about the story from database and open the activity when loading completes
+ */
 
 public class StoryLoader implements RequestListener<StorageReference, GlideDrawable>,OnSuccessListener<byte[]> {
     private ArrayList<Story> list;
     private int count=0;
     private boolean text;
     private Context context;
-   // private long start,finish;
+
     public StoryLoader(Context context){
         this.context = context;
         text = false;
-      //  start=System.currentTimeMillis();
 
-    }
-    public StoryLoader(){
 
     }
 

@@ -1,4 +1,4 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.user.datascienceapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String schoolName="test";
     ArrayList<Integer> imageNo;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -69,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
+                    //Logging out if user is annonymous
                     if(user.isAnonymous()){
                         Log.d("User","Annonymous"+user.getUid());
                         firebaseAuth.signOut();
@@ -107,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         String l_name=lname.getText().toString()+" ";
         String grade_name=grade.getText().toString();
 
-
+        // Prevent empty fields
         if(f_name.equals("")||l_name.equals("")||grade_name.equals("")){
             Toast.makeText(getBaseContext(),"Fill all the fields",Toast.LENGTH_LONG).show();
             progressBar.setVisibility(View.GONE);
@@ -118,7 +121,10 @@ public class LoginActivity extends AppCompatActivity {
                 grade_name="0";
             else if(grade_name.equals("Above 12"))
                 grade_name="13";
-
+            /**
+             * Firebase accpets username as emails only. Custom email is formed for each user using his/her firstname, lastname and grade.
+             * Default password is used for all users.
+             */
             final String email = f_name.substring(0,f_name.indexOf(' ')) + "." + grade_name + "@" + l_name.substring(0,l_name.indexOf(' ')) + ".com";
             final String password = "password123";
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -187,6 +193,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
+
+    /**
+     * Merging the account with the anonymous account
+     * @param email
+     * @param password
+     */
     public void loginAnno(String email,String  password){
         AuthCredential credential=EmailAuthProvider.getCredential(email,password);
         mAuth.getCurrentUser().linkWithCredential(credential)
@@ -204,10 +216,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-
+    // Signing In a old user
     public void login(String email,String password){
-
-
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
          @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

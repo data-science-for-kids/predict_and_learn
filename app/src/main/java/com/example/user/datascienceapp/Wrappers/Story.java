@@ -1,4 +1,4 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Wrappers;
 
 import java.io.Serializable;
 

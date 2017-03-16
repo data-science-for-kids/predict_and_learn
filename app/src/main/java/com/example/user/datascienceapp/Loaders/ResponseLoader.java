@@ -1,9 +1,12 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Loaders;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.user.datascienceapp.Activities.PredictActivity;
+import com.example.user.datascienceapp.Wrappers.Response;
+import com.example.user.datascienceapp.Wrappers.Session;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -14,6 +17,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * Created by Aman Mathur.
+ * This class is used for loading the responses uses submitted last open the activity when loading completes
+ */
 
 public class ResponseLoader implements ValueEventListener {
     private ArrayList<Response> list;
@@ -26,7 +33,7 @@ public class ResponseLoader implements ValueEventListener {
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-
+        // Event listener to notify when responses are loaded
         if(!dataSnapshot.exists()){
             Log.d("No","Data");
         }
@@ -56,7 +63,7 @@ public class ResponseLoader implements ValueEventListener {
             }
 
             FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-            final DatabaseReference cardRef = firebaseDatabase.getReference().child("session").child(uid);
+            final DatabaseReference cardRef = firebaseDatabase.getReference().child("session").child(uid); //getting the session number
             cardRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

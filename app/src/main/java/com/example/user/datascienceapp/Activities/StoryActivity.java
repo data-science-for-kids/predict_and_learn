@@ -1,4 +1,4 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,7 +14,6 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.eftimoff.viewpagertransformers.StackTransformer;
+import com.example.user.datascienceapp.R;
+import com.example.user.datascienceapp.Wrappers.Story;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;

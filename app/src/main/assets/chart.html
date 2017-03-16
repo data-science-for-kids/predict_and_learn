@@ -40,6 +40,7 @@
         top: 10%;
         width: 100%;
         text-align: center;
+        padding: 10px 10px 10px 10px;
         font-size: 18px;
     }
 
@@ -62,29 +63,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
 <body>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<br>
 
+<div class="w3-container w3-center" >
 
-<div class="w3-container w3-center">
-
-    <div class="w3-container" id="Chart">
+    <div class="w3-container" id="Chart" >
         <div id="table_div" ></div>
         <div id="line-chart-marker"></div>
         <p class="w3-text-red" id="info" style="font-size: small;"></p>
     </div>
 
-    <div class="center" id="card">
-        <p id="card_text" class="w3-text-red">Welcome</p>
+    <div class="center" id="card" >
+        <p id="card_text" class="w3-text-red"></p>
         <img src="" style="width: 100%; height: 228px;" id="image">
         <p id="person" class="w3-text-red"><b></b></p>
         <p id="suggest" class="w3-text-red" ><b></b></p>
-        <input type="number" id="inputNo" placeholder="Answer" style="width:70px;" >
-        <textarea id="response" cols="40" rows="5" ></textarea>
-        <button id="send_email" onclick="sendEmail()" class="w3-btn w3-transparent w3-text-red">Send</button>
-        <button id="submitSuggestion" class="w3-btn w3-transparent w3-text-red">Submit Suggestion</button>
+        <input type="number" id="inputNo" placeholder="Type to Answer" style="width:130px; border: 1px solid red;" >
+        <textarea id="response" cols="30" rows="5" style="border: 1px solid red;" ></textarea>
+        <button id="send_email" onclick="sendEmail()" class="w3-btn w3-transparent w3-text-red" style="border: 1px solid red; border-radius: 15px;">Send</button>
+        <button id="submitSuggestion" class="w3-btn w3-transparent w3-text-red" style="border: 1px solid red; border-radius: 15px;">Submit Suggestion</button>
         <br>
+    </div>
+
+    <div class="w3-container" id="table_div1" >
+
     </div>
 
     <div class="bottomright">
@@ -119,12 +121,11 @@
                         "Let us first understand how many you chose to befriend.","",
                         "Based on your rating preference and looking at the histogram,","",
                         "Let us now understand something about whom you have befriended.",
-                        "So far so good?<br>Please feel free to share any queries. We'll do our best to answer them and get in touch with you!",
                         "Let us find out what is common among those whom you thought you'll befriend. This will help us *predict* whom you befriend.",
-                        "We think there are three factors based on which you may have decided to befriend people shown to you.<br> * Name of the person<br> * The person's gender<br> * The person's hobby",
-                        "Name of the person<br>Whether its an old name or a new name",
-                        "Person's gender<br>Boy or a girl",
-                        "Person's hobby<br>Outdoor activity or an indoor activity",
+                        "We think there are three factors based on which you may have decided to befriend people shown to you.<br><br><b>* The person's name<br>* The person's gender<br>* The person's hobby</b>",
+                        "<b>Name of the person</b><br>Whether its an old name or a new name",
+                        "<b>Person's gender</b><br>Boy or a girl",
+                        "<b>Person's hobby</b><br>Outdoor activity or an indoor activity",
                         "Do you think there are more factors which determined how you made friends?","","","","","","",
                         "to be continued..."
                    ];
@@ -142,8 +143,8 @@
                         "It seems you are generally a friendly person. We infer this because you have rated many more people with 4 or 5 stars than those with 1, 2 or 3 stars."
                      ];
         var results = [
-                        "Great! So we've found out a little something about you",
-                        "Great! So your data is yet to reveal anything about you. Let's keep looking..."
+                        "<b>Great! So we've found out a little something about you.</b><br>Please feel free to share any queries. We'll do our best to answer them and get in touch with you!",
+                        "<b>Great! So your data is yet to reveal anything about you. Let's keep looking...</b><br>Please feel free to share any queries. We'll do our best to answer them and get in touch with you!"
                       ];
 
         function next(){
@@ -174,6 +175,8 @@
             $('#send_email').hide();
             $('#submitSuggestion').hide();
             $('#image').hide();
+            $('#table_div1').hide();
+            $('#table_div').hide();
 
             switch(i){
 
@@ -208,7 +211,7 @@
                     var ans=document.getElementById('inputNo').value;
                     if(ans == max){
                        if(typeof androidAppProxy !== "undefined"){
-                         androidAppProxy.makeToast("Correct Answer");
+                         androidAppProxy.makeToast("Great! Right Answer!");
                        }
                        if(row_max == 3||row_max == 0||row_max == 4)
                         document.getElementById('suggest').innerHTML = results[0];
@@ -218,57 +221,54 @@
                     }
                     else{
                         if(typeof androidAppProxy !== "undefined"){
-                           androidAppProxy.makeToast("Oops. That's not right.\n Can you go back, check and add up the numbers correctly.");
+                           androidAppProxy.makeToast("Oops. That's not right.\nCan you go back, check and add up the numbers correctly.");
                         }
                           i--;// calling page 5
                           pageHandler();
                           return;
                     }
+                    $('#response').show();
+                    $('#send_email').show();
                     console.log(i+'Page');
 
               break;
 
               case 7:
-
               break;
 
               case 8:
-                    $('#response').show();
-                    $('#send_email').show();
               break;
 
               case 9:
-
               break;
 
               case 10:
-
+                    $('#image').show();
+                    document.getElementById('image').src="name.png";
+                    <!--document.getElementById('image').src="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/name.png?alt=media&token=561a3191-cb13-43e4-a50b-c88246e010a2";-->
               break;
 
               case 11:
                     $('#image').show();
-                    document.getElementById('image').src="name.png";
+                    document.getElementById('image').src="gender.png"
+                    <!--document.getElementById('image').src="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/gender.png?alt=media&token=cc1b1d0c-2795-42ca-93cb-06d58eba4903";-->
               break;
 
               case 12:
                     $('#image').show();
-                    document.getElementById('image').src="gender.png";
+                    document.getElementById('image').src="activity.png"
+                    <!--document.getElementById('image').src="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/activity.png?alt=media&token=ed3102b2-15fb-4a8e-9706-d8529f386056";-->
               break;
 
               case 13:
-                    $('#image').show();
-                    document.getElementById('image').src="activity.png";
-              break;
-
-              case 14:
                     $('#response').show();
                     $('#submitSuggestion').show();
               break;
 
-              case 15:
+              case 14:
                     $('#Chart').show();
                     $('#line-chart-marker').hide();
-                    $('#table_div').show();
+                    $('#table_div1').show();
                     $('#info').show();
                     var span=document.getElementById('info');
                     span.style.fontSize="18px";
@@ -280,10 +280,10 @@
                     }
               break;
 
-              case 16:
+              case 15:
                     $('#Chart').show();
                     $('#line-chart-marker').show();
-                    $('#table_div').hide();
+                    $('#table_div1').hide();
                     $('#info').show();
                     var span=document.getElementById('info');
                     span.style.fontSize="18px";
@@ -295,10 +295,10 @@
                     }
                 break;
 
-              case 17:
+              case 16:
                     $('#Chart').show();
                     $('#line-chart-marker').hide();
-                    $('#table_div').show();
+                    $('#table_div1').show();
                     $('#info').show();
                     var span=document.getElementById('info');
                     span.style.fontSize="18px";
@@ -306,10 +306,10 @@
                     drawTableNew(2);
                break;
 
-              case 18:
+              case 17:
                     $('#Chart').show();
                     $('#line-chart-marker').show();
-                    $('#table_div').hide();
+                    $('#table_div1').hide();
                     $('#info').show();
                     var span=document.getElementById('info');
                     span.style.fontSize="18px";
@@ -317,10 +317,10 @@
                     drawPie(2);
               break;
 
-              case 19:
+              case 18:
                     $('#Chart').show();
                     $('#line-chart-marker').hide();
-                    $('#table_div').show();
+                    $('#table_div1').show();
                     $('#info').show();
                     var span=document.getElementById('info');
                     span.style.fontSize="18px";
@@ -328,10 +328,10 @@
                     drawTableNew(3);
               break;
 
-              case 20:
+              case 19:
                     $('#Chart').show();
                     $('#line-chart-marker').show();
-                    $('#table_div').hide();
+                    $('#table_div1').hide();
                     $('#info').show();
                     var span=document.getElementById('info');
                     span.style.fontSize="18px";
@@ -360,7 +360,6 @@
 
         }
 
-
         function drawChart() {
           var x=null;
           var y=null;
@@ -388,7 +387,8 @@
             lineWidth: 4,
             height: 228,
             width: "100%",
-            vAxis: { title: "# provided to"},
+            vAxis: { title: "# provided to",
+                     format: '0'},
             hAxis: { gridlines: { count: 5 },
                     title: "Stars provided\n(Tap on the bar to see details)"}
           };
@@ -419,6 +419,7 @@
     }
     var f1=false,f2=false,f3=false;
     function drawPie(n){
+        var tie=false;
         var row1,row2,title;
             if(n == 1){
                 row1='Male';
@@ -470,29 +471,57 @@
           var messages1=[ "are Female"  , "have a new name" , "likes outdoor activities"];
           if(typeof androidAppProxy !== "undefined"){
           var str;
-          if(y[0]>y[1])
+          var diff = parseInt(y[0])-parseInt(y[1]);
+          if(diff >= 9)
+          {
               str=messages[n-1];
-          else
+              console.log("in"+str+" "+y[0])
+              tie=false;
+              androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
+          }
+          else if(diff <= -9)
+          {
               str=messages1[n-1];
-
-          androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
-
+              tie=false;
+              console.log("out"+str+" "+y[0]+" "+y[1])
+              androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
+          }
+          else{
+                str="Cannot Determine your preferences"
+                tie=true;
+                androidAppProxy.showMessage(str)
+          }
           if(n == 1 && !f1){
-            inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+            if(tie)
+                inference=inference+n+")"+str+"\n\n";
+            else
+                inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+
             if(typeof androidAppProxy !== "undefined")
               androidAppProxy.dialogText(inference);
+
             f1 = true;
           }
           else if(n == 2 && !f2){
-            inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+            if(tie)
+                inference=inference+n+")"+str+"\n\n";
+            else
+                inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+
             if(typeof androidAppProxy !== "undefined")
               androidAppProxy.dialogText(inference);
+
             f2 = true;
           }
           if(n == 3 && !f3){
-            inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+            if(tie)
+                inference=inference+n+")"+str+"\n\n";
+            else
+                inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+
             if(typeof androidAppProxy !== "undefined")
               androidAppProxy.dialogText(inference);
+
             f3 = true;
           }
     }
@@ -537,7 +566,7 @@
                       [row1, parseInt(y[0])],
                       [row2, parseInt(y[1])]
                     ]);
-            var table = new google.visualization.Table(document.getElementById('table_div'));
+            var table = new google.visualization.Table(document.getElementById('table_div1'));
             table.draw(Data_new, {showRowNumber: true, width: '100%', height: '100%'});
 
             }
