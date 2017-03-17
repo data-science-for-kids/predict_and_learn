@@ -48,10 +48,10 @@
             android:name=".Activities.PredictActivity"
             android:label="Predict Your Friend"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Activities.BuildPredictor" />
+
         <activity
             android:name=".Activities.BuildPredictorActivity"
-            android:label="@string/title_activity_build_predictor"
+            android:label="Build Your Predictor"
             android:theme="@style/AppTheme"></activity>
     </application>
 

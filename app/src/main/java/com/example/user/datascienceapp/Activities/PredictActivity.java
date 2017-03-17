@@ -3,6 +3,7 @@ package com.example.user.datascienceapp.Activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -114,7 +115,11 @@ public class PredictActivity extends AppCompatActivity {
                 predict.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Toast.makeText(getBaseContext(),"Build Your Predictor",Toast.LENGTH_LONG).show();
+                        Intent intent= new Intent(PredictActivity.this,BuildPredictorActivity.class);
+                        startActivity(intent);
+                        finish();
                         dialog.dismiss();
                     }
                 });
@@ -172,10 +177,7 @@ public class PredictActivity extends AppCompatActivity {
             else{
                 res[0]++;
             }
-
         }
-
-
 
         webView.setWebViewClient(new WebViewClient(){
             boolean loadingFinished = true;

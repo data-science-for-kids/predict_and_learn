@@ -24,8 +24,4 @@
         <include layout="@layout/content_predict"
         android:id="@+id/include" />
 
-
-
-
-
 </android.support.design.widget.CoordinatorLayout>
