@@ -1,5 +1,6 @@
 package com.example.user.datascienceapp.Activities;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,16 +13,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.user.datascienceapp.R;
+import com.example.user.datascienceapp.Wrappers.Response;
+
+import java.util.ArrayList;
 
 public class BuildPredictorActivity extends AppCompatActivity {
     private WebView webView;
     private ProgressBar progressBar;
+    private int[] res;
+    private int m,f,new_name,old_name,indoor,outdoor,page;
+    private ArrayList<Response> responses;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +44,24 @@ public class BuildPredictorActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         webView = (WebView) findViewById(R.id.webview);
         progressBar = (ProgressBar) findViewById(R.id.progressBar4);
+
+        res=new int[5];
+        res[0] = 0;
+        res[1] = 0;
+        res[2] = 0;
+        res[3] = 0;
+        m = 0;
+        f = 0;
+        indoor = 0;
+        outdoor = 0;
+        new_name = 0;
+        old_name = 0;
+
         webView.getSettings().setJavaScriptEnabled(true);
+        responses= (ArrayList<Response>) getIntent().getSerializableExtra("Response");
         String url="file:///android_asset/predict.html";
+
+        inference();
 
         if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -88,9 +113,109 @@ public class BuildPredictorActivity extends AppCompatActivity {
             }
         });
 
-        //webView.addJavascriptInterface(new PredictActivity.AppJavaProxy(this),"androidAppProxy");
+        webView.addJavascriptInterface(new AppJavaProxy(this),"androidAppProxy");
         webView.loadUrl(url);
 
+    }
+    public void inference(){
+        int c=0;
+        for(Response response: responses){
+            c++;
+            if(c==43)
+                break;
+            String r = response.getResponse();
+            if(r.equals("5.0")){
+                res[4]++;
+                String gender=response.getGender();
+                if(gender.equals("MALE"))
+                    m++;
+                else
+                    f++;
+                int age=response.getNameAge();
+                if(age == 0)
+                    old_name++;
+                else
+                    new_name++;
+                int act=response.getActivity();
+                if(act == 0)
+                    indoor++;
+                else
+                    outdoor++;
+            }
+            else if(r.equals("4.0")){
+                res[3]++;
+                String gender=response.getGender();
+                if(gender.equals("MALE"))
+                    m++;
+                else
+                    f++;
+                int age=response.getNameAge();
+                if(age == 0)
+                    old_name++;
+                else
+                    new_name++;
+                int act=response.getActivity();
+                if(act == 0)
+                    indoor++;
+                else
+                    outdoor++;
+            }
+            else if(r.equals("3.0")){
+                res[2]++;
+            }
+            else if(r.equals("2.0")){
+                res[1]++;
+            }
+            else{
+                res[0]++;
+            }
+        }
+    }
+    public class AppJavaProxy{
+        private Activity activity=null;
+        public AppJavaProxy(Activity activity){
+            this.activity=activity;
+        }
+
+        @JavascriptInterface
+        public String sendNo(){
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            for(int i=0; i<res.length; i++){
+                sb.append("\"").append(res[i]).append("\"");
+                sb.append(",");
+            }
+            sb.append("\"").append(30).append("\"");
+            sb.append("]");
+            Log.d("St",sb.toString());
+            return sb.toString();
+        }
+
+        @JavascriptInterface
+        public String sendInference(){
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            sb.append("\"").append(m).append("\"");
+            sb.append(",");
+            sb.append("\"").append(f).append("\"");
+            sb.append(",");
+            sb.append("\"").append(old_name).append("\"");
+            sb.append(",");
+            sb.append("\"").append(new_name).append("\"");
+            sb.append(",");
+            sb.append("\"").append(indoor).append("\"");
+            sb.append(",");
+            sb.append("\"").append(outdoor).append("\"");
+
+            sb.append("]");
+            Log.d("St-infer",sb.toString());
+            return sb.toString();
+        }
+
+        @JavascriptInterface
+        public void makeToast(String message){
+            Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

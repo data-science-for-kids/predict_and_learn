@@ -118,14 +118,58 @@ public class PredictActivity extends AppCompatActivity {
 
                         Toast.makeText(getBaseContext(),"Build Your Predictor",Toast.LENGTH_LONG).show();
                         Intent intent= new Intent(PredictActivity.this,BuildPredictorActivity.class);
+                        intent.putExtra("Response",responses);
                         startActivity(intent);
-                        finish();
+
                         dialog.dismiss();
                     }
                 });
                 dialog.show();
             }
         });
+
+        inference();
+        webView.setWebViewClient(new WebViewClient(){
+            boolean loadingFinished = true;
+            boolean redirect = false;
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (!loadingFinished) {
+                    redirect = true;
+                }
+                loadingFinished = false;
+                view.loadUrl(url);
+                return super.shouldOverrideUrlLoading(view, url);
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                loadingFinished = false;
+                Log.d("here","there");
+                super.onPageStarted(view, url, favicon);
+            }
+
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressBar.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if(!redirect){
+                    loadingFinished = true;
+                }
+                if(loadingFinished && !redirect){
+
+                } else{
+                    redirect = false;
+                }
+                super.onPageFinished(view, url);
+            }
+        });
+
+        webView.addJavascriptInterface(new AppJavaProxy(this),"androidAppProxy");
+        webView.loadUrl(url);
+    }
+    public void inference(){
         int c=0;
         for(Response response: responses){
             c++;
@@ -178,48 +222,7 @@ public class PredictActivity extends AppCompatActivity {
                 res[0]++;
             }
         }
-
-        webView.setWebViewClient(new WebViewClient(){
-            boolean loadingFinished = true;
-            boolean redirect = false;
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (!loadingFinished) {
-                    redirect = true;
-                }
-                loadingFinished = false;
-                view.loadUrl(url);
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                loadingFinished = false;
-                Log.d("here","there");
-                super.onPageStarted(view, url, favicon);
-            }
-
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                progressBar.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                if(!redirect){
-                    loadingFinished = true;
-                }
-                if(loadingFinished && !redirect){
-
-                } else{
-                    redirect = false;
-                }
-                super.onPageFinished(view, url);
-            }
-        });
-
-        webView.addJavascriptInterface(new AppJavaProxy(this),"androidAppProxy");
-        webView.loadUrl(url);
     }
-
 
     public class AppJavaProxy{
         private Activity activity=null;

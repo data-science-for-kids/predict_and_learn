@@ -3,7 +3,7 @@
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        var i = 1;
+        var i = 0;
       </script>
     <style>
     .container {
@@ -41,7 +41,7 @@
 
     </style>
 </head>
-<title>Predict your Friend</title>
+<title>Build your Predictor</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
 <body>
@@ -51,7 +51,7 @@
 
     <div class="center" id="card" >
         <p id="card_text" class="w3-text-red"></p>
-        <br>
+        <p id="inference" class="w3-text-red"></p>
     </div>
 
     <div class="bottomright">
@@ -68,7 +68,7 @@
 
 
         var text = [
-                        "From the information we gathered from your response, we have figured,",
+                        "From the information we gathered from your response, we have figured,<br><br>You prefer to befriend people who are-",
                         "This suggests that a b are best able to predict whom you will befriend",
                         "How can we use the information to predict your friendship in general?",
                         "For a new person whom you try to befriend we can see if they are",
@@ -76,6 +76,7 @@
                         "For example.."
                    ];
 
+        pageHandler();
         function next(){
           i++;
           pageHandler();
@@ -96,22 +97,21 @@
 
             $('#next').show();
             $('#prev').show();
+            $('#inference').hide();
 
             switch(i){
-
               case 0:
+                $('#inference').show();
+                $('#prev').hide();
+                infers();
+              break;
               case 1:
+                break;
               case 2:
               case 3:
               break;
 
               case 4:
-              break;
-
-              case 5:
-              break;
-
-              case 6:
               break;
 
               default:
@@ -128,6 +128,53 @@
            console.log("text"+i);
         }
 
+       function infers(){
+          var x=null;
+          var y=null;
+
+          if(typeof androidAppProxy !== "undefined"){
+             x=androidAppProxy.sendInference();
+             console.log(x);
+             y=JSON.parse(x);
+          }
+          else{
+             x=null;
+          }
+
+
+           var choice1 = [ "* are Male"  , "* have an old name" , "* likes indoor activities"];
+           var choice2 = [ "* are Female"  , "* have a new name" , "* likes outdoor activities"];
+
+           if(typeof androidAppProxy !== "undefined"){
+                var str = "";
+                var diffGender = parseInt(y[0])-parseInt(y[1]);
+                var diffName = parseInt(y[2])-parseInt(y[3]);
+                var diffActivity = parseInt(y[4])-parseInt(y[5]);
+
+              if(diffGender >= 2)
+                  str = str + choice1[0] + "<br>";
+              else if(diffGender <= -2)
+                  str = str + choice2[0] + "<br>";
+              else
+                  str = str +  "\n";
+
+              if(diffName >= 2)
+                  str = str + choice1[1] + "<br>";
+              else if(diffName <= -2)
+                  str = str + choice2[1] + "<br>";
+              else
+                  str = str + "\n";
+
+
+              if(diffActivity >= 2)
+                  str = str+choice1[2];
+              else if(diffActivity <= -2)
+                  str = str + choice2[2];
+
+           }
+
+           document.getElementById('inference').innerHTML = str;
+       }
       </script>
 
 </body>
