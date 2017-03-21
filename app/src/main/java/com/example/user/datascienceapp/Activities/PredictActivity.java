@@ -21,6 +21,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,9 +41,10 @@ public class PredictActivity extends AppCompatActivity {
     private int m,f,new_name,old_name,indoor,outdoor,page;
     private ArrayList<Response> responses;
     private ProgressBar progressBar;
-    private FloatingActionButton floatingActionButton;
+    private ImageButton imageButton;
     private String dialog_text="";
-
+    private  Button predict;
+    private  Dialog dialog;
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -60,8 +62,8 @@ public class PredictActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-        floatingActionButton.setVisibility(View.GONE);
+        imageButton = (ImageButton) findViewById(R.id.fab);
+        imageButton.setVisibility(View.GONE);
         webView= (WebView) findViewById(R.id.webview);
 
         webView.getSettings().setJavaScriptEnabled(true);
@@ -99,11 +101,11 @@ public class PredictActivity extends AppCompatActivity {
 
         final Context context = this;
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Float","Pressed");
-                final Dialog dialog = new Dialog(context);
+                 dialog = new Dialog(context);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_inference);
                 dialog.setCanceledOnTouchOutside(true);
@@ -111,7 +113,8 @@ public class PredictActivity extends AppCompatActivity {
                 dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
                 TextView textView= (TextView) dialog.findViewById(R.id.dialog_text);
                 textView.setText(dialog_text);
-                Button predict = (Button) dialog.findViewById(R.id.predictDialogButton);
+                predict = (Button) dialog.findViewById(R.id.predictDialogButton);
+               // predict.setVisibility(View.INVISIBLE);
                 predict.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -313,7 +316,7 @@ public class PredictActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        floatingActionButton.setVisibility(View.VISIBLE);
+                        imageButton.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -321,10 +324,12 @@ public class PredictActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        floatingActionButton.setVisibility(View.GONE);
+                        imageButton.setVisibility(View.GONE);
                     }
                 });
             }
+
+
         }
 
     }

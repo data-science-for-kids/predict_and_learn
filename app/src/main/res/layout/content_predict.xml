@@ -5,7 +5,6 @@
     android:id="@+id/content_analysis_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.user.datascienceapp.Activities.PredictActivity"
     tools:showIn="@layout/activity_predict">
@@ -26,17 +25,18 @@
             android:foregroundGravity="center"
             android:id="@+id/progressBar4" />
     </WebView>
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:fabSize="normal"
+
+    <ImageButton
         android:id="@+id/fab"
-        app:elevation="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-
-        app:srcCompat="@drawable/ic_lightbulb" />
+        android:layout_marginBottom="5dp"
+        android:clickable="true"
+        android:background="@drawable/roundedbutton"
+        android:elevation="8dp"
+        android:src="@drawable/ic_lightbulb"
+        />
 
 </RelativeLayout>
