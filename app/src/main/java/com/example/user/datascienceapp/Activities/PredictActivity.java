@@ -45,6 +45,7 @@ public class PredictActivity extends AppCompatActivity {
     private String dialog_text="";
     private  Button predict;
     private  Dialog dialog;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -105,16 +106,18 @@ public class PredictActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("Float","Pressed");
-                 dialog = new Dialog(context);
+
+                dialog = new Dialog(context);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_inference);
                 dialog.setCanceledOnTouchOutside(true);
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+
                 TextView textView= (TextView) dialog.findViewById(R.id.dialog_text);
                 textView.setText(dialog_text);
                 predict = (Button) dialog.findViewById(R.id.predictDialogButton);
-               // predict.setVisibility(View.INVISIBLE);
+                // predict.setVisibility(View.INVISIBLE);
                 predict.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -239,7 +242,9 @@ public class PredictActivity extends AppCompatActivity {
         }
         @JavascriptInterface
         public void getPage(int i){
+
             Log.d("Value of i",i+"");
+
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             String uid="";
             if (mAuth.getCurrentUser() != null) {
@@ -328,8 +333,7 @@ public class PredictActivity extends AppCompatActivity {
                     }
                 });
             }
-
-
+            
         }
 
     }

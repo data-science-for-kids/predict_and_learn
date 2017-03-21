@@ -17,7 +17,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 /**
- * Created by Aman Mathur on 1/11/2017.
+ * Created by Aman Mathur
  * This class is used for loading the information about the cards from database and open the activity when loading completes
  */
 
@@ -30,6 +30,9 @@ public class ExerciseLoader  implements RequestListener<StorageReference, GlideD
          list = new ArrayList<DataBean>();
     }
 
+    /**
+     * @param dataSnapshot (Objects list of DataBean Class)
+     */
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {

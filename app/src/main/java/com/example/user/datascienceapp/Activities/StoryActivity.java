@@ -187,10 +187,16 @@ public class StoryActivity extends AppCompatActivity {
         public void onPageScrollStateChanged(int state) {}
     };
 
+
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         public PlaceholderFragment() {}
 
+        /**
+         *
+         * @param sectionNumber (It is the active page number)
+         * @return the current fragment
+         */
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -215,6 +221,10 @@ public class StoryActivity extends AppCompatActivity {
             if (story.get(page - 1).isImage()) {
                 Log.d("image","here");
                 StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child("story1/slide" + page + ".jpg");
+
+                /**
+                 * Based upon page, placeholder based upon corresponding sizes are assigned
+                 */
                 if (page == 5) {
                     Glide.with(this)
                             .using(new FirebaseImageLoader())

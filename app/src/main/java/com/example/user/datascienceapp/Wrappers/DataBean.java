@@ -1,15 +1,12 @@
 package com.example.user.datascienceapp.Wrappers;
 
-/**
- * Created by USER on 20-09-2016.
- */
-
-
 import java.io.Serializable;
 
 /**
- * Created by USER on 12-07-2016.
+ * @see java.io.Serializable
+ * @serial ( Objects of the class to be passed in threads)
  */
+
 public class DataBean implements Serializable {
     private String name;
     private String gender;
@@ -20,6 +17,7 @@ public class DataBean implements Serializable {
     public int getId() {
         return id;
     }
+
 
     public void setId(int id) {
         this.id = id;

@@ -25,6 +25,8 @@ import com.example.user.datascienceapp.Wrappers.Response;
 
 import java.util.ArrayList;
 
+// This activity is used to handle
+
 public class BuildPredictorActivity extends AppCompatActivity {
     private WebView webView;
     private ProgressBar progressBar;

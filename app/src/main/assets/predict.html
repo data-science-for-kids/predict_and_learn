@@ -147,35 +147,37 @@
 
            if(typeof androidAppProxy !== "undefined"){
                 var str = "";
-                var diffGender = parseInt(y[0])-parseInt(y[1]);
-                var diffName = parseInt(y[2])-parseInt(y[3]);
-                var diffActivity = parseInt(y[4])-parseInt(y[5]);
 
-              if(diffGender >= 2)
+                var percentGender = ((parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])-parseInt(y[1])))*100;
+
+                var percentName = ((parseInt(y[1])-parseInt(y[2]))/(parseInt(y[0])-parseInt(y[1])))*100;
+
+                var percentActivity = ((parseInt(y[3])-parseInt(y[4]))/(parseInt(y[0])-parseInt(y[1])))*100;
+
+              if(percentGender >= 20)
                   str = str + choice1[0] + "<br>";
-              else if(diffGender <= -2)
+              else if(percentGender <= -20)
                   str = str + choice2[0] + "<br>";
               else
                   str = str +  "\n";
 
-              if(diffName >= 2)
+              if(percentName >= 20)
                   str = str + choice1[1] + "<br>";
-              else if(diffName <= -2)
+              else if(percentName <= -20)
                   str = str + choice2[1] + "<br>";
               else
                   str = str + "\n";
 
 
-              if(diffActivity >= 2)
+              if(percentActivity >= 20)
                   str = str+choice1[2];
-              else if(diffActivity <= -2)
+              else if(percentActivity <= -20)
                   str = str + choice2[2];
-
            }
-
            document.getElementById('inference').innerHTML = str;
        }
       </script>
 
 </body>
 </html>
+

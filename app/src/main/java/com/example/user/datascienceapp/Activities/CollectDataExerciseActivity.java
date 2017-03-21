@@ -39,7 +39,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-
+// Activity class to hanlde collection of responses
 public class CollectDataExerciseActivity extends AppCompatActivity implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
 
     private Button newq;
@@ -54,6 +54,11 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
     private LinearLayout mainLayout;
     private ProgressBar progressBar;
 
+    /**
+     * In case back button is pressed first it shows conformation dialog box,
+     * then it saves the session id and the page number last active in firebase databse
+     * to allow resuming of activity from the last point.
+     */
     @Override
     public void onBackPressed() {
 
@@ -68,7 +73,6 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
         Button okButton = (Button) dialog.findViewById(R.id.okButton1);
         Button cancelButton = (Button) dialog.findViewById(R.id.cancelbutton);
-
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +111,8 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_collect_data_activity);
+
+        //Initializing Ui Elements
         newq = (Button) findViewById(R.id.button);
         id = (TextView) findViewById(R.id.id);
         name = (TextView) findViewById(R.id.name);
@@ -118,6 +124,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         cards = (ArrayList<DataBean>) getIntent().getSerializableExtra("Card");
         mainLayout= (LinearLayout) findViewById(R.id.linear_main);
         progressBar= (ProgressBar) findViewById(R.id.progressBar);
+
         mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,7 +143,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
         progressBar.setVisibility(View.VISIBLE);
 
         FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-        DatabaseReference cardRef = firebaseDatabase.getReference().child("session").child(uid);
+        DatabaseReference cardRef = firebaseDatabase.getReference().child("session").child(uid); // to resume activity
         cardRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -161,6 +168,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                 }
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 progressBar.setVisibility(View.GONE);
+                //Populating first card
                 game.setText(cards.get(card_no - 1).getGame());
                 id.setText(cards.get(card_no - 1).getId() + "/" + "56");
                 name.setText(cards.get(card_no - 1).getName());
@@ -168,6 +176,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                 String gender_temp=cards.get(card_no-1).getGender();
                 StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
                 StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
+
                 if(gender_temp.equals("FEMALE")) {
                     //Images are fetched from server and not drawable
                     Glide.with(getApplication())
@@ -179,6 +188,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
 
                 }
                 else{
+
                     Glide.with(getApplication())
                             .using(new FirebaseImageLoader())
                             .load(male).diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -205,6 +215,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                 String uid = "admin";
 
                 if (a == 0) {
+
                     final Context context = this;
                     final Dialog dialog = new Dialog(context);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -231,15 +242,18 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                         FirebaseUser user = mAuth.getCurrentUser();
                         uid = user.getUid();
                     }
+
+                    // Creating an instance of response for a single card
                     Response res = new Response();
+
                     res.setCard("id_" + pic_no);
                     res.setExercise("friends");
                     res.setResponse(a +"");
-
                     res.setGender(cards.get(pic_no-1).getGender());
                     res.setActivity(cards.get(pic_no-1).getActivity());
                     res.setNameAge(cards.get(pic_no-1).getNameAge());
 
+                    // Storing the response in database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference response;
                     if (ses < 10) {
@@ -257,6 +271,10 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
 
                     if (card_no < 56) {
                         page++;
+
+                        /**
+                         * Populating the cards using the information from the server
+                         */
 
                         ratingBar.setRating(0);
                         game.setText(cards.get(pic_no).getGame());
@@ -312,6 +330,8 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                         // cards finished
                     } else {
 
+
+
                         final Context context = this;
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -331,6 +351,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                                 }
                                 Log.d("pageCommit", -1 + "");
 
+                                // Storing page number as -1 when all the responses have been saved.
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference response = database.getReference("session").child(uid).child("ses");
                                 response.setValue(ses + 1);
@@ -348,7 +369,7 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                 break;
         }
     }
-
+    
     @Override
     public void onRatingChanged(RatingBar ratingBar, float rating,
                                 boolean fromTouch) {

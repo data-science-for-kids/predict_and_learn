@@ -33,6 +33,10 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * Performs login function
+ * If the user is new it sign ups instead of logging in
+ */
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText fname,lname,school,grade;
@@ -62,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         grade= (EditText) findViewById(R.id.grade);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         imageNo=getIntent().getIntegerArrayListExtra("imageNo");
+
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -126,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
              * Default password is used for all users.
              */
             final String email = f_name.substring(0,f_name.indexOf(' ')) + "." + grade_name + "@" + l_name.substring(0,l_name.indexOf(' ')) + ".com";
-            final String password = "password123";
+            final String password = "password123"; // default password
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -153,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.grade)
     void dialog(View view){
         final CharSequence grades[] = new CharSequence[] {"Below 5","5th","6th","7th","8th","9th","10th","11th","12th","Above 12"};
-
+        // alert dialog box  to choss the grade
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyDialogTheme);
         builder.setTitle("Choose Grade");
         builder.setItems(grades, new DialogInterface.OnClickListener() {
@@ -196,8 +201,8 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Merging the account with the anonymous account
-     * @param email
-     * @param password
+     * @param email - it has he format as- firstname.grage@lastname.com
+     * @param password - default password 
      */
     public void loginAnno(String email,String  password){
         AuthCredential credential=EmailAuthProvider.getCredential(email,password);

@@ -2,6 +2,9 @@ package com.example.user.datascienceapp.Wrappers;
 
 import java.io.Serializable;
 
+/**
+ * @see java.io.Serializable
+ */
 public class Response implements Serializable {
     private String exercise_id;
     private String card_id;

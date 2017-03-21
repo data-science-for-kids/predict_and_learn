@@ -328,8 +328,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         dialog1.show();
                     }
                 });
-
-
                 break;
         }
     }

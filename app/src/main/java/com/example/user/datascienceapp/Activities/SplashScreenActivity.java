@@ -2,6 +2,7 @@ package com.example.user.datascienceapp.Activities;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,12 +29,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-
+/**
+ * Opening Activity that loads the splash screen and also makes and async  call to firebase server
+ * It performs anonymous login to access firebase database
+ */
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 4500;
-
-
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     @Override
@@ -72,22 +74,18 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         };
         /**
-         * Logging in Anonymously to access images from firebase database
+         * Logging in Anonymously to access images from Firebase database
          */
         if (mAuth.getCurrentUser() == null) {
-            mAuth.signInAnonymously()
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.d("TAG", "signInAnonymously:onComplete:" + task.isSuccessful());
-                            if (!task.isSuccessful()) {
-                                Log.w("TAG", "signInAnonymously", task.getException());
-                                Toast.makeText(SplashScreenActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-                    });
+            mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {Log.d("TAG", "signInAnonymously:onComplete:" + task.isSuccessful());
+                    if (!task.isSuccessful()) {
+                        Log.w("TAG", "signInAnonymously", task.getException());
+                        Toast.makeText(SplashScreenActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 
@@ -104,10 +102,12 @@ public class SplashScreenActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
     //Loading the images in a background thread
     public void load(){
         StorageReference storyText=FirebaseStorage.getInstance().getReference().child("datasciencekids-master-story-export.json");
         final long ONE_MEGABYTE = 1024 * 1024;
+
         storyText.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -163,6 +163,4 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }

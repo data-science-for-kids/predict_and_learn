@@ -475,15 +475,17 @@
           var messages1=[ "are Female"  , "have a new name" , "likes outdoor activities"];
           if(typeof androidAppProxy !== "undefined"){
           var str;
-          var diff = parseInt(y[0])-parseInt(y[1]);
-          if(diff >= 9)
+          var percent = (parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])-parseInt(y[1]));
+
+          percent = percent*100;
+          if(percent >= 20)
           {
               str=messages[n-1];
               console.log("in"+str+" "+y[0])
               tie=false;
               androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
           }
-          else if(diff <= -9)
+          else if(percent <= -20)
           {
               str=messages1[n-1];
               tie=false;
