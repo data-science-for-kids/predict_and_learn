@@ -121,12 +121,7 @@ public class PredictActivity extends AppCompatActivity {
                 predict.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        Toast.makeText(getBaseContext(),"Build Your Predictor",Toast.LENGTH_LONG).show();
-                        Intent intent= new Intent(PredictActivity.this,BuildPredictorActivity.class);
-                        intent.putExtra("Response",responses);
-                        startActivity(intent);
-
+                        openPredictor();
                         dialog.dismiss();
                     }
                 });
@@ -174,6 +169,14 @@ public class PredictActivity extends AppCompatActivity {
 
         webView.addJavascriptInterface(new AppJavaProxy(this),"androidAppProxy");
         webView.loadUrl(url);
+    }
+
+    public void openPredictor(){
+        Toast.makeText(getBaseContext(),"Build Your Predictor",Toast.LENGTH_LONG).show();
+        Intent intent= new Intent(PredictActivity.this,BuildPredictorActivity.class);
+        intent.putExtra("Response",responses);
+        startActivity(intent);
+        finish();
     }
     public void inference(){
         int c=0;
@@ -314,6 +317,11 @@ public class PredictActivity extends AppCompatActivity {
         @JavascriptInterface
         public void makeToast(String message){
             Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
+        }
+        @JavascriptInterface
+        public void predictOpen(){
+            Log.d("Open","Activity");
+            openPredictor();
         }
         @JavascriptInterface
         public void floatVisible(boolean flag) {

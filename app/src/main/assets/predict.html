@@ -37,8 +37,6 @@
       font-family: "Custom",sans-serif,monospace;
     }
 
-
-
     </style>
 </head>
 <title>Build your Predictor</title>
@@ -148,11 +146,14 @@
            if(typeof androidAppProxy !== "undefined"){
                 var str = "";
 
-                var percentGender = ((parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])-parseInt(y[1])))*100;
+                var valGender = parseFloat((parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])+parseInt(y[1])));
+                var percentGender=valGender*100;
 
-                var percentName = ((parseInt(y[1])-parseInt(y[2]))/(parseInt(y[0])-parseInt(y[1])))*100;
+                var valName = parseFloat((parseInt(y[1])-parseInt(y[2]))/(parseInt(y[0])+parseInt(y[1])));
+                var percentName = valName*100;
 
-                var percentActivity = ((parseInt(y[3])-parseInt(y[4]))/(parseInt(y[0])-parseInt(y[1])))*100;
+                var valActivity = parseFloat((parseInt(y[3])-parseInt(y[4]))/(parseInt(y[0])+parseInt(y[1])));
+                var percentActivity = valActivity*100;
 
               if(percentGender >= 20)
                   str = str + choice1[0] + "<br>";

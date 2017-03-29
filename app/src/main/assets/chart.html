@@ -6,8 +6,6 @@
         google.charts.load("current", {packages:['corechart','table']});
         var i = 1;
         function codeAddress() {
-
-
             if(typeof androidAppProxy !== "undefined"){
                 i = androidAppProxy.setPage();
                 console.log("Page Received is "+i);
@@ -119,28 +117,28 @@
                         "But can we guess or \"predict\" whom you generally befriend based on this information? Can \"analyzing\" the ratings you just provided tell us more about your likes and preferences? About you, as a person?",
                         "Let's find out!",
                         "Let us first understand how many you chose to befriend.","",
-                        "Based on your rating preference and looking at the histogram,","",
+                        "Based on your rating preference and looking at the histogram :-","",
                         "Let us now understand something about whom you have befriended.",
                         "Let us find out what is common among those whom you thought you'll befriend. This will help us *predict* whom you befriend.",
                         "We think there are three factors based on which you may have decided to befriend people shown to you.<br><br><b>* The person's name<br>* The person's gender<br>* The person's hobby</b>",
-                        "<b>Name of the person</b><br>Whether its an old name or a new name",
-                        "<b>Person's gender</b><br>Boy or a girl",
-                        "<b>Person's hobby</b><br>Outdoor activity or an indoor activity",
+                        "<b>Name of the person</b><br>Whether its an new name or an old name",
+                        "<b>Person's gender</b><br>Girl or a boy",
+                        "<b>Person's hobby</b><br>Indoor activity or an outdoor activity",
                         "Do you think there are more factors which determined how you made friends?","","","","","","",
-                        "to be continued..."
+                        ""
                    ];
 
         var suggest = [
                         "Can you go back, count and tell us how many people you marked as \"friends\"? We consider all those whom you rated with 4 or 5 stars as your friends",
                         "Among those you befriended, how many were boys vs girls?",
                         "Among those you befriended, how many had new name vs old name?",
-                        "And from those you befriended, how many like Outdoor Activity vs Indoor Activity",
+                        "And from those you befriended, how many like Indoor Activity vs Outdoor Activity",
                         "We can visualize this information through a pie-chart!"
                       ];
         var person = [
-                        "It seems you don't easily befriend a person",
-                        "It's hard to say whether you easily befriend a person or not.",
-                        "It seems you are generally a friendly person. We infer this because you have rated many more people with 4 or 5 stars than those with 1, 2 or 3 stars."
+                        "it seems you don't easily befriend a person",
+                        "it's hard to say whether you easily befriend a person or not.",
+                        "it seems you are generally a friendly person. We infer this because you have rated many more people with 4 or 5 stars than those with 1, 2 or 3 stars."
                      ];
         var results = [
                         "<b>Great! So we've found out a little something about you.</b><br>Please feel free to share any queries. We'll do our best to answer them and get in touch with you!",
@@ -149,7 +147,18 @@
 
         function next(){
           i++;
-          pageHandler();
+
+          if(i == 20)
+          {
+            console.log("20");
+            i = 19;
+            if(typeof androidAppProxy !== "undefined"){
+                androidAppProxy.predictOpen();
+            }
+          }
+
+          else
+            pageHandler();
         }
         function back(){
           i--;
@@ -424,21 +433,21 @@
     }
     function drawPie(n){
         var tie=false;
-        var row1,row2,title;
+        var row1,row2,titleP;
             if(n == 1){
                 row1='Male';
                 row2='Female';
-                title='Gender';
+                titleP='Gender';
             }
             else if(n == 2){
                 row1='Old Name';
                 row2='New Name';
-                title='Names';
+                titleP='Names';
             }
             else{
                 row1='Indoor';
                 row2='Outdoor';
-                title='Activity';
+                titleP='Activity';
             }
           var x=null;
           var y=null;
@@ -457,14 +466,14 @@
           }
           var Data_new = google.visualization.arrayToDataTable(
                     [
-                      [title, '# provided to' ],
+                      [titleP, '# provided to' ],
                       [row1, parseInt(y[0])],
                       [row2, parseInt(y[1])]
                     ]);
 
           var options = {
-            title: ' Gender \n (Tap on the chart to see details)',
-            height: 300,
+            title: titleP+'\n(Tap on the chart to see details)',
+            height: 400,
             width: "100%",
           };
 
@@ -475,13 +484,15 @@
           var messages1=[ "are Female"  , "have a new name" , "likes outdoor activities"];
           if(typeof androidAppProxy !== "undefined"){
           var str;
-          var percent = (parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])-parseInt(y[1]));
-
+          var percent = parseFloat(parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])+parseInt(y[1]));
           percent = percent*100;
+
+          //console.log("The percent is"+percent);
+
           if(percent >= 20)
           {
               str=messages[n-1];
-              console.log("in"+str+" "+y[0])
+              console.log("in"+str+" "+y[0]+" "+percent)
               tie=false;
               androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
           }
@@ -489,12 +500,13 @@
           {
               str=messages1[n-1];
               tie=false;
-              console.log("out"+str+" "+y[0]+" "+y[1])
+              console.log("out"+str+" "+y[0]+" "+y[1]+" "+percent)
               androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
           }
           else{
-                str="Cannot Determine your preferences"
+                str="Cannot determine your preferences"
                 tie=true;
+                console.log(" "+percent);
                 androidAppProxy.showMessage(str)
           }
           if(n == 1 && !f1){

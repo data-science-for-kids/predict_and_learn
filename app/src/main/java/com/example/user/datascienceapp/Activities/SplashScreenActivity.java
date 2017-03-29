@@ -105,6 +105,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     //Loading the images in a background thread
     public void load(){
+
         StorageReference storyText=FirebaseStorage.getInstance().getReference().child("datasciencekids-master-story-export.json");
         final long ONE_MEGABYTE = 1024 * 1024;
 

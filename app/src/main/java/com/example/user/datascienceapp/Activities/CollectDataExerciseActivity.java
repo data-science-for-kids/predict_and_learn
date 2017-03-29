@@ -357,6 +357,8 @@ public class CollectDataExerciseActivity extends AppCompatActivity implements Vi
                                 response.setValue(ses + 1);
                                 DatabaseReference response1 = database.getReference("session").child(uid).child("card");
                                 response1.setValue(-1);
+                                DatabaseReference page = database.getReference("session").child(uid).child("page");
+                                page.setValue(0);
                                 finish();
 
                                 dialog.dismiss();
