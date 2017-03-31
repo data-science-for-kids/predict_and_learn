@@ -3,11 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/slider_background"
-    tools:context="com.example.user.datascienceapp.CollectDataExerciseActivity">
+    tools:context="com.example.user.datascienceapp.Activities.CollectDataExerciseActivity">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+       android:visibility="gone"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

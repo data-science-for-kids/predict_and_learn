@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        var i = 0;
+      </script>
+    <style>
+    .container {
+        position: relative;
+    }
+
+    .bottomright {
+        position: absolute;
+        bottom: 8px;
+        right: 16px;
+        font-size: 18px;
+    }
+    .bottomleft {
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+        font-size: 18px;
+    }
+
+    .center {
+        position: absolute;
+        left: 0;
+        top: 10%;
+        width: 100%;
+        text-align: center;
+        padding: 10px 10px 10px 10px;
+        font-size: 18px;
+    }
+
+    p{
+      font-family: "Custom",sans-serif,monospace;
+    }
+
+    </style>
+</head>
+<title>Build your Predictor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<div class="w3-container w3-center" >
+
+    <div class="center" id="card" >
+        <p id="card_text" class="w3-text-red"></p>
+        <p id="inference" class="w3-text-red"></p>
+    </div>
+
+    <div class="bottomright">
+        <button class="w3-btn w3-transparent w3-text-red" onclick="next()" id="next">NEXT</button>
+    </div>
+    <div class="bottomleft">
+        <button class="w3-btn w3-transparent w3-text-red" onclick="back()" id="prev">PREV</button>
+    </div>
+    <br>
+</div>
+
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript">
+
+
+        var text = [
+                        "From the information we gathered from your response, we have figured,<br><br>You prefer to befriend people who are-",
+                        "This suggests that a b are best able to predict whom you will befriend",
+                        "How can we use the information to predict your friendship in general?",
+                        "For a new person whom you try to befriend we can see if they are",
+                        "How do we represent this as a formula?",
+                        "For example.."
+                   ];
+
+        pageHandler();
+        function next(){
+          i++;
+          pageHandler();
+        }
+        function back(){
+          i--;
+          pageHandler();
+        }
+
+        function getSession(){
+          if(typeof androidAppProxy !== "undefined"){
+               androidAppProxy.getPage(i);
+          }
+        }
+
+        function pageHandler(){
+            console.log(i);
+
+            $('#next').show();
+            $('#prev').show();
+            $('#inference').hide();
+
+            switch(i){
+              case 0:
+                $('#inference').show();
+                $('#prev').hide();
+                infers();
+              break;
+              case 1:
+                break;
+              case 2:
+              case 3:
+              break;
+
+              case 4:
+              break;
+
+              default:
+                    if(i<0){
+                        $('#prev').hide();
+                        i=0;
+                    }
+                    else
+                        $('#next').hide();
+              break;
+            }
+
+           document.getElementById('card_text').innerHTML=text[i];
+           console.log("text"+i);
+        }
+
+       function infers(){
+          var x=null;
+          var y=null;
+
+          if(typeof androidAppProxy !== "undefined"){
+             x=androidAppProxy.sendInference();
+             console.log(x);
+             y=JSON.parse(x);
+          }
+          else{
+             x=null;
+          }
+
+
+           var choice1 = [ "* are Male"  , "* have an old name" , "* likes indoor activities"];
+           var choice2 = [ "* are Female"  , "* have a new name" , "* likes outdoor activities"];
+
+           if(typeof androidAppProxy !== "undefined"){
+                var str = "";
+
+                var valGender = parseFloat((parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])+parseInt(y[1])));
+                var percentGender=valGender*100;
+
+                var valName = parseFloat((parseInt(y[1])-parseInt(y[2]))/(parseInt(y[0])+parseInt(y[1])));
+                var percentName = valName*100;
+
+                var valActivity = parseFloat((parseInt(y[3])-parseInt(y[4]))/(parseInt(y[0])+parseInt(y[1])));
+                var percentActivity = valActivity*100;
+
+              if(percentGender >= 20)
+                  str = str + choice1[0] + "<br>";
+              else if(percentGender <= -20)
+                  str = str + choice2[0] + "<br>";
+              else
+                  str = str +  "\n";
+
+              if(percentName >= 20)
+                  str = str + choice1[1] + "<br>";
+              else if(percentName <= -20)
+                  str = str + choice2[1] + "<br>";
+              else
+                  str = str + "\n";
+
+
+              if(percentActivity >= 20)
+                  str = str+choice1[2];
+              else if(percentActivity <= -20)
+                  str = str + choice2[2];
+           }
+           document.getElementById('inference').innerHTML = str;
+       }
+      </script>
+
+</body>
+</html>
+

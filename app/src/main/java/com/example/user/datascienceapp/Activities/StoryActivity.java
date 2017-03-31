@@ -1,4 +1,4 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,7 +14,6 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.eftimoff.viewpagertransformers.StackTransformer;
+import com.example.user.datascienceapp.R;
+import com.example.user.datascienceapp.Wrappers.Story;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -186,10 +187,16 @@ public class StoryActivity extends AppCompatActivity {
         public void onPageScrollStateChanged(int state) {}
     };
 
+
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         public PlaceholderFragment() {}
 
+        /**
+         *
+         * @param sectionNumber (It is the active page number)
+         * @return the current fragment
+         */
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -214,6 +221,10 @@ public class StoryActivity extends AppCompatActivity {
             if (story.get(page - 1).isImage()) {
                 Log.d("image","here");
                 StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child("story1/slide" + page + ".jpg");
+
+                /**
+                 * Based upon page, placeholder based upon corresponding sizes are assigned
+                 */
                 if (page == 5) {
                     Glide.with(this)
                             .using(new FirebaseImageLoader())

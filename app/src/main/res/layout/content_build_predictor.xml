@@ -2,13 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_analysis_page"
+    android:id="@+id/content_build_predictor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.user.datascienceapp.Activities.PredictActivity"
-    tools:showIn="@layout/activity_predict">
-
+    tools:context="com.example.user.datascienceapp.Activities.BuildPredictorActivity"
+    tools:showIn="@layout/activity_build_predictor2">
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,18 +24,4 @@
             android:foregroundGravity="center"
             android:id="@+id/progressBar4" />
     </WebView>
-
-    <ImageButton
-        android:id="@+id/fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:clickable="true"
-        android:background="@drawable/roundedbutton"
-        android:elevation="8dp"
-        android:src="@drawable/ic_lightbulb"
-        />
-
 </RelativeLayout>

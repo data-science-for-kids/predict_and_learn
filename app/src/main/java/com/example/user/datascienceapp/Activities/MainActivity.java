@@ -1,10 +1,10 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
@@ -13,9 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,6 +23,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.user.datascienceapp.Loaders.ExerciseLoader;
+import com.example.user.datascienceapp.Loaders.ResponseLoader;
+import com.example.user.datascienceapp.Loaders.StoryLoader;
+import com.example.user.datascienceapp.R;
+import com.example.user.datascienceapp.Wrappers.Session;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +39,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+
+/**
+ * Main Activity to display buttons for the three activities
+ * -> Story Activity
+ * -> Collect Data Activity
+ * -> Predict Activity
+ * Main Activity asynchronously downloads images from Firebase Database for Story Activity
+ */
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -71,8 +83,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-
     @Override
     public void onResume(){
         super.onResume();
@@ -94,7 +104,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         onPause();
     }
 
-
+    /**
+     *
+     * @param w - contains the view of the activity being called
+     */
     public void onClick(View w) {
         final DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         switch (w.getId()) {
@@ -112,7 +125,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // Handle any errors
                     }
                 });
-                int[] image={2,3,5,6,8,10,12,13,14,15,16,18};
+
+                int[] image={2,3,5,6,8,10,12,13,14,15,16,18}; //image ids
+
+                /**
+                 * Using the loader class images are downloaded from Firebase.
+                 * When the files are loaded the loader class calls the Story Activity and finishes the Main Activity
+                 */
+
                 for(int i=0;i<12;i++){
                     StorageReference storyImg = FirebaseStorage.getInstance().getReference().child("story1/slide"+image[i]+".jpg");
                     if(i==2)
@@ -136,25 +156,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.collect_button:
-                final Context context = this;
+
+                Context context = this;
                 final Dialog dialog = new Dialog(context);
+                //Initiating the dialog box
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialogue_box_layout);
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 dialog.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+
                 Button declineButton = (Button) dialog.findViewById(R.id.declineButton);
                 declineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //Exercise Loader is a listener that calls the CollectData Activity when the images and corresponding data is laoded
                         ExerciseLoader exerciseLoader=new ExerciseLoader(getApplicationContext());
+
+                        //Lazy Loading for image of boy and girl
                         StorageReference female = FirebaseStorage.getInstance().getReference().child("card/rating_pic_f.png");
                         StorageReference male = FirebaseStorage.getInstance().getReference().child("card/rating_pic_m.png");
+
                         FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                        DatabaseReference cards = database1.getReference().child("cards").child("card_1");
+                        DatabaseReference cards = database1.getReference().child("cards").child("card_2");
+
                         progressBar.setVisibility(View.VISIBLE);
                         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                         Glide.with(getBaseContext())
                                 .using(new FirebaseImageLoader())
                                 .load(female)
@@ -219,51 +248,86 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 };
                 break;
             case R.id.analyze_button:
-                int card;
-                int session=0;
-                String uid = "admin";
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+
+                String uid="";
+                progressBar.setVisibility(View.VISIBLE);
+                final FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 if (mAuth.getCurrentUser() != null) {
                     FirebaseUser user = mAuth.getCurrentUser();
                     uid = user.getUid();
                 }
-                SharedPreferences prefs = getSharedPreferences("Page", MODE_PRIVATE);
-                card = prefs.getInt(uid, 1);//1 is the default value.
-                session = (prefs.getInt("session" + uid, 1) == 1) ? 1 : prefs.getInt("session" + uid, 1)-1;
 
-                Log.d("Session",session+"");
-                Log.d("Card",card+"");
-                Log.d("Uid",uid);
+                FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+                DatabaseReference cardRef = firebaseDatabase.getReference().child("session").child(uid);
+                cardRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                       // progressBar.setVisibility(View.GONE);
+                        Session s = dataSnapshot.getValue(Session.class);
+                        if(s != null) {
+                            int card = s.getCard();
 
-             if(card == -1){
-                 progressBar.setVisibility(View.VISIBLE);
-                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            long ses = (long) dataSnapshot.child("ses").getValue();
 
-                 FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                 DatabaseReference responses = database1.getReference().child("response").child("resid_"+uid).child("ses_0"+session);
-                 ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
-                 responses.addValueEventListener(responseLoader);
-                 Log.d("analyze","button");
-             }
-                else{
-                 final Context context1 = this;
-                 final Dialog dialog1 = new Dialog(context1);
-                 dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                 dialog1.setContentView(R.layout.complete_exercise_dialog_box);
-                 dialog1.setCanceledOnTouchOutside(false);
-                 dialog1.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                 dialog1.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
-                 Button declineButton1 = (Button) dialog1.findViewById(R.id.declineButton);
-                 declineButton1.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                         dialog1.dismiss();
-                     }
-                 });
-                 dialog1.show();
-             }
+                            Log.d("Session",ses+"");
+                            Log.d("Card",card+"");
 
+                            ses = (ses == 1) ? 1 : ses-1;
+
+                            if(card == -1){
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                String uid="";
+                                if (mAuth.getCurrentUser() != null) {
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    uid = user.getUid();
+                                }
+                                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                                DatabaseReference responses = database1.getReference().child("response").child("resid_"+uid).child("ses_0"+ses);
+                                ResponseLoader responseLoader=new ResponseLoader(getApplicationContext());
+                                responses.addValueEventListener(responseLoader);
+                                Log.d("analyze","button");
+                            }
+                            else{
+                                progressBar.setVisibility(View.GONE);
+                                showDialog();
+                            }
+
+
+                        }
+                        else {
+                            progressBar.setVisibility(View.GONE);
+                            showDialog();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        showDialog();
+                    }
+
+                    public void showDialog(){
+
+                        progressBar.setVisibility(View.GONE);
+                        final Dialog dialog1=new Dialog(MainActivity.this);
+                        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog1.setContentView(R.layout.complete_exercise_dialog_box);
+                        dialog1.setCanceledOnTouchOutside(false);
+                        dialog1.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                        dialog1.getWindow().setLayout(CoordinatorLayout.LayoutParams.MATCH_PARENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+                        Button declineButton1 = (Button) dialog1.findViewById(R.id.declineButton);
+                        declineButton1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog1.dismiss();
+                            }
+                        });
+                        dialog1.show();
+                    }
+                });
                 break;
         }
     }

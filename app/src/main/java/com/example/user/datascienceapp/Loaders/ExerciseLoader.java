@@ -1,30 +1,27 @@
-package com.example.user.datascienceapp;
+package com.example.user.datascienceapp.Loaders;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.example.user.datascienceapp.Activities.CollectDataExerciseActivity;
+import com.example.user.datascienceapp.Wrappers.DataBean;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by Aman Mathur on 1/11/2017.
+ * Created by Aman Mathur
+ * This class is used for loading the information about the cards from database and open the activity when loading completes
  */
 
 public class ExerciseLoader  implements RequestListener<StorageReference, GlideDrawable>,ValueEventListener {
-    MainActivity mainActivity;
     private ArrayList<DataBean> list;
     private int count=0;
     private Context context;
@@ -33,6 +30,9 @@ public class ExerciseLoader  implements RequestListener<StorageReference, GlideD
          list = new ArrayList<DataBean>();
     }
 
+    /**
+     * @param dataSnapshot (Objects list of DataBean Class)
+     */
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -55,6 +55,9 @@ public class ExerciseLoader  implements RequestListener<StorageReference, GlideD
 
     }
     public void check(int count){
+        /**
+         * Count == 3 ie. Two images and one for all the text
+         */
         if(count==3){
             Intent intent = new Intent(context,CollectDataExerciseActivity.class);
             intent.putExtra("Card",list);
