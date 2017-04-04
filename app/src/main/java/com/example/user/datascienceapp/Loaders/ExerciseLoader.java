@@ -3,6 +3,7 @@ package com.example.user.datascienceapp.Loaders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,6 +74,16 @@ public class ExerciseLoader  implements RequestListener<StorageReference, GlideD
          * Count == 3 ie. Two images and one for all the text
          */
         if(count==3){
+
+            // Serializing the list and storing it as a string in shared preferences to used in other activities
+
+            SharedPreferences appSharedPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(context);
+            SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(list);
+            prefsEditor.putString("cardList", json);
+            prefsEditor.commit();
 
             Intent intent = new Intent(context,CollectDataExerciseActivity.class);
             intent.putExtra("Card",list);

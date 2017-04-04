@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,12 +23,16 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.user.datascienceapp.R;
+import com.example.user.datascienceapp.Wrappers.DataBean;
 import com.example.user.datascienceapp.Wrappers.Response;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 // This activity is used to handle
@@ -37,6 +43,8 @@ public class BuildPredictorActivity extends AppCompatActivity {
     private int[] res;
     private int m,f,new_name,old_name,indoor,outdoor,page;
     private ArrayList<Response> responses;
+    private ArrayList<DataBean> cards;
+    int pp=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +70,16 @@ public class BuildPredictorActivity extends AppCompatActivity {
         outdoor = 0;
         new_name = 0;
         old_name = 0;
+
+        //deserialize the shared preferences to receive the card list in arrayList
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = appSharedPrefs.getString("cardList", "");
+        Type type = new TypeToken<ArrayList<DataBean>>(){}.getType();
+        cards= gson.fromJson(json, type);
+
+        Log.d("Cards Received",cards.size()+" ");
 
         webView.getSettings().setJavaScriptEnabled(true);
         responses= (ArrayList<Response>) getIntent().getSerializableExtra("Response");
@@ -216,6 +234,18 @@ public class BuildPredictorActivity extends AppCompatActivity {
             sb.append("]");
             Log.d("St-infer",sb.toString());
             return sb.toString();
+        }
+        @JavascriptInterface
+        public void getCard(String gender,int nameAge,int activity){
+            pp++;
+            for(DataBean db:cards){
+
+                if((nameAge==-1||nameAge==db.getNameAge())&&(activity==-1||activity==db.getActivity())&&(gender.equals("NONE")||gender.equals(db.getGender()))){
+
+                    Log.d("db",""+db.getId()+" "+pp);
+                    break;
+                }
+            }
         }
 
         @JavascriptInterface

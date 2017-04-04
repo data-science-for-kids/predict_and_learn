@@ -42,17 +42,27 @@
 		var choices = {
 		                    c1: "Gender",
 		                    c2: "Activity",
-		                    c3: "Names"
+		                    c3: "Names",
+
+		                    c11: "Is the name new or old?",
+		                    c12: "Is the hobby indoor or outdoor",
+		                    c13: "Is the person male or female"
+		                    //Verify c13
 		              };
+
 
         var pageMiddle = {
                             p4: "We notice that *",
                             p5: "We notice that *",
                             p6: "If ( New person *)<br>\t then befriend the person<br>else<br>\t do not befriend the person",
                             p7: "If ( New person *)<br>\t then befriend the person<br>else<br>\t do not befriend the person",
+                            p10: "*",
+                            p11: "*"
 
                          };
+
         var pageEnd = {
                             p5: "We infered before that you use these features to befrriend aa person",
                             p6: "These are the features which you donot prefer",
+                            p14: "There are * matches"
                         };
