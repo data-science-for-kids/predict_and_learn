@@ -2,9 +2,12 @@
 <html>
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="predictText.js"></script>
     <script type="text/javascript">
         var i = 0;
-      </script>
+        console.log('i in predictor is '+i);
+
+    </script>
     <style>
     .container {
         position: relative;
@@ -62,16 +65,12 @@
 </div>
 
 <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
 <script type="text/javascript">
-
-
-        var text = [
-                        "From the information we gathered from your response, we have figured,<br><br>You prefer to befriend people who are-",
-                        "This suggests that a b are best able to predict whom you will befriend",
-                        "How can we use the information to predict your friendship in general?",
-                        "For a new person whom you try to befriend we can see if they are",
-                        "How do we represent this as a formula?",
-                        "For example.."
+        var pageTopText = [
+                        pageTop.p1,pageTop.p2, pageTop.p3, pageTop.p4, pageTop.p5, pageTop.p6,pageTop.p7,pageTop.p8,pageTop.p9,pageTop.p10,
+                        pageTop.p11,pageTop.p12,pageTop.p13,pageTop.p14,pageTop.p15,pageTop.p16,pageTop.p17,pageTop.p18,pageTop.p19,pageTop.p20,
+                        pageTop.p21,pageTop.p22,pageTop.p23,pageTop.p24,pageTop.p25,pageTop.p26
                    ];
 
         pageHandler();
@@ -110,7 +109,60 @@
               break;
 
               case 4:
+              $('#inference').show();
+                document.getElementById('inference').innerHTML = pageMiddle.p4;
               break;
+              case 5:
+                $('#inference').show();
+                document.getElementById('inference').innerHTML = pageMiddle.p5;
+              break;
+              case 6:
+                $('#inference').show();
+                document.getElementById('inference').innerHTML = pageMiddle.p6;
+              break;
+              case 7:
+                $('#inference').show();
+                document.getElementById('inference').innerHTML = pageMiddle.p6;
+              break;
+              case 8:
+              break;
+              case 9:
+              break;
+              case 10:
+              break;
+              case 11:
+              break;
+              case 12:
+              break;
+              case 13:
+              break;
+              case 14:
+              break;
+              case 15:
+              break;
+              case 16:
+              break;
+              case 17:
+              break;
+              case 18:
+              break;
+              case 19:
+              break;
+              case 20:
+              break;
+              case 21:
+              break;
+              case 22:
+              break;
+              case 23:
+              break;
+              case 24:
+              break;
+              case 25:
+              break;
+              case 26:
+              break;
+
 
               default:
                     if(i<0){
@@ -122,10 +174,16 @@
               break;
             }
 
-           document.getElementById('card_text').innerHTML=text[i];
+           document.getElementById('card_text').innerHTML=pageTopText[i];
            console.log("text"+i);
         }
 
+       function stringMaker(idx,rem,str){
+        String.prototype.splice = function(idx, rem, str) {
+        return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+        };
+
+       }
        function infers(){
           var x=null;
           var y=null;
@@ -139,9 +197,8 @@
              x=null;
           }
 
-
-           var choice1 = [ "* are Male"  , "* have an old name" , "* likes indoor activities"];
-           var choice2 = [ "* are Female"  , "* have a new name" , "* likes outdoor activities"];
+          // var choice1 = [ "* are Male"  , "* have old names" , "* like indoor activities"];
+          //var choice2 = [ "* are Female"  , "* have new names" , "* like outdoor activities"];
 
            if(typeof androidAppProxy !== "undefined"){
                 var str = "";
@@ -156,24 +213,24 @@
                 var percentActivity = valActivity*100;
 
               if(percentGender >= 20)
-                  str = str + choice1[0] + "<br>";
+                  str = str + inferences.male + "<br>";
               else if(percentGender <= -20)
-                  str = str + choice2[0] + "<br>";
+                  str = str + inferences.female + "<br>";
               else
                   str = str +  "\n";
 
               if(percentName >= 20)
-                  str = str + choice1[1] + "<br>";
+                  str = str + inferences.old_name + "<br>";
               else if(percentName <= -20)
-                  str = str + choice2[1] + "<br>";
+                  str = str + inferences.new_name + "<br>";
               else
                   str = str + "\n";
 
 
               if(percentActivity >= 20)
-                  str = str+choice1[2];
+                  str = str+inferences.indoor;
               else if(percentActivity <= -20)
-                  str = str + choice2[2];
+                  str = str + inferences.outdoor;
            }
            document.getElementById('inference').innerHTML = str;
        }
