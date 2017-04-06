@@ -51,7 +51,7 @@
 
         <activity
             android:name=".Activities.BuildPredictorActivity"
-            android:label="Build Your Predictor"
+            android:label="Build your predictor"
             android:theme="@style/AppTheme"></activity>
     </application>
 

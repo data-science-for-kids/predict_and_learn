@@ -15,6 +15,9 @@
         window.onload = codeAddress;
       </script>
     <style>
+    .large-font {
+    font-size: 30px;
+    }
     .container {
         position: relative;
     }
@@ -170,9 +173,7 @@
                androidAppProxy.getPage(i);
           }
         }
-
-        function pageHandler(){
-            console.log(i);
+        function hideElements(){
 
             $('#Chart').hide();
             $('#inputNo').hide();
@@ -186,6 +187,28 @@
             $('#image').hide();
             $('#table_div1').hide();
             $('#table_div').hide();
+            console.log('Hiding');
+        }
+
+        function pageHandler(){
+
+            console.log(i+ 'Value');
+
+            hideElements();
+
+            if(i>=15){
+
+                if(typeof androidAppProxy !== "undefined"){
+                       androidAppProxy.floatVisible(true);
+                       console.log("Float"+three());
+                }
+            }
+            else{
+                if(typeof androidAppProxy !== "undefined"){
+                       androidAppProxy.floatVisible(false);
+                       console.log(""+three());
+                 }
+            }
 
             switch(i){
 
@@ -254,19 +277,19 @@
               case 10:
                     $('#image').show();
                     document.getElementById('image').src="name.png";
-                    <!--document.getElementById('image').src="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/name.png?alt=media&token=561a3191-cb13-43e4-a50b-c88246e010a2";-->
+
               break;
 
               case 11:
                     $('#image').show();
                     document.getElementById('image').src="gender.png"
-                    <!--document.getElementById('image').src="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/gender.png?alt=media&token=cc1b1d0c-2795-42ca-93cb-06d58eba4903";-->
+
               break;
 
               case 12:
                     $('#image').show();
                     document.getElementById('image').src="activity.png"
-                    <!--document.getElementById('image').src="https://firebasestorage.googleapis.com/v0/b/datasciencekids-master.appspot.com/o/activity.png?alt=media&token=ed3102b2-15fb-4a8e-9706-d8529f386056";-->
+
               break;
 
               case 13:
@@ -283,11 +306,7 @@
                     span.style.fontSize="18px";
                     document.getElementById('info').innerHTML = suggest[1];
                     drawTableNew(1);
-                    if(typeof androidAppProxy !== "undefined"){
 
-                       androidAppProxy.floatVisible(false);
-                       console.log(""+three());
-                    }
               break;
 
               case 15:
@@ -299,10 +318,7 @@
                     span.style.fontSize="18px";
                     document.getElementById('info').innerHTML = suggest[4];
                     drawPie(1);
-                    if(typeof androidAppProxy !== "undefined"){
-                       androidAppProxy.floatVisible(true);
-                       console.log("Float"+three());
-                    }
+
                 break;
 
               case 16:
@@ -480,8 +496,9 @@
           var chart = new google.visualization.PieChart(document.getElementById('line-chart-marker'));
           chart.draw(Data_new, options);
 
-          var messages = [ "are Male"  , "have an old name" , "likes indoor activities"];
-          var messages1=[ "are Female"  , "have a new name" , "likes outdoor activities"];
+          var messages = [ "are Male"  , "have old names" , "like indoor activities"];
+          var messages1 = [ "are Female"  , "have new names" , "like outdoor activities"];
+          var messages2 = ["boys or girls","people with old names or new names","people who like indoor or outdoor activities"];
           if(typeof androidAppProxy !== "undefined"){
           var str;
           var percent = parseFloat(parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])+parseInt(y[1]));
@@ -494,7 +511,7 @@
               str=messages[n-1];
               console.log("in"+str+" "+y[0]+" "+percent)
               tie=false;
-              androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
+              androidAppProxy.showMessage("Based on your ratings, you prefer to befriend people who "+str )
           }
           else if(percent <= -20)
           {
@@ -504,16 +521,16 @@
               androidAppProxy.showMessage("Based upon your ratings, you prefer to befriend people who "+str )
           }
           else{
-                str="Cannot determine your preferences"
+                str="Cannot determine whether you befriend "+messages2[n-1];
                 tie=true;
                 console.log(" "+percent);
                 androidAppProxy.showMessage(str)
           }
           if(n == 1 && !f1){
             if(tie)
-                inference=inference+n+")"+str+"\n\n";
+                inference=inference+str+"\n\n";
             else
-                inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+                inference=inference+"You prefer to befriend people who "+str+"\n\n";
 
             if(typeof androidAppProxy !== "undefined")
               androidAppProxy.dialogText(inference);
@@ -522,9 +539,9 @@
           }
           else if(n == 2 && !f2){
             if(tie)
-                inference=inference+n+")"+str+"\n\n";
+                inference=inference+str+"\n\n";
             else
-                inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+                inference=inference+"You prefer to befriend people who "+str+"\n\n";
 
             if(typeof androidAppProxy !== "undefined")
               androidAppProxy.dialogText(inference);
@@ -533,9 +550,9 @@
           }
           if(n == 3 && !f3){
             if(tie)
-                inference=inference+n+")"+str+"\n\n";
+                inference=inference+str+"\n\n";
             else
-                inference=inference+n+") You prefer to befriend people who "+str+"\n\n";
+                inference=inference+"You prefer to befriend people who "+str+"\n\n";
 
             if(typeof androidAppProxy !== "undefined")
               androidAppProxy.dialogText(inference);
@@ -584,8 +601,15 @@
                       [row1, parseInt(y[0])],
                       [row2, parseInt(y[1])]
                     ]);
+
+            var options = {
+              showRowNumber: true,
+              width: '100%',
+              height: '100%'
+            };
+
             var table = new google.visualization.Table(document.getElementById('table_div1'));
-            table.draw(Data_new, {showRowNumber: true, width: '100%', height: '100%'});
+            table.draw(Data_new, options);
 
             }
       </script>

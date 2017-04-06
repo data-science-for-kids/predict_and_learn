@@ -173,6 +173,7 @@ public class PredictActivity extends AppCompatActivity {
 
     public void openPredictor(){
         Toast.makeText(getBaseContext(),"Build Your Predictor",Toast.LENGTH_LONG).show();
+
         Intent intent= new Intent(PredictActivity.this,BuildPredictorActivity.class);
         intent.putExtra("Response",responses);
         startActivity(intent);

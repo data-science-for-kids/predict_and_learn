@@ -2,9 +2,12 @@
 <html>
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="predictText.js"></script>
     <script type="text/javascript">
         var i = 0;
-      </script>
+        console.log('i in predictor is '+i);
+
+    </script>
     <style>
     .container {
         position: relative;
@@ -49,8 +52,13 @@
 
     <div class="center" id="card" >
         <p id="card_text" class="w3-text-red"></p>
+
         <p id="inference" class="w3-text-red"></p>
     </div>
+
+    <!--<div class="w3-red w3-display-left" style="width:50%;height:40%">-->
+        <!--<img src="name.png" style="width:100%;height:100%">-->
+    <!--</div>-->
 
     <div class="bottomright">
         <button class="w3-btn w3-transparent w3-text-red" onclick="next()" id="next">NEXT</button>
@@ -62,17 +70,21 @@
 </div>
 
 <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
 <script type="text/javascript">
-
-
-        var text = [
-                        "From the information we gathered from your response, we have figured,<br><br>You prefer to befriend people who are-",
-                        "This suggests that a b are best able to predict whom you will befriend",
-                        "How can we use the information to predict your friendship in general?",
-                        "For a new person whom you try to befriend we can see if they are",
-                        "How do we represent this as a formula?",
-                        "For example.."
+        var gflag,nflag,aflag;
+        infers();
+        var pageTopText = [
+                        pageTop.p1,pageTop.p2, pageTop.p3, pageTop.p4, pageTop.p5, pageTop.p6,pageTop.p7,pageTop.p8,pageTop.p9,pageTop.p10,
+                        pageTop.p11,pageTop.p12,pageTop.p13,pageTop.p14,pageTop.p15,pageTop.p16,pageTop.p17,pageTop.p18,pageTop.p19,pageTop.p20,
+                        pageTop.p21,pageTop.p22,pageTop.p23,pageTop.p24,pageTop.p25,pageTop.p26
                    ];
+
+        if (!String.prototype.splice) {
+            String.prototype.splice = function(start, delCount, newSubStr) {
+                return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+            };
+        }
 
         pageHandler();
         function next(){
@@ -82,6 +94,12 @@
         function back(){
           i--;
           pageHandler();
+        }
+
+        function getCard(gender,nameAge,activity){
+            if(typeof androidAppProxy !== "undefined"){
+                     androidAppProxy.getCard(gender,nameAge,activity);
+            }
         }
 
         function getSession(){
@@ -98,19 +116,123 @@
             $('#inference').hide();
 
             switch(i){
+
               case 0:
-                $('#inference').show();
-                $('#prev').hide();
-                infers();
+                   var str = "";
+
+                  if(gflag==1)
+                      str = str + inferences.male + "<br>";
+                  else if(gflag==0)
+                      str = str + inferences.female + "<br>";
+                  else
+                      str = str +  "\n";
+
+                  if(nflag==1)
+                      str = str + inferences.old_name + "<br>";
+                  else if(nflag==0)
+                      str = str + inferences.new_name + "<br>";
+                  else
+                      str = str + "\n";
+
+                  if(aflag==1)
+                      str = str+inferences.indoor;
+                  else if(aflag==0)
+                      str = str + inferences.outdoor;
+
+
+                  $('#inference').show();
+                  document.getElementById('inference').innerHTML = str;
+                  $('#prev').hide();
+
               break;
               case 1:
-                break;
+                var temp=pageTopText[i];
+                var idx=temp.indexOf("*");
+                console.log(idx+" index");
+                var str="";
+
+                if(gflag==1||gflag==0)
+                      str = str + choices.c1 + ",";
+
+                if(gflag==1||gflag==0)
+                      str = str + choices.c2 + ",";
+
+                if(gflag==1||gflag==0)
+                      str = str + choices.c3;
+
+                if(str=="")
+                    str='##';
+
+                console.log(str);
+                pageTopText[i] = temp.splice(idx, 1, str);
+                console.log(pageTopText[i]);
+
+              break;
               case 2:
+
+              break;
               case 3:
               break;
 
               case 4:
+              $('#inference').show();
+                document.getElementById('inference').innerHTML = pageMiddle.p4;
               break;
+              case 5:
+                $('#inference').show();
+                document.getElementById('inference').innerHTML = pageMiddle.p5;
+              break;
+              case 6:
+                $('#inference').show();
+                document.getElementById('inference').innerHTML = pageMiddle.p6;
+              break;
+              case 7:
+                $('#inference').show();
+                document.getElementById('inference').innerHTML = pageMiddle.p6;
+              break;
+              case 8:
+                console.log('calls');
+                var result = "foo baz".splice(4, 0, "bar ");
+                console.log(result);
+                getCard();
+              break;
+              case 9:
+              break;
+              case 10:
+              break;
+              case 11:
+              break;
+              case 12:
+              break;
+              case 13:
+              break;
+              case 14:
+              break;
+              case 15:
+              break;
+              case 16:
+              break;
+              case 17:
+              break;
+              case 18:
+              break;
+              case 19:
+              break;
+              case 20:
+              break;
+              case 21:
+              break;
+              case 22:
+              break;
+              case 23:
+              break;
+              case 24:
+              break;
+              case 25:
+              break;
+              case 26:
+              break;
+
 
               default:
                     if(i<0){
@@ -122,11 +244,18 @@
               break;
             }
 
-           document.getElementById('card_text').innerHTML=text[i];
+           document.getElementById('card_text').innerHTML=pageTopText[i];
            console.log("text"+i);
         }
 
+       function stringMaker(idx,rem,str){
+        String.prototype.splice = function(idx, rem, str) {
+        return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+        };
+
+       }
        function infers(){
+          console.log("Inferred");
           var x=null;
           var y=null;
 
@@ -139,11 +268,6 @@
              x=null;
           }
 
-
-           var choice1 = [ "* are Male"  , "* have an old name" , "* likes indoor activities"];
-           var choice2 = [ "* are Female"  , "* have a new name" , "* likes outdoor activities"];
-
-           if(typeof androidAppProxy !== "undefined"){
                 var str = "";
 
                 var valGender = parseFloat((parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])+parseInt(y[1])));
@@ -155,26 +279,44 @@
                 var valActivity = parseFloat((parseInt(y[3])-parseInt(y[4]))/(parseInt(y[0])+parseInt(y[1])));
                 var percentActivity = valActivity*100;
 
-              if(percentGender >= 20)
-                  str = str + choice1[0] + "<br>";
-              else if(percentGender <= -20)
-                  str = str + choice2[0] + "<br>";
-              else
+              if(percentGender >= 20){
+                  str = str + inferences.male + "<br>";
+                  gflag=1;
+              }
+              else if(percentGender <= -20){
+                  str = str + inferences.female + "<br>";
+                  gflag=0;
+              }
+              else{
                   str = str +  "\n";
+                  gflag=-1;
+              }
 
-              if(percentName >= 20)
-                  str = str + choice1[1] + "<br>";
-              else if(percentName <= -20)
-                  str = str + choice2[1] + "<br>";
-              else
+              if(percentName >= 20){
+                  str = str + inferences.old_name + "<br>";
+                  nflag=1;
+              }
+              else if(percentName <= -20){
+                  str = str + inferences.new_name + "<br>";
+                  nflag=0;
+              }
+              else{
                   str = str + "\n";
+                  nflag=-1;
+              }
 
+              if(percentActivity >= 20){
+                  str = str+inferences.indoor;
+                  aflag=1;
+              }
+              else if(percentActivity <= -20){
+                  str = str + inferences.outdoor;
+                  aflag=0;
+              }
+              else{
+                  aflag=-1;
+              }
 
-              if(percentActivity >= 20)
-                  str = str+choice1[2];
-              else if(percentActivity <= -20)
-                  str = str + choice2[2];
-           }
            document.getElementById('inference').innerHTML = str;
        }
       </script>
