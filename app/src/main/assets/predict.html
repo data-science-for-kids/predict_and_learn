@@ -6,13 +6,11 @@
     <script type="text/javascript">
         var i = 0;
         console.log('i in predictor is '+i);
-
     </script>
     <style>
     .container {
         position: relative;
     }
-
     .bottomright {
         position: absolute;
         bottom: 8px;
@@ -25,7 +23,6 @@
         left: 16px;
         font-size: 18px;
     }
-
     .center {
         position: absolute;
         left: 0;
@@ -35,11 +32,9 @@
         padding: 10px 10px 10px 10px;
         font-size: 18px;
     }
-
     p{
       font-family: "Custom",sans-serif,monospace;
     }
-
     </style>
 </head>
 <title>Build your Predictor</title>
@@ -52,12 +47,17 @@
 
     <div class="center" id="card" >
         <p id="card_text" class="w3-text-red"></p>
-
+        <table id="myTable13" style="display : none"></table>
+        <table id="myTable14" style="display : none"></table>
+        <table id="myTable15" style="display : none"></table>
+        <table id="myTable16" style="display : none"></table>
+        <table id="myTable18" style="display : none"></table>
         <p id="inference" class="w3-text-red"></p>
+        <p id="end" class="w3-text-red"></p>
     </div>
 
     <!--<div class="w3-red w3-display-left" style="width:50%;height:40%">-->
-        <!--<img src="name.png" style="width:100%;height:100%">-->
+    <!--<img src="name.png" style="width:100%;height:100%">-->
     <!--</div>-->
 
     <div class="bottomright">
@@ -77,15 +77,15 @@
         var pageTopText = [
                         pageTop.p1,pageTop.p2, pageTop.p3, pageTop.p4, pageTop.p5, pageTop.p6,pageTop.p7,pageTop.p8,pageTop.p9,pageTop.p10,
                         pageTop.p11,pageTop.p12,pageTop.p13,pageTop.p14,pageTop.p15,pageTop.p16,pageTop.p17,pageTop.p18,pageTop.p19,pageTop.p20,
-                        pageTop.p21,pageTop.p22,pageTop.p23,pageTop.p24,pageTop.p25,pageTop.p26
+                        pageTop.p21,pageTop.p22,pageTop.p23,pageTop.p24,pageTop.p25,pageTop.p26,pageTop.p27,pageTop.p28
                    ];
-
         if (!String.prototype.splice) {
-            String.prototype.splice = function(start, delCount, newSubStr) {
+            String.prototype.splice = function(str, delCount, newSubStr) {
+                var start=str.indexOf("*");
+                console.log(start+"  "+str);
                 return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
             };
         }
-
         pageHandler();
         function next(){
           i++;
@@ -96,11 +96,39 @@
           pageHandler();
         }
 
-        function getCard(gender,nameAge,activity){
+        var c_name,c_gender,c_id,c_activity,c_game,c_nameage;
+        var flag13 = true;
+        var flag15 = true;
+        var flag16 = true;
+        var flag14 = true;
+        var flag18 = true;
+
+        function getCard(gen,nameAge,activity){
+            if(gen==1)
+                gender-"MALE";
+            else if(gen==0)
+                gender="FEMALE";
+            else
+                gender="NONE";
+
             if(typeof androidAppProxy !== "undefined"){
-                     androidAppProxy.getCard(gender,nameAge,activity);
+                   x=androidAppProxy.getCard(gender,nameAge,activity);
+                   console.log(x);
+                   y=JSON.parse(x);
             }
+            else{
+                   x=null;
+            }
+
+            c_name=y[0];
+            c_gender=y[1];
+            c_id=parseInt(y[2]);
+            c_activity=parseInt(y[3]);
+            c_game=y[4];
+            c_nameage=parseInt(y[5]);
         }
+
+
 
         function getSession(){
           if(typeof androidAppProxy !== "undefined"){
@@ -108,115 +136,291 @@
           }
         }
 
-        function pageHandler(){
-            console.log(i);
-
+        function hideHtml(){
             $('#next').show();
             $('#prev').show();
             $('#inference').hide();
+            $('#end').hide();
 
+            $('#myTable13').css({"display": "none"});
+            $('#myTable14').css({"display": "none"});
+            $('#myTable15').css({"display": "none"});
+            $('#myTable16').css({"display": "none"});
+            $('#myTable18').css({"display": "none"});
+        }
+
+        function pageHandler(){
+            console.log(i);
+            hideHtml();
             switch(i){
 
               case 0:
-                   var str = "";
+                       var str = "";
+                      if(gflag==1)
+                          str = str + inferences.male + "<br>";
+                      else if(gflag==0)
+                          str = str + inferences.female + "<br>";
+                      else
+                          str = str +  "\n";
+                      if(nflag==1)
+                          str = str + inferences.old_name + "<br>";
+                      else if(nflag==0)
+                          str = str + inferences.new_name + "<br>";
+                      else
+                          str = str + "\n";
 
-                  if(gflag==1)
-                      str = str + inferences.male + "<br>";
-                  else if(gflag==0)
-                      str = str + inferences.female + "<br>";
-                  else
-                      str = str +  "\n";
-
-                  if(nflag==1)
-                      str = str + inferences.old_name + "<br>";
-                  else if(nflag==0)
-                      str = str + inferences.new_name + "<br>";
-                  else
-                      str = str + "\n";
-
-                  if(aflag==1)
-                      str = str+inferences.indoor;
-                  else if(aflag==0)
-                      str = str + inferences.outdoor;
-
-
-                  $('#inference').show();
-                  document.getElementById('inference').innerHTML = str;
-                  $('#prev').hide();
+                      if(aflag==1)
+                          str = str+inferences.indoor;
+                      else if(aflag==0)
+                          str = str + inferences.outdoor;
+                      $('#inference').show();
+                      document.getElementById('inference').innerHTML = str;
+                      $('#prev').hide();
 
               break;
+
               case 1:
-                var temp=pageTopText[i];
-                var idx=temp.indexOf("*");
-                console.log(idx+" index");
-                var str="";
+                    var str="";
+                    if(gflag==1||gflag==0)
+                          str = str + choices.c1 + ",";
+                    if(aflag==1||aflag==0)
+                          str = str + choices.c2 + ",";
+                    if(nflag==1||nflag==0)
+                          str = str + choices.c3;
+                    if(str=="")
+                        str='##';
 
-                if(gflag==1||gflag==0)
-                      str = str + choices.c1 + ",";
-
-                if(gflag==1||gflag==0)
-                      str = str + choices.c2 + ",";
-
-                if(gflag==1||gflag==0)
-                      str = str + choices.c3;
-
-                if(str=="")
-                    str='##';
-
-                console.log(str);
-                pageTopText[i] = temp.splice(idx, 1, str);
-                console.log(pageTopText[i]);
+                    console.log(str);
+                    var temp=pageTopText[i];
+                    temp = temp.splice(temp, 1, str);
+                    console.log(pageTopText[i]);
+                    document.getElementById('card_text').innerHTML = temp;
 
               break;
+
               case 2:
-
               break;
+
               case 3:
+                    var str="";
+                    if(gflag==1||gflag==0)
+                          str = str + choices.c1 + ",";
+
+                    if(aflag==1||aflag==0)
+                          str = str + choices.c2 + ",";
+
+                    if(nflag==1||nflag==0)
+                          str = str + choices.c3;
+
+                    if(str=="")
+                        str='##';
+                    var temp=pageTopText[i];
+                    console.log(temp);
+                    console.log(str+"$$$");
+                    temp = temp.splice(temp, 1, str);
+                    document.getElementById('card_text').innerHTML = temp;
               break;
 
               case 4:
-              $('#inference').show();
-                document.getElementById('inference').innerHTML = pageMiddle.p4;
+                    $('#inference').show();
+                    $('#end').show();
+                    str="";
+                    if(nflag == 1)
+                       str = str+choices.c511+",";
+                    else if(nflag == 0)
+                        str = str+choices.c512+",";
+                    if(gflag == 1)
+                       str = str+choices.c521+",";
+                    else if(gflag == 0)
+                        str = str+choices.c522+",";
+                    if(aflag == 1)
+                       str = str+choices.c531+",";
+                    else if(aflag == 0)
+                        str = str+choices.c532+",";
+
+                    if(str == "")
+                        str="##";
+
+                    getCard(gflag,nflag,aflag);
+
+                    str = c_name+" "+str;
+                    var str1 = (pageMiddle.p5).splice(pageMiddle.p5, 1, str);
+
+                    document.getElementById('inference').innerHTML = str1;
+                    document.getElementById('end').innerHTML = pageEnd.p5;
               break;
+
               case 5:
-                $('#inference').show();
-                document.getElementById('inference').innerHTML = pageMiddle.p5;
+                    $('#inference').show();
+                    str="";
+                    if(nflag == 1)
+                       str = str+choices.c511+",";
+                    else if(nflag == 0)
+                        str = str+choices.c512+",";
+                    if(gflag == 1)
+                       str = str+choices.c521+",";
+                    else if(gflag == 0)
+                        str = str+choices.c522+",";
+                    if(aflag == 1)
+                       str = str+choices.c531+",";
+                    else if(aflag == 0)
+                        str = str+choices.c532+",";
+
+                    if(str == "")
+                        str="##";
+                    str = c_name+" "+str;
+                    var str1 = (pageMiddle.p5).splice(pageMiddle.p5, 1, str);
+                    document.getElementById('inference').innerHTML = str1;
               break;
+
               case 6:
-                $('#inference').show();
-                document.getElementById('inference').innerHTML = pageMiddle.p6;
+                    $('#inference').show();
+                    str="";
+                    if(nflag == 1)
+                       str = str+" has "+choices.c511+" AND";
+                    else if(nflag == 0)
+                       str = str+" has "+choices.c512+" AND";
+                    if(gflag == 1)
+                       str = str+" is "+choices.c521+" AND";
+                    else if(gflag == 0)
+                       str = str+" is "+choices.c522+" AND";
+
+                    if(aflag == 1)
+                       str = str+choices.c531;
+                    else if(aflag == 0)
+                            str=str+choices.c532;
+
+                    if(str == "")
+                        str="##";
+                    var str1 = (pageMiddle.p6).splice(pageMiddle.p6, 1, str);
+                    document.getElementById('inference').innerHTML = str1;
+
               break;
+
               case 7:
-                $('#inference').show();
-                document.getElementById('inference').innerHTML = pageMiddle.p6;
+                    $('#inference').show();
+                    document.getElementById('inference').innerHTML = pageMiddle.p6;
               break;
+
               case 8:
-                console.log('calls');
-                var result = "foo baz".splice(4, 0, "bar ");
-                console.log(result);
-                getCard();
               break;
               case 9:
               break;
               case 10:
               break;
               case 11:
+                   if(gflag == 1 || gflag == 0)
+                    getCard(1,-1,-1);
+                   else if(nflag == 0|| nflag == 1)
+                    getCard(-1,1,-1);
+                   else if(aflag == 0|| aflag == 1)
+                    getCard(-1,-1,1);
+                   else
+                    getCard(1,-1,-1);
+
+
               break;
               case 12:
               break;
               case 13:
+
+                    if(gflag == 1 || gflag == 0)
+                    getCard(1,-1,-1);
+                   else if(nflag == 0|| nflag == 1)
+                    getCard(-1,1,-1);
+                   else if(aflag == 0|| aflag == 1)
+                    getCard(-1,-1,1);
+                   else
+                    getCard(1,-1,-1);
+
+                    $('#myTable13').css({"display":"table"});
+                    var table = document.getElementById("myTable13");
+                    if(flag13){
+
+                        var row = table.insertRow(0);
+                        var row1 = table.insertRow(1);
+                        var row2 = table.insertRow(2);
+                        var row3 = table.insertRow(3);
+
+                        var cell01 = row.insertCell(0);
+                        var cell02 = row.insertCell(1);
+                        var cell03 = row.insertCell(2);
+                        var cell1 = row1.insertCell(0);
+                        var cell2 = row1.insertCell(1);
+                        var cell3 = row1.insertCell(2);
+                        var cell4 = row2.insertCell(0);
+                        var cell5 = row2.insertCell(1);
+                        var cell6 = row2.insertCell(2);
+
+                        var cell7 = row3.insertCell(0);
+                        var cell8 = row3.insertCell(1);
+                        var cell9 = row3.insertCell(2);
+
+
+
+                        cell01.innerHTML = "Name";
+                        cell02.innerHTML = "Gender";
+                        cell03.innerHTML = "Hobby";
+                        cell1.innerHTML = c_name;
+                        cell2.innerHTML = c_gender;
+                        cell3.innerHTML = c_game;
+                        cell4.innerHTML = nflag;
+                        cell5.innerHTML = gflag;
+                        cell6.innerHTML = aflag;
+
+
+                        cell7.innerHTML = "MATCH";
+                        cell8.innerHTML = "MATCH";
+                        cell9.innerHTML = "NO MATCH";
+                        flag13=false;
+              }
+
               break;
               case 14:
+                    $('#myTable14').css({"display":"table"});
+                    var table = document.getElementById("myTable14");
+                    if(flag14)
+                    {
+                        tableMaker(table);
+                        flag14=false;
+                    }
               break;
               case 15:
+                    $('#myTable15').css({"display":"table"});
+                    var table = document.getElementById("myTable15");
+                    if(flag15)
+                    {
+
+                        tableMaker(table);
+                        flag15=false;
+                    }
               break;
               case 16:
+                    $('#myTable16').css({"display":"table"});
+                    var table = document.getElementById("myTable16");
+                    if(flag16)
+                    {
+                        tableMaker(table);
+                        flag16=false;
+                    }
               break;
               case 17:
+
               break;
               case 18:
+                    $('#myTable18').css({"display":"table"});
+                    var table = document.getElementById("myTable18");
+                    if(flag18)
+                    {
+                        tableMaker(table);
+                        flag18=false;
+                    }
+                    $('#end').show();
+                    document.getElementById('end').innerHTML = pageEnd.p18;
               break;
               case 19:
+
+
               break;
               case 20:
               break;
@@ -233,7 +437,6 @@
               case 26:
               break;
 
-
               default:
                     if(i<0){
                         $('#prev').hide();
@@ -244,21 +447,79 @@
               break;
             }
 
-           document.getElementById('card_text').innerHTML=pageTopText[i];
+            if(i!=1&&i!=3)
+                document.getElementById('card_text').innerHTML = pageTopText[i];
+
            console.log("text"+i);
         }
 
+        function tableMaker(table){
+                       if(gflag == 1 || gflag == 0)
+                        getCard(1,-1,-1);
+                       else if(nflag == 0|| nflag == 1)
+                        getCard(-1,1,-1);
+                       else if(aflag == 0|| aflag == 1)
+                        getCard(-1,-1,1);
+                       else
+                        getCard(1,-1,-1);
+
+                        var row = table.insertRow(0);
+                        var row1 = table.insertRow(1);
+                        var row2 = table.insertRow(2);
+                        var row3 = table.insertRow(3);
+
+                        var cell01 = row.insertCell(0);
+                        var cell02 = row.insertCell(1);
+                        var cell03 = row.insertCell(2);
+                        var cell1 = row1.insertCell(0);
+                        var cell2 = row1.insertCell(1);
+                        var cell3 = row1.insertCell(2);
+                        var cell4 = row2.insertCell(0);
+                        var cell5 = row2.insertCell(1);
+                        var cell6 = row2.insertCell(2);
+
+                        var cell001 = row3.insertCell(0);
+                        var cell002 = row3.insertCell(1);
+                        var cell003 = row3.insertCell(2);
+
+                        cell01.innerHTML = "Name";
+                        cell02.innerHTML = "Gender";
+                        cell03.innerHTML = "Hobby";
+                        cell1.innerHTML = c_name;
+                        cell2.innerHTML = c_gender;
+                        cell3.innerHTML = c_game;
+                        cell4.innerHTML = nflag;
+                        cell5.innerHTML = gflag;
+                        cell6.innerHTML = aflag;
+
+                        var t1=document.createElement("input");
+                        var t2=document.createElement("input");
+                        var t3=document.createElement("input");
+
+                            t1.type="number";
+                            t1.id = "input1";
+                            t1.style = "width:100px";
+                        cell001.appendChild(t1);
+                            t2.type="number";
+                            t2.id = "input2";
+                            t2.style = "width:100px";
+                        cell002.appendChild(t2);
+                            t3.type="number";
+                            t3.id = "input3";
+                            t3.style = "width:100px";
+                        cell003.appendChild(t3);
+        }
        function stringMaker(idx,rem,str){
         String.prototype.splice = function(idx, rem, str) {
         return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
         };
-
        }
+
+
        function infers(){
           console.log("Inferred");
           var x=null;
           var y=null;
-
           if(typeof androidAppProxy !== "undefined"){
              x=androidAppProxy.sendInference();
              console.log(x);
@@ -267,18 +528,13 @@
           else{
              x=null;
           }
-
                 var str = "";
-
                 var valGender = parseFloat((parseInt(y[0])-parseInt(y[1]))/(parseInt(y[0])+parseInt(y[1])));
                 var percentGender=valGender*100;
-
-                var valName = parseFloat((parseInt(y[1])-parseInt(y[2]))/(parseInt(y[0])+parseInt(y[1])));
+                var valName = parseFloat((parseInt(y[2])-parseInt(y[3]))/(parseInt(y[2])+parseInt(y[3])));
                 var percentName = valName*100;
-
-                var valActivity = parseFloat((parseInt(y[3])-parseInt(y[4]))/(parseInt(y[0])+parseInt(y[1])));
+                var valActivity = parseFloat((parseInt(y[4])-parseInt(y[5]))/(parseInt(y[4])+parseInt(y[5])));
                 var percentActivity = valActivity*100;
-
               if(percentGender >= 20){
                   str = str + inferences.male + "<br>";
                   gflag=1;
@@ -291,7 +547,6 @@
                   str = str +  "\n";
                   gflag=-1;
               }
-
               if(percentName >= 20){
                   str = str + inferences.old_name + "<br>";
                   nflag=1;
@@ -304,7 +559,6 @@
                   str = str + "\n";
                   nflag=-1;
               }
-
               if(percentActivity >= 20){
                   str = str+inferences.indoor;
                   aflag=1;
@@ -316,11 +570,9 @@
               else{
                   aflag=-1;
               }
-
            document.getElementById('inference').innerHTML = str;
        }
       </script>
 
 </body>
 </html>
-

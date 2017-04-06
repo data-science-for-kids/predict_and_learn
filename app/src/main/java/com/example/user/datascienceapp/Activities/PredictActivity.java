@@ -183,7 +183,9 @@ public class PredictActivity extends AppCompatActivity {
         int c=0;
         for(Response response: responses){
             c++;
-            if(c==43)
+            if(c<=8)
+                continue;
+            if(c==41)
                 break;
             String r = response.getResponse();
             if(r.equals("5.0")){
