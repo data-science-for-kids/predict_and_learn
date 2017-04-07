@@ -8,6 +8,7 @@
         console.log('i in predictor is '+i);
     </script>
     <style>
+
     .container {
         position: relative;
     }
@@ -32,6 +33,11 @@
         padding: 10px 10px 10px 10px;
         font-size: 18px;
     }
+
+    table {
+        text-align:center;
+        vertical-align:middle;
+     }
     p{
       font-family: "Custom",sans-serif,monospace;
     }
@@ -44,30 +50,27 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <div class="w3-container w3-center" id="main_div" >
+    <div class="w3-container w3-center">
+        <p id="card_text" class="w3-text-red" ></p>
+    </div>
 
-    <div class="center" id="card" >
-        <p id="card_text" class="w3-text-red"></p>
-        <table id="myTable13" style="display : none"></table>
-        <table id="myTable14" style="display : none"></table>
-        <table id="myTable15" style="display : none"></table>
-        <table id="myTable16" style="display : none"></table>
-        <table id="myTable18" style="display : none"></table>
+    <div class="w3-card-4 w3-black" id="card_div">
+        <div class="w3-container w3-center" >
+            <p>1/16</p>
+            <img src="male.png" alt="Avatar" style="width:40%; height: 50%;">
 
-        <div class="w3-card-4 w3-red" id="card_div">
-            <div class="w3-container w3-center">
-                <p>1/16</p>
-                <img src="male.png" alt="Avatar" style="width:55%; height: 60%;">
-                <h5>John Doe</h5>
-            </div>
+            <table id="myTable13" style="display : none"></table>
+            <table id="myTable14" style="display : none"></table>
+            <table id="myTable15" style="display : none"></table>
+            <table id="myTable16" style="display : none"></table>
+            <table id="myTable18" style="display : none"></table>
+
         </div>
-
+    </div>
+    <div class="center" id="card" >
         <p id="inference" class="w3-text-red"></p>
         <p id="end" class="w3-text-red"></p>
     </div>
-
-    <!--<div class="w3-red w3-display-left" style="width:50%;height:40%">-->
-    <!--<img src="name.png" style="width:100%;height:100%">-->
-    <!--</div>-->
 
     <div class="bottomright">
         <button class="w3-btn w3-transparent w3-text-red" onclick="next()" id="next">NEXT</button>
@@ -178,17 +181,20 @@
                           str = str + inferences.female + "<br>";
                       else
                           str = str +  "\n";
+
                       if(nflag==1)
                           str = str + inferences.old_name + "<br>";
                       else if(nflag==0)
                           str = str + inferences.new_name + "<br>";
-                      else
-                          str = str + extra.p0;
+
 
                       if(aflag==1)
                           str = str+inferences.indoor;
                       else if(aflag==0)
                           str = str + inferences.outdoor;
+
+                      if(str=="")
+                          str = str + extra.p0;
                       $('#inference').show();
                       document.getElementById('inference').innerHTML = str;
                       $('#prev').hide();
@@ -398,16 +404,28 @@
                 $('#card_div').show();
               break;
               case 13:
+                    var a,g,n;
+                    if(gflag == 1 || gflag == 0){
+                      g=1; a=-1; n=-1;
+                    }
 
-                    if(gflag == 1 || gflag == 0)
-                    getCard(1,-1,-1);
                    else if(nflag == 0|| nflag == 1)
-                    getCard(-1,1,-1);
+                    {
+                      g=-1; a=-1; n=1;
+                    }
                    else if(aflag == 0|| aflag == 1)
-                    getCard(-1,-1,1);
-                   else
-                    getCard(1,-1,-1);
+                    {
+                      g=-1; a=0; n=-1;
+                    }
 
+                   else
+                    {
+                      g=1; a=-1; n=-1;
+                    }
+
+                    getCard(g,a,n);
+
+                    $('#card_div').show();
                     $('#myTable13').css({"display":"table"});
                     var table = document.getElementById("myTable13");
                     if(flag13){
@@ -440,9 +458,41 @@
                         cell2.innerHTML = c_gender;
                         cell3.innerHTML = c_game;
 
-                        cell4.innerHTML = nflag;
-                        cell5.innerHTML = gflag;
-                        cell6.innerHTML = aflag;
+                        switch(nflag){
+                          case 0:
+                            cell4.innerHTML = "Old Name";
+                            break;
+                          case 1:
+                            cell4.innerHTML = "New Name";
+                            break;
+                          case -1:
+                            cell4.innerHTML = "Undefined";
+                            break;
+                        }
+
+                        switch(gflag){
+                          case 0:
+                            cell4.innerHTML = "Female";
+                            break;
+                          case 1:
+                            cell4.innerHTML = "Male";
+                            break;
+                          case -1:
+                            cell4.innerHTML = "Undefined";
+                            break;
+                        }
+
+                        switch(aflag){
+                          case 0:
+                            cell4.innerHTML = "Outdoor";
+                            break;
+                          case 1:
+                            cell4.innerHTML = "Indoor";
+                            break;
+                          case -1:
+                            cell4.innerHTML = "Undefined";
+                            break;
+                        }
 
 
                         cell7.innerHTML = "MATCH";
@@ -453,6 +503,7 @@
 
               break;
               case 14:
+                    $('#card_div').show();
                     $('#myTable14').css({"display":"table"});
                     var table = document.getElementById("myTable14");
                     if(flag14)
@@ -462,6 +513,7 @@
                     }
               break;
               case 15:
+                    $('#card_div').show();
                     $('#myTable15').css({"display":"table"});
                     var table = document.getElementById("myTable15");
                     if(flag15)
@@ -472,6 +524,7 @@
                     }
               break;
               case 16:
+                    $('#card_div').show();
                     $('#myTable16').css({"display":"table"});
                     var table = document.getElementById("myTable16");
                     if(flag16)
@@ -566,6 +619,7 @@
                         cell1.innerHTML = c_name;
                         cell2.innerHTML = c_gender;
                         cell3.innerHTML = c_game;
+
                         cell4.innerHTML = nflag;
                         cell5.innerHTML = gflag;
                         cell6.innerHTML = aflag;
@@ -614,6 +668,7 @@
                 var percentName = valName*100;
                 var valActivity = parseFloat((parseInt(y[4])-parseInt(y[5]))/(parseInt(y[4])+parseInt(y[5])));
                 var percentActivity = valActivity*100;
+
               if(percentGender >= 20){
                   str = str + inferences.male + "<br>";
                   gflag=1;
@@ -627,7 +682,6 @@
               else{
                   str = str +  "\n";
                   gflag=-1;
-
               }
               if(percentName >= 20){
                   str = str + inferences.old_name + "<br>";
