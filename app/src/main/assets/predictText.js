@@ -1,6 +1,6 @@
 var pageTop = {
   							p1 : "From the information we gathered from your responses, we have figured -",
-  							p2 : "This suggests that * are best able to predict whom you will befriend.",
+  							p2 : "This suggests that * best able to predict whom you will befriend.",
  							p3 : "How can we use this information to predict your friendship in general?",
  							p4 : "For a new person whom you are trying to befriend you could check what his or her * ",
  							p5 : "For example, when trying to befriend",
@@ -29,6 +29,11 @@ var pageTop = {
  							p28: "This means the predictor is correct"
 
 						};
+		var extra = {
+                                  p0: "No preferences", //verify for first page when no inferences
+                                  p1: "nothing ",
+                                  p9: "No preferences" // verify for what would happen page
+		            };
 
 		var inferences = {
 		                    male:     "You prefer to befriend people who are male.<br>",
@@ -56,9 +61,9 @@ var pageTop = {
 		                    c531: "likes indoor activities",
 		                    c532: "likes outdoor activities",
 
-		                    c81: "Is the person boy or a girl?",
-		                    c82: "Is the name new or old?",
-		                    c83: "Is the activity outdoor or indoor"
+		                    c91: "Is the person boy or a girl?",
+		                    c92: "Is the name new or old?",
+		                    c93: "Is the activity outdoor or indoor"
 		                    //Verify all
 		              };
 
@@ -69,7 +74,8 @@ var pageTop = {
                             p6: "If ( New person *)<br>\t then <b>befriend the person<b><br>else<br>\t <b>do not befriend the person<b>",
                             p7: "If ( New person *)<br>\t then <b>befriend the person<b><br>else<br>\t do not befriend the person<b>",
                             p10: "*",
-                            p11: "*"
+                            p11: "*",
+                            p12: "Fow each feature of your preference that the new person has, assign 1 point and then up"
 
                          };
 

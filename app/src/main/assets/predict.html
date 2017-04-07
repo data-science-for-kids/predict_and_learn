@@ -43,7 +43,7 @@
 <body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<div class="w3-container w3-center" >
+<div class="w3-container w3-center" id="main_div" >
 
     <div class="center" id="card" >
         <p id="card_text" class="w3-text-red"></p>
@@ -52,6 +52,15 @@
         <table id="myTable15" style="display : none"></table>
         <table id="myTable16" style="display : none"></table>
         <table id="myTable18" style="display : none"></table>
+
+        <div class="w3-card-4 w3-red" id="card_div">
+            <div class="w3-container w3-center">
+                <p>1/16</p>
+                <img src="male.png" alt="Avatar" style="width:55%; height: 60%;">
+                <h5>John Doe</h5>
+            </div>
+        </div>
+
         <p id="inference" class="w3-text-red"></p>
         <p id="end" class="w3-text-red"></p>
     </div>
@@ -73,7 +82,11 @@
 
 <script type="text/javascript">
         var gflag,nflag,aflag;
+
+        <!--Calculating the preferences-->
+        var count_flag=0;
         infers();
+
         var pageTopText = [
                         pageTop.p1,pageTop.p2, pageTop.p3, pageTop.p4, pageTop.p5, pageTop.p6,pageTop.p7,pageTop.p8,pageTop.p9,pageTop.p10,
                         pageTop.p11,pageTop.p12,pageTop.p13,pageTop.p14,pageTop.p15,pageTop.p16,pageTop.p17,pageTop.p18,pageTop.p19,pageTop.p20,
@@ -86,6 +99,8 @@
                 return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
             };
         }
+
+
         pageHandler();
         function next(){
           i++;
@@ -102,6 +117,7 @@
         var flag16 = true;
         var flag14 = true;
         var flag18 = true;
+
 
         function getCard(gen,nameAge,activity){
             if(gen==1)
@@ -141,7 +157,7 @@
             $('#prev').show();
             $('#inference').hide();
             $('#end').hide();
-
+            $('#card_div').hide();
             $('#myTable13').css({"display": "none"});
             $('#myTable14').css({"display": "none"});
             $('#myTable15').css({"display": "none"});
@@ -167,7 +183,7 @@
                       else if(nflag==0)
                           str = str + inferences.new_name + "<br>";
                       else
-                          str = str + "\n";
+                          str = str + extra.p0;
 
                       if(aflag==1)
                           str = str+inferences.indoor;
@@ -181,14 +197,31 @@
 
               case 1:
                     var str="";
-                    if(gflag==1||gflag==0)
-                          str = str + choices.c1 + ",";
-                    if(aflag==1||aflag==0)
-                          str = str + choices.c2 + ",";
+                    if(gflag==1||gflag==0){
+                        if(aflag == -1)
+                            str = str + choices.c1 + " ";
+                        else
+                            str = str + choices.c1 + ",";
+                    }
+                    if(aflag==1||aflag==0){
+                        if(nflag == -1)
+                            str = str + choices.c2 + " ";
+                        else
+                            str = str + choices.c2 + ",";
+                    }
+
                     if(nflag==1||nflag==0)
                           str = str + choices.c3;
+
+
                     if(str=="")
-                        str='##';
+                        str=extra.p1;
+
+
+                        if(count_flag>1)
+                            str = str+" are";
+                        else
+                            str = str+" is";
 
                     console.log(str);
                     var temp=pageTopText[i];
@@ -203,20 +236,28 @@
 
               case 3:
                     var str="";
-                    if(gflag==1||gflag==0)
-                          str = str + choices.c1 + ",";
-
-                    if(aflag==1||aflag==0)
-                          str = str + choices.c2 + ",";
-
+                    if(gflag==1||gflag==0){
+                        if(aflag == -1)
+                            str = str + choices.c1 + " ";
+                        else
+                            str = str + choices.c1 + " or ";
+                    }
+                    if(aflag==1||aflag==0){
+                        if(nflag == -1)
+                            str = str + choices.c2 + " ";
+                        else
+                            str = str + choices.c2 + " or ";
+                    }
                     if(nflag==1||nflag==0)
                           str = str + choices.c3;
 
                     if(str=="")
-                        str='##';
+                        str=extra.p1;
+
+                    str = str+" is.";
+
                     var temp=pageTopText[i];
-                    console.log(temp);
-                    console.log(str+"$$$");
+
                     temp = temp.splice(temp, 1, str);
                     document.getElementById('card_text').innerHTML = temp;
               break;
@@ -252,25 +293,40 @@
 
               case 5:
                     $('#inference').show();
+                    $('#end').show();
+                    var g,n,a;
+                    if(gflag!=-1)
+                        g = 1-gflag;
+                    if(nflag!=-1)
+                        n = 1-nflag;
+                    if(aflag!=-1)
+                        a = 1-aflag;
+
+                    getCard(g,n,a);
                     str="";
-                    if(nflag == 1)
+                    if(n == 1)
                        str = str+choices.c511+",";
-                    else if(nflag == 0)
+                    else if(n == 0)
                         str = str+choices.c512+",";
-                    if(gflag == 1)
+                    if(g == 1)
                        str = str+choices.c521+",";
-                    else if(gflag == 0)
+                    else if(g == 0)
                         str = str+choices.c522+",";
-                    if(aflag == 1)
+                    if(a == 1)
                        str = str+choices.c531+",";
-                    else if(aflag == 0)
+                    else if(a == 0)
                         str = str+choices.c532+",";
 
                     if(str == "")
                         str="##";
+
+
+
                     str = c_name+" "+str;
                     var str1 = (pageMiddle.p5).splice(pageMiddle.p5, 1, str);
+
                     document.getElementById('inference').innerHTML = str1;
+                    document.getElementById('end').innerHTML = pageEnd.p5;
               break;
 
               case 6:
@@ -305,6 +361,25 @@
               case 8:
               break;
               case 9:
+                    $('#inference').show();
+                    console.log(choices.c91+" aman mathur");
+                    var str = "";
+
+                    if(gflag == 1 || gflag == 0)
+                        str = str+choices.c91+"<br>";
+
+                    if(nflag == 0|| nflag == 1){
+                        str = str+choices.c92+"<br>";
+                        console.log(str+"**");
+                    }
+                    if(aflag == 0|| aflag == 1)
+                        str = str+choices.c93;
+
+                    if(str == "")
+                        str = extra.p9;
+
+                    document.getElementById('inference').innerHTML = str;
+
               break;
               case 10:
               break;
@@ -318,9 +393,9 @@
                    else
                     getCard(1,-1,-1);
 
-
               break;
               case 12:
+                $('#card_div').show();
               break;
               case 13:
 
@@ -364,6 +439,7 @@
                         cell1.innerHTML = c_name;
                         cell2.innerHTML = c_gender;
                         cell3.innerHTML = c_game;
+
                         cell4.innerHTML = nflag;
                         cell5.innerHTML = gflag;
                         cell6.innerHTML = aflag;
@@ -453,6 +529,8 @@
            console.log("text"+i);
         }
 
+
+
         function tableMaker(table){
                        if(gflag == 1 || gflag == 0)
                         getCard(1,-1,-1);
@@ -509,11 +587,12 @@
                             t3.style = "width:100px";
                         cell003.appendChild(t3);
         }
-       function stringMaker(idx,rem,str){
-        String.prototype.splice = function(idx, rem, str) {
-        return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
-        };
-       }
+
+           function stringMaker(idx,rem,str){
+            String.prototype.splice = function(idx, rem, str) {
+            return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+            };
+           }
 
 
        function infers(){
@@ -538,22 +617,27 @@
               if(percentGender >= 20){
                   str = str + inferences.male + "<br>";
                   gflag=1;
+                  count_flag++;
               }
               else if(percentGender <= -20){
                   str = str + inferences.female + "<br>";
                   gflag=0;
+                  count_flag++;
               }
               else{
                   str = str +  "\n";
                   gflag=-1;
+
               }
               if(percentName >= 20){
                   str = str + inferences.old_name + "<br>";
                   nflag=1;
+                  count_flag++;
               }
               else if(percentName <= -20){
                   str = str + inferences.new_name + "<br>";
                   nflag=0;
+                  count_flag++;
               }
               else{
                   str = str + "\n";
@@ -562,10 +646,12 @@
               if(percentActivity >= 20){
                   str = str+inferences.indoor;
                   aflag=1;
+                  count_flag++;
               }
               else if(percentActivity <= -20){
                   str = str + inferences.outdoor;
                   aflag=0;
+                  count_flag++;
               }
               else{
                   aflag=-1;
