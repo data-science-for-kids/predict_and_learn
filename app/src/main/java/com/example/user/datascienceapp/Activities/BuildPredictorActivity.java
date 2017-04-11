@@ -145,7 +145,9 @@ public class BuildPredictorActivity extends AppCompatActivity {
         int c=0;
         for(Response response: responses){
             c++;
-            if(c==43)
+            if(c<=8)
+                continue;
+            if(c==41)
                 break;
             String r = response.getResponse();
             if(r.equals("5.0")){
@@ -236,16 +238,33 @@ public class BuildPredictorActivity extends AppCompatActivity {
             return sb.toString();
         }
         @JavascriptInterface
-        public void getCard(String gender,int nameAge,int activity){
+        public String getCard(String gender,int nameAge,int activity){
             pp++;
+            StringBuilder sb = new StringBuilder();
             for(DataBean db:cards){
 
                 if((nameAge==-1||nameAge==db.getNameAge())&&(activity==-1||activity==db.getActivity())&&(gender.equals("NONE")||gender.equals(db.getGender()))){
 
-                    Log.d("db",""+db.getId()+" "+pp);
+
+                    sb.append("[");
+                    sb.append("\"").append(db.getName()).append("\"");
+                    sb.append(",");
+                    sb.append("\"").append(db.getGender()).append("\"");
+                    sb.append(",");
+                    sb.append("\"").append(db.getId()).append("\"");
+                    sb.append(",");
+                    sb.append("\"").append(db.getActivity()).append("\"");
+                    sb.append(",");
+                    sb.append("\"").append(db.getGame()).append("\"");
+                    sb.append(",");
+                    sb.append("\"").append(db.getNameAge()).append("\"");
+
+                    sb.append("]");
+
                     break;
                 }
             }
+            return sb.toString();
         }
 
         @JavascriptInterface
